@@ -1,0 +1,2 @@
+{% assign link = site.posts | where: "ref", include.ref | where: "lang", page.lang %}
+{{ link [0].url }}

@@ -1,0 +1,77 @@
+---
+layout: page
+title: Categorías
+lang: es
+ref: categories-idx
+---
+
+{% assign categories = site.categories | sort %}
+
+<ul class="category-list">
+	{% for tag in categories %}
+		<li>
+			<a href="#{{ tag[0] | slugify }}" class="post-tag">{{ tag[0] }}</a>
+		</li>
+	{% endfor %}
+</ul>
+
+<hr/>
+
+{% for tag in categories %}
+	<h2 id="{{ tag[0] | slugify }}">{{ tag[0] }}</h2>
+
+	<ul>
+		{% for post in tag [1] %}
+			{% assign translated = tag [1]
+									| where: "ref", post.ref
+									| where: "lang", page.lang
+			%}
+			{% assign flag = false %}
+			{% assign data = false %}
+
+			<!--
+				If there is no translation, shows the post in the
+				default language
+			-->
+			{% if post.lang == page.lang %}
+				{% comment %}
+				<!-- The post is on the current language -->
+				{% endcomment %}
+
+				{% assign data = post %}
+				{% assign flag = true %}
+			{% elsif translated [0] %}
+				{% comment %}
+				<!-- The post is not on the current language, but there is
+				an available version of it -->
+				{% endcomment %}
+			{% else %}
+				{% comment %}
+				<!-- The post is not available on the current language -->
+				{% endcomment %}
+
+				{% assign data = post %}
+			{% endif %}
+
+			{% if data %}
+				{% if flag %}
+					<a href="{{ site.baseurl }}{{ post.url }}">
+						<li>
+							{{ post.title }}
+							<small>{{ post.date | date_to_string }}</small>
+						</li>
+					</a>
+				{% else %}
+					<a href="{{ site.baseurl }}{{ post.url }}">
+						<li>
+							{{ post.title }}
+							<small>{{ post.date | date_to_string }}</small>
+							({{ site.data.i18n [post.lang].name }})
+						</li>
+					</a>
+				{% endif %}
+			{% endif %}
+
+		{% endfor %}
+	</ul>
+{% endfor %}

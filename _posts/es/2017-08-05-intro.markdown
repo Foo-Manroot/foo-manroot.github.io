@@ -1,0 +1,122 @@
+---
+title:  "Cómo está hecha esta página"
+date:	2017-08-05 20:35:57 +0200
+categories: es site-info
+lang: es
+ref: intro-post
+---
+
+Este es el primer post del blog. En él, voy a escribir sobre cómo he hecho esta página
+web.
+
+
+## Tecnologías
+Antes que nada, esta página se pensó para estar almacenada en
+[Github Pages](https://pages.github.com/), donde las páginas se generan con
+[Jekyll](https://jekyllrb.com/).
+
+Usé el [tema por defecto](https://github.com/jekyll/minima) y lo modifiqué bastante
+(tanto en la parte técnica como en la visual).
+
+
+### Jekyll
+Jekyll es un generador de contenido escrito en Ruby. Sus tareas son coger el contenido de
+los múltiples ficheros en el directorio, interpretarlos y generar páginas estáticas para
+ser servidas.
+
+
+Eso significa que el servidor web (ya sea Apache, Nginx o incluso `python -m
+SimpleHTTPServer`) tiene menor carga, puesto que sólo tiene que entregar las páginas que
+se le piden. Esto difiere con el típico CMS (_Content Management System_), como
+Wordpress, donde se tiene una base de datos con las entradas y artículos y, usando algún
+tipo de lenguaje de _scripting_ (como PHP), el servidor __crea__ la página únicamente
+para esa petición en particular.
+
+
+Al final todo se reduce a que Jekyll intercambia memoria por tiempo, puesto que hay datos
+duplicados, pero el servidor no necesita nada de tiempo para servir los datos (en
+comparación con ejecutar PHP, obtener el contenido de la base de datos y generar la
+página que enviar al cliente).
+
+
+Por ejemplo, en un blog muy básico con cuatro entradas, puede hacerse de maneras muy
+diferentes con páginas dinámicas o estáticas:
+
+  - __Páginas dinámicas__: el servidor tiene sólo una página, `posts.php`, que acepta un
+	argumento para especificar la entrada que se quiere. Para obtener la entrada
+	`post_ejemplo`, el cliente debe realizar la petición para
+	`/posts.php?id=post_ejemplo`. En el servidor, habría los siguientes ficheros:
+	<pre>
+	/
+	├── css
+	│   └── estilo.css
+	└── posts.php
+	</pre>
+
+  - __Páginas estáticas__: el servidor tiene una página por cada entrada, duplicando
+	mucho contenido (ya que la plantilla principal, con la colocación de los
+	elementos, la cabecera, etc. se mantiene igual en todas estas páginas). Por lo
+	tanto, en el servidor, la estructura de directorios sería como sigue:
+	<pre>
+	/
+	├── css
+	│   └── estilo.css
+	├── post_1.html
+	├── post_2.html
+	├── post_3.html
+	└── post_4.html
+	</pre>
+
+
+
+La memoria es barata y el tiempo es valioso, así que las páginas estáticas son una buena
+opción para diseñar una página web para un blog. Sin embargo, la enorme cantidad de
+ficheros lo hace imposible de mantener, así que debería haber alguna manera de "compilar"
+las páginas y convertirlas en sitios estáticos. Aquí es donde entra Jekyll a salvarnos
+el día.
+
+Jekyll nos permite, usando un lenguaje de _markup_ llamado
+[Liquid](https://shopify.github.io/liquid/) (de hecho, es una
+[variación](https://jekyllrb.com/docs/templates/) de él) para mantener todas las partes
+comunes de la página juntas (como las cabeceras, la colocación de los elementos...) para
+centrarse en el contenido. Luego, cuando Jekyll genera la página, todos los ficheros son
+interpretados y las páginas con sus datos redundantes pueden ser servidas, pero sólo
+tenemos que mantener unos pocos ficheros (o menos que si tuviéramos una web estática).
+
+La nueva estructura de los directorios puede ser ahora algo así (post_*.markdown sólo
+tiene el texto de la entrada en cuestión):
+<pre>
+.
+├── _config.yml
+├── css
+│   └── estilo.css
+├── _includes
+│   ├── pie.html
+│   └── cabecera.html
+├── _layouts
+│   └── post.html
+└── _posts
+    ├── post_1.markdown
+    ├── post_2.markdown
+    ├── post_3.markdown
+    └── post_4.markdown
+</pre>
+
+Y, cuando la página está compilada, la estructura resultante será la misma que la de la
+página estática:
+
+<pre>
+/
+├── css
+│   └── estilo.css
+├── post_1.html
+├── post_2.html
+├── post_3.html
+└── post_4.html
+</pre>
+
+
+Con muchos más ficheros, la página es bastante más fácil de mantener que antes.
+
+Este post es más extenso de lo que pensaba, así que puede que el resto de detalles sobre
+Jekyll y esta página web sean material para otra entrada en el futuro.

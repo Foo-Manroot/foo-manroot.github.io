@@ -1,0 +1,10 @@
+test:
+        name: Name of Test
+        github: Test
+
+jekyll:
+        name: Jekyll
+        github: jekyll
+foo:
+        name: Foo-Manroot
+        github: foo-manroot

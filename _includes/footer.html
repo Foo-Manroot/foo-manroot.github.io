@@ -1,0 +1,34 @@
+
+<div id="footer-rule"></div>
+
+<footer id="footer">
+
+	<h2 id="footer-heading">{{ site.title }}</h2>
+
+	<!-- Column 1: contact -->
+	<ul id="footer-contact">
+		<li>{{ site.title }}</li>
+		<li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+	</ul>
+
+	<!-- Column 2: social media -->
+	<ul id="footer-social-media">
+		{% if site.github_username %}
+		<li>
+			{% include icon-github.html username=site.github_username %}
+		</li>
+		{% endif %}
+
+		{% if site.twitter_username %}
+		<li>
+			{% include icon-twitter.html username=site.twitter_username %}
+		</li>
+		{% endif %}
+	</ul>
+
+	<!-- Column 3: page description -->
+	<p id="footer-description">
+		<!-- Current language's description -->
+		{{ site.description [page.lang] }}
+	</p>
+</footer>

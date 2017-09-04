@@ -1,0 +1,92 @@
+---
+layout: default
+lang: en
+ref: index
+---
+
+<div class="home">
+
+	<h1 class="page-heading">Posts by date</h1>
+
+	{% assign posts_dates = site.posts
+							| group_by_exp: "post", "post.date
+							| date: '%Y %m'"
+	%}
+
+
+	<ul class="post-list">
+		{% for date in posts_dates %}
+			<li>
+				<h2 class="post-list-date">
+					{% assign array = date.name | split: " " %}
+					{% assign month = array [1] | to_integer %}
+					{% assign year = array [0] | to_integer %}
+
+					{{ site.data.i18n [page.lang].month [month] }} - {{ year }}
+				</h2>
+				<ul class="post-list">
+					{% for post in date.items %}
+
+						{% assign translated = site.posts
+												| where: "ref", post.ref
+												| where: "lang", page.lang
+						%}
+						{% assign flag = false %}
+						{% assign data = false %}
+
+						<!--
+							If there is no translation, shows the post in the
+							default language
+						-->
+						{% if post.lang == page.lang %}
+							{% comment %}
+							<!-- The post is on the current language -->
+							{% endcomment %}
+
+							{% assign data = post %}
+							{% assign flag = true %}
+						{% elsif translated [0] %}
+							{% comment %}
+							<!-- The post is not on the current language, but there is
+							an available version of it -->
+							{% endcomment %}
+						{% else %}
+							{% comment %}
+							<!-- The post is not available on the current language -->
+							{% endcomment %}
+
+							{% assign data = post %}
+						{% endif %}
+
+						{% if data %}
+						<li class="post-entry">
+
+							<span class="post-day">
+								<!-- Date -->
+								{{ data.date | date: "%d, at %H:%M" }}
+							</span>
+
+							<h3>
+								<a class="post-link"
+								   href="{{ data.url | prepend: site.baseurl }}">
+									{% if flag %}
+										{{ data.title }}
+									{% else %}
+										{{ data.title }}
+										({{ site.data.i18n [post.lang].name }})
+									{% endif %}
+								</a>
+							</h3>
+
+						</li>
+						{% endif %}
+					{% endfor %}
+				</ul>
+			</li>
+		{% endfor %}
+	</ul>
+
+	<hr/>
+
+	<p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+</div>

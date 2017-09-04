@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang }}">
+
+{% include head.html %}
+
+<body>
+	<!--
+		Little hack to simulate onClick effect to show the sidebar.
+		Extracted from: https://stackoverflow.com/a/32721572
+	-->
+	<input type="checkbox" id="sidebar-toggle-checkbox" />
+	<label for="sidebar-toggle-checkbox" id="sidebar-toggle">
+		<svg viewBox="0 0 653.516 522.87801" xmlns="http://www.w3.org/2000/svg">
+			<path style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.42516828;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" d="m 22.813824,316.30058 c 15.576437,15.94572 38.072984,25.92677 63.168685,25.92677 l 369.224531,10e-4 -95.35449,95.35441 c -20.75974,20.75972 -21.92899,53.01604 -2.62126,72.32373 19.3077,19.30769 51.56404,18.13849 72.32379,-2.6213 L 636.44605,300.39483 c 0.46849,-0.46848 0.9146,-0.94949 1.36311,-1.42941 0.42207,-0.39207 0.84619,-0.77988 1.25678,-1.19047 9.47485,-9.47485 14.00769,-22.06878 13.72505,-34.89128 0.26223,-12.79516 -4.26833,-25.35723 -13.72367,-34.81256 -0.40456,-0.40456 -0.82312,-0.78594 -1.23882,-1.17253 -0.45414,-0.48636 -0.90782,-0.97411 -1.38245,-1.44874 L 429.55646,18.56045 c -20.75975,-20.7597339 -53.01747,-21.9275839 -72.32517,-2.61989 -19.30773,19.30771 -18.13848,51.564 2.62126,72.32373 l 95.35449,95.3544 -369.224531,-10e-4 c -47.238968,1e-5 -85.26992486,35.37156 -85.26992486,79.30641 0,20.59446 8.35732396,39.30712 22.10123986,53.37686 z"/>
+		</svg>
+	</label>
+
+	<!-- Wrapper to get the slide effect when the sidebar is shown -->
+	<div id="page-wrap">
+		{% include header.html %}
+
+		<!-- Internationalization -->
+		<ul id="languages">
+			{% for lang in site.data.i18n %}
+				<li>
+					{% if lang[0] == page.lang %}
+						<a href="{{ page.url }}"
+						   id="current-lang">
+							{{ lang[1].name | capitalize }}
+						</a>
+					{% else %}
+						{% assign translated = site.pages
+												| where: "ref", page.ref
+												| where: "lang", lang [0]
+						%}
+
+						{% if translated [0] %}
+							<a href="{{ translated [0].url }}">
+								{{ lang [1].name | capitalize }}
+							</a>
+						{% else %}
+							<!-- Searches on the collections -->
+							{% for col in site.collections %}
+
+								{% for doc in col.docs %}
+									{% if doc.ref == page.ref
+										and doc.lang == lang [0]
+									%}
+										<a href="{{ doc.url }}">
+											{{ lang [1].name | capitalize }}
+										</a>
+									{% endif %}
+								{% endfor %}
+
+							{% endfor %}
+
+						{% endif %}
+
+					{% endif %}
+				</li>
+			{% endfor %}
+		</ul>
+
+
+		{% include nav_bar.html %}
+
+		<div class="page-content">
+			<div class="wrapper">
+				{{ content }}
+			</div>
+		</div>
+
+		<a id="navigation-arrow" href="#">
+			{% include arrow-icon.svg %}
+		</a>
+
+		{% include footer.html %}
+	</div>
+
+</body>
+</html>

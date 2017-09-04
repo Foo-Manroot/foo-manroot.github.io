@@ -1,0 +1,66 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+
+default_lang: en
+
+defaults:
+    -
+        scope:
+            path: ""
+            type: "posts"
+        values:
+            lang: en
+            author: "foo"
+            layout: post
+            categories: "post"
+
+
+description:
+    en: >
+        Personal web page of Foo-Manroot, with articles, write-ups, useful tools,
+        personal projects and more information; mainly about cybersecurity.
+    es: >
+        Página web personal de Foo-Manroot, con artículos, write-ups, herramientas útiles
+        , proyectos y más información útil; sobre todo sobre ciberseguridad.
+
+
+title: Foo-ManBlog
+email: miguel.garciamartin@hotmail.com
+
+baseurl: ""
+url: "http://foo-manroot.github.io"
+
+
+github_username:  Foo-Manroot
+#reddit_username: Foo-Manroot
+#twitter_username: jekyllrb
+
+excerpt_separator: <!--more-->
+
+encoding: utf-8
+
+# Plugins and their config
+#plugins: [jekyll-paginate]
+#paginate: 2
+
+# Build settings
+markdown: kramdown
+#safe: True
+
+collections:
+        projects:
+                output: true
+                permalink: /:collection/:path
+                en: "projects"
+                es: "proyectos"
+        tools:
+                output: true
+                permalink: /:collection/:path
+                en: "tools"
+                es: "herramientas"

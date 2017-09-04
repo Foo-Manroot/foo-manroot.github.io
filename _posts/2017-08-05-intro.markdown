@@ -1,0 +1,114 @@
+---
+layout: post
+title:  "How this page is done"
+date:	2017-08-05 20:35:57 +0200
+author: foo
+categories: site-info
+ref: intro-post
+---
+
+This is the first post on the blog. Here, I'm going to write about how this page has
+been done.
+
+
+## Technologies
+First of all, this was intended to be hosted on
+[Github Pages](https://pages.github.com/), where the pages are generated with
+[Jekyll](https://jekyllrb.com/).
+
+I used the [default theme](https://github.com/jekyll/minima) and I've modified quite a
+lot (both on the technical and the visual part).
+
+### Jekyll
+Jekyll is a content generator written in Ruby. Its tasks are to get the content on the
+multiple files on the directory, interpret them and generate static pages to be served.
+
+That means that the web server (either Apache, Nginx or even `python -m
+SimpleHTTPServer`) has a lower charge, as it only has to serve content. This differs with
+the usual CMS (Content Management System), like Wordpress, where one has the database
+with the posts and articles and, using some kind of scripting language (like PHP), the
+server __creates__ the page just for that particular petition.
+
+In essence Jekyll exchanges memory for time, as there are a lot more duplicated data, but
+the server doesn't takes any time serving data (in comparison with executing PHP,
+getting content from the database and generating the page to send to the client).
+
+For example, in a very basic blog with four posts, it can be made very differently with
+dynamic or with static pages:
+
+  - __Dynamic pages__: the server only has one page, `posts.php`, that accepts an
+	argument to specify the required post. To get the post 'example_post', the client
+	should ask for `/posts.php?id=example_post`. On the server, there are the
+	following files:
+	<pre>
+	/
+	├── css
+	│   └── style.css
+	└── posts.php
+	</pre>
+
+  - __Static pages__: the server has one page for every post, duplicating a lot of
+	content (as the main template with the header, layout, etc. remains untouched
+	between every page). Thus, in the server, the directory structure will be as
+	follows:
+	<pre>
+	/
+	├── css
+	│   └── style.css
+	├── post_1.html
+	├── post_2.html
+	├── post_3.html
+	└── post_4.html
+	</pre>
+
+
+Memory is cheap and time is valuable, so the static pages are a good option to desing a
+web page for a blog. However, the insane amount of files is impossible to maintain, so
+there has to be a way to "compile" the page into static sites. Here is where Jekyll comes
+to save our day.
+
+Jekyll allows us, using a markup language called
+[Liquid](https://shopify.github.io/liquid/) (in fact, it's a
+[variation](https://jekyllrb.com/docs/templates/) of it) to maintain all the common parts
+of the page together (as the header, the layouts...) to focus on the content. Then, when
+Jekyll generates the site, all the files are interpreted and the pages with redundant
+data can be served, but we only have to maintain a few files (at least, fewer than having
+the static site).
+
+Our directory structure can be now something like this (post_*.markdown has only the
+post's text):
+<pre>
+.
+├── _config.yml
+├── css
+│   └── style.css
+├── _includes
+│   ├── footer.html
+│   └── header.html
+├── _layouts
+│   └── post.html
+└── _posts
+    ├── post_1.markdown
+    ├── post_2.markdown
+    ├── post_3.markdown
+    └── post_4.markdown
+</pre>
+
+And, when the site is already compiled, the resulting layout will be the same as the one
+of the static site:
+<pre>
+/
+├── css
+│   └── style.css
+├── post_1.html
+├── post_2.html
+├── post_3.html
+└── post_4.html
+</pre>
+
+With many more files, the site is far more easy to manaintain than before.
+
+
+This post is now far more extense than I though, so maybe the rest of the details about
+Jekyll and this web page will be material for another post in the future.
+

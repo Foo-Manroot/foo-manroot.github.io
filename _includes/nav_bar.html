@@ -1,0 +1,78 @@
+
+<aside id="sidebar" >
+
+	<ul>
+		<li class="sidebar-item">
+			<!--
+				Little hack to simulate onClick effect.
+				Extracted from: https://stackoverflow.com/a/32721572
+			-->
+			<input type="checkbox" id="sidebar-categ-checkbox" class="sidebar-checkbox"/>
+
+			{% assign categ_page = site.pages
+								| where: "ref", "categories-idx"
+								| where: "lang", page.lang
+			%}
+			<label for="sidebar-categ-checkbox" class="sidebar-label">
+				<!-- Div to allow clicking anywhere on the box and show the sublist -->
+				<div class="sidebar-item sidebar-deployable">
+					{{ categ_page [0].title | capitalize }}
+				</div>
+
+				<ul class="sidebar-content">
+					{% assign categories = site.categories | sort %}
+					{% for cat in categories %}
+						<li class="sidebar-final-item">
+							<a href="{{ categ_page [0].url }}#{{ cat [0] }}">
+								{{ cat [0] | capitalize }}
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</label>
+		</li>
+
+		<li class="sidebar-item sidebar-final-item">
+			{% assign translation = site.pages
+									| where: "ref", "about"
+									| where: "lang", page.lang
+			%}
+			<a href="{{ translation [0].url }}">
+					{{ translation [0].title }}
+			</a>
+		</li>
+		{% if page.lang == site.default_lang %}
+			{% assign path = site.baseurl %}
+		{% else %}
+			{% assign path = site.baseurl
+							| append: "/"
+							| append: page.lang
+			%}
+		{% endif %}
+		<!-- Collections -->
+		{% for col in site.collections %}
+
+			{% assign translation = col [ page.lang ] %}
+
+			{% if col.label == "posts" %}
+				{% assign translation = site.pages
+										| where: "ref", "index"
+										| where: "lang", page.lang
+				%}
+				<li class="sidebar-tiem sidebar-final-item">
+					<a href="{{ path }}/{{ translation.path }}">
+						{{ col.label | capitalize }}
+					</a>
+				</li>
+			{% else %}
+				<li class="sidebar-tiem sidebar-final-item">
+					<a href="{{ path }}/{{ col.label }}">
+						{{ translation | capitalize }}
+					</a>
+				</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+
+</aside>
+

@@ -26,7 +26,7 @@ El criptograma es `MzkuM3gyLKA5K2AlrKO0ZS99`
 
 A pesar de que puede resultar difícil verlo, ya que no hay relleno (el símbolo '=' del
 final), porque los bytes del mensaje original están alineados, el alfabeto usado hace
-pensar que es base 64. Al decodificar la cadena, sin embarog, sólo sale basura:
+pensar que es base 64. Al decodificar la cadena, sin embargo, sólo sale basura:
 ```sh
 $ echo "MzkuM3gyLKA5K2AlrKO0ZS99" | base64 -d | xxd
 00000000: 3339 2e33 7832 2ca0 392b 6025 aca3 b465  39.3x2,.9+`%...e

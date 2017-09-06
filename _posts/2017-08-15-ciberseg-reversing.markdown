@@ -404,5 +404,5 @@ $ java Flag | xxd
 00000020: 3320 3323 1f23 247d 0a                   3 3#.#$}.
 ```
 
-So, the flag is `flag{693f'$da %d""d"ac#"#'a"ce333 3##$}` (with all its strange
-characters).
+So, the flag is `flag{693f'$da %d""d"ac#"#'a"ce333 3##$}` (the problematic `0x1f`
+character  has been removed).

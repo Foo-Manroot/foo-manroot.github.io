@@ -407,5 +407,5 @@ $ java Flag | xxd
 00000020: 3320 3323 1f23 247d 0a                   3 3#.#$}.
 ```
 
-Por lo tanto, la bandera es `flag{693f'$da %d""d"ac#"#'a"ce333 3##$}` (con todos sus
-caracteres extraños).
+Por lo tanto, la bandera es `flag{693f'$da %d""d"ac#"#'a"ce333 3##$}` (se ha eliminado
+el carácter problemático, `0x1f`).

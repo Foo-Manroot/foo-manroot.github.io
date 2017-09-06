@@ -1,5 +1,6 @@
 {
     "name": "Foo-ManBlog",
+    "short_name": "Foo-ManBlog",
     "icons": [
         {
             "src": "/icons/android-chrome-192x192.png",

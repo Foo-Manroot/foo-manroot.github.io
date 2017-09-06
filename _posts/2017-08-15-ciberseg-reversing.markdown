@@ -356,7 +356,7 @@ Yay, it didn't. The title of that last video is the flag:
 ### Materials
 
 For this last challenge we're going to need [this apk](/assets/posts
-/2017-08-15-ciberseg-reversing/reto.apk).
+/2017-08-15-ciberseg-reversing/reto.tar.gz).
 
 ### The challenge
 

@@ -358,7 +358,7 @@ Bien, no lo hizo. El título de este vídeo es la bandera:
 ### Materiales
 
 Para este último reto sólo vamos a necesitar [esta apk](/assets/posts
-/2017-08-15-ciberseg-reversing/reto.apk).
+/2017-08-15-ciberseg-reversing/reto.tar.gz).
 
 ### El reto
 

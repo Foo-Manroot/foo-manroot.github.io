@@ -1,51 +1,52 @@
 ---
 layout: post
-title:  "Scraping Twitter for fun... but no profit"
+title:  "Scraping Twitter"
 date:	2017-09-05 13:19:12 +0200
 author: foo
-categories: scraping twitter
+categories: es scraping twitter
+lang: es
 ref: scraping-twitter
 ---
 
-## Scraping Twitter for fun... but no profit
+## Scraping Twitter por diversión... y necesidad
 
-A week ago, after reading a
-[Reddit post](https://www.reddit.com/r/netsecstudents/comments/6wj7xq
-/most_efficenteffective_way_to_keep_up_with_netsec/) with some Twitter accounts to follow
-to be updated with the latest news on netsec field, and I decided to follow them.
+Hace como una semana, después de leer un
+[post en Reddit](https://www.reddit.com/r/netsecstudents/comments/6wj7xq
+/most_efficenteffective_way_to_keep_up_with_netsec/) con algunas cuentas de Twitter para
+seguir y estar al tanto de las últimas noticias en seguridad informática, y decidí
+seguirlas.
 
-However, I couldn't find any way to create a feed, like a normal RSS feed with blogs and
-similar pages. And I didn't want to make a new account just for lurk around, without
-interacting in any form.
+Sin embargo, no pude encontrar ningún modo de obtener la información, como normalmente se
+hace con RSS para los blogs y páginas similares. Y no quería crearme una cuenta nueva
+y sólo recibir noticias, sin interactuar de ningún modo.
 
-In brief, I just wanted to read news, as I do with my Reddit account, where I have a
-[multireddit](https://www.reddit.com/r/CracktheCode+DSP+Exhibit_Art+GNURadio+MachineLearning+OpenToAllCTFteam+ProgramAnalysisStudy+REMath+RTLSDR+ReverseEngineering+algorithms+artificial+blackhat+breakmycode+codes+commandline+compsci+computerforensics+crypto+cryptography+gamedev+hackrf+learnmath+logic+lowlevel+math+memoryforensics+netsec+netsecstudents+op011+programming+programmingchallenges+puzzles+rfelectronics+security+securityCTF+unix+web_design+webdev/)
-with all the subreddits that I find useful or interesting.
+En resumen, sólo quería leer noticias, como hago con mi cuenta de Reddit, donde tengo un
+[multireddit](https://www.reddit.com/r/CracktheCode+DSP+Exhibit_Art+GNURadio+MachineLearning+OpenToAllCTFteam+ProgramAnalysisStudy+REMath+RTLSDR+ReverseEngineering+algorithms+artificial+blackhat+breakmycode+codes+commandline+compsci+computerforensics+crypto+cryptography+gamedev+hackrf+learnmath+logic+lowlevel+math+memoryforensics+netsec+netsecstudents+op011+programming+programmingchallenges+puzzles+rfelectronics+security+securityCTF+unix+web_design+webdev/) con todos los subreddits que creo que son útiles
+o interesantes.
 
+Parecía que se me forzaba a crear una nueva cuenta, significando que me tendría que crear
+un nuevo usuario y contraseña (aunque eso tampoco es un gran problema, porque uso un
+_password manager_) y debería instala las herramientas oficiales (básicamente, la
+aplicación de Twitter) para estar al tanto de las noticias.
 
-It seemed that I was being forced to create a new account, meaning that I'll have
-a new user/passwd (even though that's not a big problem, as I use a password manager)
-and should install the official tools (mainly, the Twitter App) to stay update.
+Y la verdad es que no me apetecía crearme una cuenta, ni usar su aplicación; así que
+creé mi propio _script_ para obtener los datos que quería.
 
-And I didn't really wanted to create an account, nor use their app; so I just created
-my own script to gather the data I wanted.
+### Reconocimiento
 
+Como con cualquier proyecto, lo primero que hay que hacer es el diseño; y eso implica
+saber cómo la página Twitter (en escritorio, con JavaScript habilitado) carga más
+contenido cuando se alcanza el final de la página; y cómo sabe que hay nuevos tweets
+disponibles.
 
-### Reconnaissance
+Para ello, sólo tenemos que inspeccionar el tráfico entre el navegador y el servidor; y
+las herramientas de desarrollo de Firefox son suficientes para esta tarea.
 
-As with every project, the first thing to do is to design it; and that implies to know
-how does the Twitter page (on desktop, with JavaScript enabled) load more content when
-one reaches the bottom of the page; and also how does it know that there are new tweets
-available.
+#### Obteniendo actualizaciones
 
-To this end, we just have to inspect the traffic between the browser and the server; and
-Firefox's developer tools are sufficient for this task.
-
-#### Getting updates
-
-The first thing we notice inspecting the traffic (the 'network' tab, on the developer
-tools) is that, periodically (every half a minute, or so), there are some requests to
-what seems to be an update page:
+La primera cosa que notamos inspeccionando el tráfico (la pestaña 'network', en las
+herramientas de desarrollo) es que, periódicamente (cada medio minuto, más o menos), hay
+algunas peticiones a lo que parece ser una página de actualización:
 ```
 https://twitter.com/i/profiles/show/malwareunicorn/timeline/tweets?composed_count=0
 	&include_available_features=1
@@ -58,12 +59,11 @@ https://twitter.com/i/profiles/show/malwareunicorn/timeline/tweets?composed_coun
 
 {% include image.html
 	src="/assets/posts/2017-09-05-scraping-twitter/twitter-update-requests.png"
-	title="Requests viewed with Firefox's developer tools"
-	alt="View from the developer tools"
+	title="Peticiones vistas con las herramientas de desarrollo de Firefox"
+	alt="Vista de las herramientas de desarrollo"
 %}
 
-
-And the response is the following one:
+Y la respuesta es la siguiente:
 ```sh
 $ curl -Ls "https://twitter.com/i/profiles/show/malwareunicorn/timeline/tweets?composed_count=0&include_available_features=1&include_entities=1&include_new_items_bar=true&interval=30000&latent_count=0&min_position=904803707652411392" 2>&1 | jq "."
 {
@@ -73,29 +73,29 @@ $ curl -Ls "https://twitter.com/i/profiles/show/malwareunicorn/timeline/tweets?c
   "new_latent_count": 0
 }
 ```
+Cuando hay una nueva actualización, `items_html` contiene el HTML de los tweets nuevos,
+listo para ser añadido al _stream_ (una lista ordenada con `id="stream-items-id"`).
 
-When there is a new update, `items_html` contains the HTML of the new tweets, ready to
-be appended inside the stream (an ordered list with `id="stream-items-id"`).
+No sé exactamente qué significa cada uno de los parámetros en la petición (aunque los
+nombres dan alguna pista); pero lo más importante a tener en cuenta es:
 
-I don't know exactly what does every parameter on the update request mean (although the
-names can give some clues); but the important thing to note are:
+  - **Username**: Las peticiones de actualización se hacen a https://twitter.com/i
+	/profiles/show/**USUARIO**/(...), así que estas peticiones se pueden hacer sin
+	problema por cada usuario
 
-  - **Username**: The update requests are made to https://twitter.com/i/profiles/show
-	/**USERNAME**/(...), so these requests can be made without problem by user
-
-  - **Min\_position**: Probably, the ID of the last tweet fetched. This theory is
-	supported by the fact that the ID of the first tweet (the value of
-	`data-tweet-id`) on the feed (obviating the pinned one) is, indeed,
-	*904803707652411392*. Also, on the container of the tweets (the div with
-	`class="stream-container"`) there are a couple of parameters that are most
-	likely related to this one:
+  - **Min\_position**: Probablemente, el ID del último tweet obtenido. Esta teoría se
+	refuerza con el hecho de que el ID del primer tweet (el valor de `data-tweet-id`
+	en el _feed_ (obviando el tweet anclado) es, efectivamente, *904803707652411392*.
+	Además, en el contenedor de los tweets (el div con `class="stream-container"`)
+	hay un par de parámetros que están seguramente relacionados con este:
 	```html
 	<div class="stream-container" data-max-position="904803707652411392" data-min-position="903449933658722305">
 	```
 
-To test our hypothesis about the meaning of each parameter, lets forge a request to get
-the first tweet (the one with ID *904803707652411392*). To do that, we must get the ID
-of *the previous* tweet, that happens to be *904803158697717760*. This is the result:
+Para probar nuestra hipótesis sobre el significado de cada parámetro, vamos a crear una
+petición para obtener el primer tweet (el de ID *904803707652411392*). Para ello, debemos
+obtener el ID del tweet *anterior*, que resulta ser *904803158697717760*. Este es el
+resultado:
 <pre>
 $ curl -Ls "https://twitter.com/i/profiles/show/malwareunicorn/timeline/tweets?composed_count=0&include_available_features=1&include_entities=1&include_new_items_bar=true&interval=30000&latent_count=0&min_position=904803158697717760" 2>&1 | jq "."
 {
@@ -109,26 +109,26 @@ $ curl -Ls "https://twitter.com/i/profiles/show/malwareunicorn/timeline/tweets?c
 </b></ul></b></span>
 </pre>
 
-Yay! We got the desired tweet (yes, it has *a lot* of code). To check it, we can grep
-the text, to see if it contains *"Was made with a PE and ELF binary with IDA"* (the text
-of the wanted tweet):
+¡Bien! Tenemos el tweet deseado (sí, tiene *un montón* de código). Para comprobarlo,
+podemos filtrar el texto con *grep*, para ver si contiene *"Was made with a PE and ELF
+binary with IDA"* (el texto del tweet que queremos):
 ```sh
 $ curl -Ls "https://twitter.com/i/profiles/show/malwareunicorn/timeline/tweets?composed_count=0&include_available_features=1&include_entities=1&include_new_items_bar=true&interval=30000&latent_count=0&min_position=904803158697717760" 2>&1 | grep -o "Was made with a PE and ELF binary with IDA"
 Was made with a PE and ELF binary with IDA
 ```
 
-Perfect, now we can get the new tweets. It's just a matter of parse the HTML (I used
-[BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/) for that purpose) and
-get all the data we want.
+Perfecto, ahora podemos obtener tweets. Ahora simplemente se trata de interpretar el
+HTML (yo usé [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/) para ello)
+y obtener todos los datos que queramos.
 
+#### Página infinita
 
-#### Infinite scrolling
+Con todo lo que hemos aprendido de cómo se obtienen los tweets nuevos, tenemos una tarea
+más fácil, puesto que tenemos mucha información interesante sobre la organización de la
+página.
 
-With all the knowledge we acquired investigating the update, we have now an easier task,
-as we already have some valuable information about the organization of the page.
-
-When we scroll down, we see a new GET request, similar to the previous ones, to the
-following address:
+Cuando bajamos al final de la página, vemos una nueva petición GET, similar a la primera,
+a la siguiente dirección:
 ```
 https://twitter.com/i/profiles/show/malwareunicorn/timeline/tweets
 	?include_available_features=1
@@ -137,48 +137,47 @@ https://twitter.com/i/profiles/show/malwareunicorn/timeline/tweets
 	&reset_error_state=false
 ```
 
-And the response is another JSON with the following keys and values:
+Y la respuesta es otro JSON con las siguientes claves y valores:
 
   - **min\_position**: 902568467332603904
   - **has\_more\_items**: true
-  - **items\_html**: (a lot of HTML with the new tweets)
+  - **items\_html**: (mucho HTML con los nuevos tweets)
   - **new\_latent\_count**: 20
 
 
-Now it becomes clear that the updates are made according to some limits, indicated with
-the `max_position` and `min_position` parameters, that are taken the first time from
-the stream container and later updated with the response JSONs.
+Ahora se ve claramente que las peticiones se hacen de acuerdo a unos límites, indicados
+con los parámetros `max_position` y `min_position`, que son tomados por primera vez del
+contenedor de los tweets y luego actualizados con las respuestas JSON.
 
 
-### Building the scraper and notifying the updates
+### Construyendo el scraper y notificando las actualizaciones
 
-After getting all the information, it's trivial to build a program that requests that
-pages and parses the HTML (as I said earlier, you can use BeautifulSoup with Python) to
-retrieve the desired information.
+Tras obtener toda la información, es trivial construir un programa que pida las páginas
+e interprete el HTML (como ya dije antes, se puede usar BeautifulSoup con Python) para
+obtener la información deseada.
 
-Then, different methods may be used to notificate on new tweets, either using
-`subprocess.Popen` to call `notify-send` (at least on UNIX-like systems) or using a
-Python library. I did it with [notify2](https://pypi.python.org/pypi/notify2), allowing
-me to easily load the text of the tweet on a notification message and get the updates
-while I'm doing other things, like playing videogames or working.
+Luego, se pueden usar diferentes métodos para notificar los tweets, ya sea usando
+`subprocess.Popen` para llamar a `notify-send` (al menos en sistemas tipo UNIX) o usando
+una biblioteca de Python. Yo lo hice con [notify2](https://pypi.python.org/pypi/notify2),
+permitiéndome cargar fácilmente el texto del tweet en una notificación y obtener las
+actualizaciones mientras hago otras cosas, como jugar a videojuegos o trabajar.
 
-Sometimes there are too much updates and some are not shown, so I should try to search
-another method to really get a useful feeder.
+A veces a demasiadas actualizaciones y algunas no se muestran, así que debería intentar
+buscar otro método para obtener una herramienta más útil.
+
+## Usando el _scraper_ con otro propósito
+
+Aunque la idea inicial es simplemente obtener los tweets de la gente a la que "sigo"
+(realmente no les sigo con mi cuenta, porque no tengo...), este _scraper_ puede
+resultarle más útil a otra gente sindo usado sólo como biblioteca.
+
+Por supuesto, si el _scraper_ te resulta útil, eres libre de usarlo y modificarlo (bajo
+los términos especificados en la licencia, si es que hay).
 
 
-## Using the scraper with other purposes
-
-Although the initial idea was just to get the tweets of the people I "follow" (Im not
-really following them with my account, as I have none...), this scraper may result more
-useful to other people used only as a library.
-
-
-Of course, if the scraper is useful to you, you are free to use and modifiy it (under the
-terms stated on the license, if there's one).
-
-For example, to get the 2 latest tweet from a user, you can use the function
-`get_tweets`, that recieves a list with the users (read the docstring for more info),
-as follows:
+Por ejemplo, para obtener los 2 últimos tweets de una persona, se puede usar la función
+`get_tweets`, que recibe una lista con los nombres de las cuentas (se puede leer la
+documentación de cada función para más información), como se ve a continuación:
 ```python
 >>> import scraper
 >>> data = scraper.get_tweets (["mzbat"], max_count = 2)
@@ -238,51 +237,51 @@ as follows:
 }
 ```
 
-In that example, two tweets are retrieved and pretty-printed using `json.dumps`.
+En ese ejemplo, dos tweets son obtenidos e impresos por pantalla usando `json.dumps`.
 
-The retrieved data is a dictionary with the following format:
+Los datos obtenidos están en un diccionario con el siguiente formato:
 ```python
 {
-    <user>: {
+    <cuenta>: {
         <tweet-id>: {
-              "profile_pic": <avatar of the tweet owner>
-            , "permalink": <link to the tweet>
+              "profile_pic": <avatar de la cuenta>
+            , "permalink": <enlace al tweet>
             , "stats": {
-                  "likes": <number of likes>
-                , "retweets": <number of retweets>
-                , "replies": <number of replies>
+                  "likes": <número de 'likes'>
+                , "retweets": <número de retweets>
+                , "replies": <número de respuestas>
             }
-            , "tweet_id": <tweet-id>
-            , "text": <text of the tweet>
-            , "tweet_age": <timestamp of the tweet, in UNIX epoch format>
-            , "pinned": <indication to know if the tweet is pinned>
-            , "conversation": <conversation-id>
+            , "tweet_id": <id del tweet>
+            , "text": <texto del tweet>
+            , "tweet_age": <hora del tweet, con formato epoch de UNIX>
+            , "pinned": <indicación para saber si el tweet está anclado>
+            , "conversation": <id de la conversación>
             , "user": {
-                # Information of the owner of the tweet (important if it's a retweet)
-                  "username": <account name (twitter.com/username)>
-                , "displayname": <nickname for the user>
-                , "uid": <user id>
-                , "avatar": <profile pic>
+                # Información de la cuenta propietaria del tweet (importante si es un retweet)
+                  "username": <nombre de la cuenta (twitter.com/nombre)>
+                , "displayname": <nickname de la cuenta>
+                , "uid": <id de la cuenta>
+                , "avatar": <imagen de la cuenta>
             }
-            , "retweet": <indication to know if it has been tweeted by someone else>
-            # Only if "retweet" is True
+            , "retweet": <indicación para saber si ha sido un tweet de otra persona>
+            # Sólo si "retweet" es True
             , "retweet_info" {
-                  "retweet_id": <id of the retweet>
-                , "retweeter": <username who retweeted (the one whose data is being extracted)>
+                  "retweet_id": <id del retweet>
+                , "retweeter": <nombre de la cuenta que retweeteó (la misma de la que se están extrayendo los datos)>
             }
         }
-        # ... (more tweeets from the user)
+        # ... (más tweets en la cuenta)
     }
-    # ... (more users and their tweets)
+    # ... (más cuentas con sus tweets)
 }
 ```
 
-Probably some things should be changed to expose only the needed methods to get data (in
-fact, only `get_tweets` should be public, making the others private methods), but for
-the moment I don't think it's necessary.
+Probablemente algunas cosas se deben cambiar para exponer sólo los métodos necesarios
+para obtener datos (de hecho, sólo `get_tweets` debería ser público, haciendo al resto
+métodos privados), pero por el momento no creo que sea necesario.
 
 -----------------------------------------------------------------------------------------
 
-The whole project explained on this article is
-[hosted on Github](https://github.com/Foo-Manroot/tweet-feed), so you can use it freely
-and contribute if you want to.
+El proyecto entero explicado en este artículo
+[está en Github](https://github.com/Foo-Manroot/tweet-feed), así que cualquiera puede
+usarlo y contribuir libremente, si quiere.

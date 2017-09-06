@@ -21,7 +21,11 @@ to do.
 Should work well on LANs, but when a NAT is between the hosts, the chat is no more able
 to send message. That should be one of the main things to work on.
 
-![example of a chat](/assets/projects/images/cal.png "Test chat with nobody")
+{% include image.html
+	src="/assets/projects/images/cal.png"
+	title="Test chat with nobody"
+	alt="Example of a chat"
+%}
 
 ----
 

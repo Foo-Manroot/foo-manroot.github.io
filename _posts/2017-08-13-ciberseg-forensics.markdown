@@ -80,7 +80,11 @@ couldn't get the answer searching the strings.
 
 Extracting the files gives us the following image with the answer:
 
-![image with the flag](/assets/posts/2017-08-13-ciberseg-forensics/flag.png "Flag")
+{% include image.html
+	src="/assets/posts/2017-08-13-ciberseg-forensics/flag.png"
+	title="Flag"
+	alt="Image with the flag"
+%}
 
 The flag is: `flag{4077fb6a74ea5a5b6ac7d0b74e5a379d}`
 
@@ -150,8 +154,11 @@ with 6 '?a' elements, where it takes hours to perform the search. Fortunately, w
 the flag on the first try using `hashcat -m 1000 -a 3 -o cracked ctf.hashes
 flag{?a?a?a?a?a}`, taking only a couple of minutes:
 
-![result of hashcat](/assets/posts/2017-08-13-ciberseg-forensics/hashcat-crack.png
-"Cracked password by HashCat")
+{% include image.html
+	src="/assets/posts/2017-08-13-ciberseg-forensics/hashcat-crack.png"
+	title="Cracked password by HashCat"
+	alt="Result of HashCat"
+%}
 
 
 #### Second approach
@@ -221,8 +228,11 @@ hide information on music files.
 
 As the data is unencrypted, we can simply extract it and get the flag:
 
-![extracted file](/assets/posts/2017-08-13-ciberseg-forensics/deepsound.png
-"Secret data extracted using DeepSound")
+{% include image.html
+	src="/assets/posts/2017-08-13-ciberseg-forensics/deepsound.png"
+	title="Secret data extracted using DeepSound"
+	alt="Extracted file"
+%}
 
 And we have that last flag of this set of challenges:
 `flag{thelannistersendtheirregards}`.

@@ -32,8 +32,11 @@ Además, añadí ejemplo e incluso [el trabajo final](https://github.com/Foo-Man
 /Script-JFlex-CUP/blob/master/test/sem/Memoria.pdf) resultante de ese semestre, con la
 memoria y todo el código fuente.
 
-![salida del analizador](/assets/projects/images/script-jflex-cup.png
-"Analizador semántico en acción")
+{% include image.html
+	src="/assets/projects/images/script-jflex-cup.png"
+	title="Analizador semántico en acción"
+	alt="Salida del analizador"
+%}
 
 ----
 

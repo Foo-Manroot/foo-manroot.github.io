@@ -20,8 +20,11 @@ principal que hay que usar es `GUI_main`.
 No tuvimos tiempo ni ganas para darle nombre, así que cogimos el nombre sugerido
 automáticamente por Github.
 
-![juego en ejecución](/assets/projects/images/literate-octo-umbrella.png
-"Jugando en el nivel 1")
+{% include image.html
+	src="/assets/projects/images/literate-octo-umbrella.png"
+	title="Jugando en el nivel 1"
+	alt="Juego en ejecución"
+%}
 
 ----
 

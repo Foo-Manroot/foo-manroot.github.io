@@ -8,7 +8,11 @@ ref: projects-time-wanderer
 
 ## Time Wanderer
 
-![time-wanderer cover](/assets/projects/images/time-wanderer.png "Cover")
+{% include image.html
+	src="/assets/projects/images/time-wanderer.png"
+	title="Cover"
+	alt="Cover de Time-Wanderer"
+%}
 
 Este es un videojuego que hicimos (unos compañeros y yo) para la clase '_Tecnología de
 Videojuegos_', de la universidad, como proyecto final.

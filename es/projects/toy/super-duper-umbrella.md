@@ -35,8 +35,11 @@ No tuvimos tiempo ni ganas para darle nombre, así que cogimos el nombre sugerid
 automáticamente por Github.
 
 
-![captura de pantalla del juego con detalle extra](/assets/projects/images/
-super-duper-umbrella.png "Juego con la opción de detalle extra activada")
+{% include image.html
+	src="/assets/projects/images/super-duper-umbrella.png"
+	title="Juego con la opción de detalle extra activada"
+	alt="Captura de pantalla del juego con detalle extra"
+%}
 
 ----
 

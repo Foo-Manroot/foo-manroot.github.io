@@ -79,7 +79,11 @@ obtener la respuesta buscando _strings_.
 
 Al extraer los ficheros obtenemos la siguiente imagen con la respuesta:
 
-![imagen con la bandera](/assets/posts/2017-08-13-ciberseg-forensics/flag.png "Bandera")
+{% include image.html
+	src="/assets/posts/2017-08-13-ciberseg-forensics/flag.png"
+	title="Imagen con la bandera"
+	alt="Bandera"
+%}
 
 La bandera es: `flag{4077fb6a74ea5a5b6ac7d0b74e5a379d}`
 
@@ -150,9 +154,11 @@ tarda horas en realizar la búsqueda. Afortunadamente, encontramos la bandera en
 intento usando `hashcat -m 1000 -a 3 -o cracked ctf.hashes flag{?a?a?a?a?a}`, tardando
 sólo un par de minutos:
 
-![resultado de hashcat](/assets/posts/2017-08-13-ciberseg-forensics/hashcat-crack.png
-"Contraseña sacada con HashCat")
-
+{% include image.html
+	src="/assets/posts/2017-08-13-ciberseg-forensics/hashcat-crack.png"
+	title="Contraseña sacada con HashCat"
+	alt="Resultado de hashcat"
+%}
 
 #### Segunda aproximación
 
@@ -224,8 +230,11 @@ ocultar información en archivos de música.
 
 Como los datos están sin cifrar, podemos simplemente extraerlos y obtener la bandera:
 
-![extracted file](/assets/posts/2017-08-13-ciberseg-forensics/deepsound.png
-"Secret data extracted using DeepSound")
+{% include image.html
+	src="/assets/posts/2017-08-13-ciberseg-forensics/deepsound.png"
+	title="Datos extraídos usando DeepSound"
+	alt="Fichero extraído"
+%}
 
 Y tenemos la última bandera de este conjunto de retos:
 `flag{thelannistersendtheirregards}`.

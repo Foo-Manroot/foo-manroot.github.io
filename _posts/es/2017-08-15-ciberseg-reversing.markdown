@@ -366,8 +366,11 @@ Tras descargar la aplicación de Android, podemos usar un emulador para instalar
 explorarla un poco. Sólo tiene un botón con el texto "calcular flag"; y, una vez
 accionado, muestra ek texto "flag calculada".
 
-![Exploración de la app](/assets/posts/2017-08-15-ciberseg-reversing/apk-first-run.png
-"Primera ejecución de la app")
+{% include image.html
+	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-first-run.png"
+	title="Primera ejecución de la aplicación"
+	alt="Exploración de la aplicación"
+%}
 
 Parece que algo pasa por debajo, en el _back-end_, pero no se nos muestra. Ahora es
 momento para examinar el código fuente. Podemos usar cualquier servicio online para
@@ -379,8 +382,11 @@ sus _.dex_, en un jar, con archivos _.class_. Luego, decompilamos el bytecode us
 [decompilador de Java](http://jd.benow.ca/), y podemos obtener una clase llamada
 __CalculateFlagAction__, donde podemos ver:
 
-![App decompilada](/assets/posts/2017-08-15-ciberseg-reversing/apk-decompiled.png
-"CalculateFlagAction vista en el decompilador")
+{% include image.html
+	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-decompiled.png"
+	title="CalculateFlagAction vista en el decompilador"
+	alt="App decompilada"
+%}
 
 Se ve aquí que la bandera es calculada añadiendo los códigos de los caracteres uno a uno
 en un array que luego se formatea como un cadena con la bandera ("flag{...}")
@@ -395,7 +401,7 @@ Hay un par de caracteres extraños, así que es mejor guardar el archivo decompi
 todos los cambios apropiados, podemos imprimir la bandera:
 
 __NOTA: como los caracteres extraños dan problemas a la hora de interpretar el XML (para
-el feed RSS), han sido eliminados del texto (en particular, el carácter `0x1f`)__ 
+el feed RSS), han sido eliminados del texto (en particular, el carácter `0x1f`)__
 
 ```sh
 $ javac Flag.java

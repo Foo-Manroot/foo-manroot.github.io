@@ -119,8 +119,11 @@ SHA-1.
 Usando cualquier base de datos online, como [crackstation](https://crackstation.net/),
 podemos encontrar la partes primera y última de la bandera:
 
-![resultado de crackstation](/assets/posts/2017-08-11-ciberseg-crypto/crackstation.png
-"Resultado obtenido con CrackStation")
+{% include image.html
+	src="/assets/posts/2017-08-11-ciberseg-crypto/crackstation.png"
+	title="Resultado obtenido con CrackStation"
+	alt="Resultado de CrackStation"
+%}
 
 Desafortunadamente, la parte del medio de la bandera no ha sido encontrada. Sin embargo,
 podemos usar la pista que nos dan, de que es como una contraseña de la
@@ -128,7 +131,10 @@ podemos usar la pista que nos dan, de que es como una contraseña de la
 `[a-z]{3}[[:punct:]][0-9]{4}`). Eso hace la tarea más sencilla. Después de un par de
 minutos tenemos la respuesta:
 
-![resultado de hashcat](/assets/posts/2017-08-11-ciberseg-crypto/cracked-hash.png
-"Resultado obtenido con HashCat")
+{% include image.html
+	src="/assets/posts/2017-08-11-ciberseg-crypto/cracked-hash.png"
+	title="Resultado obtenido con HashCat"
+	alt="Resultado de HashCat"
+%}
 
 La bandera es `flag{uah#5674}`

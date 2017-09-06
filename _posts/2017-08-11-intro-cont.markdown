@@ -54,11 +54,19 @@ others). These two layouts are changed by simply modifying the value of `grid-te
 These are the layouts, shown using the Mozilla Firefox's developer tools (the background
 colour has been removed to see the grid more easily):
 
-![grid on non-mobile devices](/assets/posts/2017-08-11-intro-cont/footer-grid.png)
+{% include image.html
+	src="/assets/posts/2017-08-11-intro-cont/footer-grid.png"
+	title="Grid shown using the developer tools"
+	alt="Grid on non-mobile devices"
+%}
 
 and on mobile:
 
-![grid on mobile devices](/assets/posts/2017-08-11-intro-cont/footer-grid-mobile.png)
+{% include image.html
+	src="/assets/posts/2017-08-11-intro-cont/footer-grid-mobile.png"
+	title="Grid shown using the developer tools"
+	alt="Grid on mobile devices"
+%}
 
 
 More examples of this are on [this website](https://gridbyexample.com/learn/), where I

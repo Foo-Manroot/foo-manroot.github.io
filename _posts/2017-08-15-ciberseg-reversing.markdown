@@ -364,8 +364,11 @@ After downloading the Android App, we can use an emulator to install and explore
 bit. It only has a button with the text (translated from spanish) "calculate flag"; and,
 once pressed, shows the text (again, translated from spanish) "flag calculated".
 
-![Exploration of the app](/assets/posts/2017-08-15-ciberseg-reversing/apk-first-run.png
-"First run of the app")
+{% include image.html
+	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-first-run.png"
+	title="First run of the app"
+	alt="Exploration of the app"
+%}
 
 It seems that something is happening in the back-end, but it isn't showed to us. Now it's
 time to examine the source code. We can use any online service to decompile an apk file;
@@ -376,8 +379,11 @@ _.dex_ files, into a jar, with _.class_ files. Then, we decompile the bytecode u
 a [Java decompiler](http://jd.benow.ca/), and we find a class named
 __CalculateFlagAction__, where we can see:
 
-![Decompiled app](/assets/posts/2017-08-15-ciberseg-reversing/apk-decompiled.png
-"CalculateFlagAction viewed on the decompiler")
+{% include image.html
+	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-decompiled.png"
+	title="CalculateFlagAction viewed on the decompiler"
+	alt="Decompiled app"
+%}
 
 We see there the flag being calculated by appending the character codes one by one into
 an array that is later formatted as a string with the flag ("flag{...}").

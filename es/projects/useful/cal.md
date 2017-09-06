@@ -21,7 +21,11 @@ Debería funcionar bien en redes locales, pero cuando hay una NAT entre los nodo
 ya no puede mandar mensajes. Esta debería ser una de las primeras cosas en las que
 ponerse trabajar.
 
-![ejemplo de chat](/assets/projects/images/cal.png "Conversación de prueba con nadie")
+{% include image.html
+	src="/assets/projects/images/cal.png"
+	title="Conversación de prueba"
+	alt="Ejemplo de chat"
+%}
 
 ----
 

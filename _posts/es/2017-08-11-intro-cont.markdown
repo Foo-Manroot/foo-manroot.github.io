@@ -57,11 +57,19 @@ cambian simplemente modificando el valor de `grid-template`.
 Estos son los dos modelos, mostrados usando las herramientas de desarrollo de Mozilla
 Firefox (el color de fondo se ha quitado para ver la rejilla más fácilmente):
 
-![grid on non-mobile devices](/assets/posts/2017-08-11-intro-cont/footer-grid.png)
+{% include image.html
+	src="/assets/posts/2017-08-11-intro-cont/footer-grid.png"
+	title="Rejilla vista con las herramientas de desarrollo"
+	alt="Rejilla en dispositivos con pantallas grandes"
+%}
 
 y para móviles:
 
-![grid on mobile devices](/assets/posts/2017-08-11-intro-cont/footer-grid-mobile.png)
+{% include image.html
+	src="/assets/posts/2017-08-11-intro-cont/footer-grid-mobile.png"
+	title="Rejilla en móviles vista con las herramientas de desarrollo"
+	alt="Rejilla en dispositivos móviles"
+%}
 
 
 Más ejemplos de esto están en [esta página](https://gridbyexample.com/learn/), donde yo

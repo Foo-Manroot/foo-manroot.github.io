@@ -20,7 +20,11 @@ y sus archivos de syntaxis).
 
 
 
-![script siendo ejecutado](/assets/projects/images/tools.png "Ejemplo de ejecución")
+{% include image.html
+	src="/assets/projects/images/tools.png"
+	title="Ejemplo de ejecución"
+	alt="Script siendo ejecutado"
+%}
 
 ----
 

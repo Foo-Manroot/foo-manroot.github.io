@@ -35,14 +35,19 @@ Con un control de accesos también basado en el del sistema de archivos de Unix,
 ver los archivos disponibles (a los que se tiene permiso para acceder) y administrar los
 propios.
 
-![file downloading](/assets/projects/images/crispy-potato_Files-download.png
-"Files downloading page")
+{% include image.html
+	src="/assets/projects/images/crispy-potato_Files-download.png"
+	title="Página de descarga de archivos"
+	alt="Descarga de archivos"
+%}
 
 También se pueden subir archivos nuevos:
 
-![file uploading](/assets/projects/images/crispy-potato_Files-upload.png
-"Uploading page")
-
+{% include image.html
+	src="/assets/projects/images/crispy-potato_Files-upload.png"
+	title="Página para la subida de archivos"
+	alt="Subida de archivos"
+%}
 
 ### Artículos
 

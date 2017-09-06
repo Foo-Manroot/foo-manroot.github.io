@@ -13,7 +13,11 @@ arquitectura cliente-servidor para asentar lo aprendido en las clases de '_Redes
 
 Aprendí todo lo que tenía que aprender, así que este proyecto está más bien abandonado.
 
-![ejemplo del chat](/assets/projects/images/chat.png "Conversación de ejemplo")
+{% include image.html
+	src="/assets/projects/images/chat.png"
+	title="Conversación de ejemplo"
+	alt="Ejemplo del chat"
+%}
 
 ---
 

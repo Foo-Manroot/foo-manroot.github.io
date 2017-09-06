@@ -56,10 +56,12 @@ https://twitter.com/i/profiles/show/malwareunicorn/timeline/tweets?composed_coun
 	&min_position=904803707652411392).
 ```
 
-[![View from the developer tools](
-	/assets/posts/2017-09-05-scraping-twitter/twitter-update-requests.png
-	"Requests viewed with Firefox's developer tools"
-)](/assets/posts/2017-09-05-scraping-twitter/twitter-update-requests.png)
+{% include image.html
+	src="/assets/posts/2017-09-05-scraping-twitter/twitter-update-requests.png"
+	title="Requests viewed with Firefox's developer tools"
+	alt="View from the developer tools"
+%}
+
 
 And the response is the following one:
 ```sh

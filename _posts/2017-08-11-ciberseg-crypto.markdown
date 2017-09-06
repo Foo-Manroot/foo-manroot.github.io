@@ -118,16 +118,21 @@ SHA-1.
 Using any online database, like [crackstation](https://crackstation.net/), we can find
 the first and last part of the flag:
 
-![crackstation result](/assets/posts/2017-08-11-ciberseg-crypto/crackstation.png
-"Result obtained with CrackStation")
+{% include image.html
+	src="/assets/posts/2017-08-11-ciberseg-crypto/crackstation.png"
+	title="Result obtained with CrackStation"
+	alt="CrackStation result"
+%}
 
 Unfortunately, the middle part of the flag hasn't been found. However, we can use the
 given clue, that it's like [UAH](https://www.uah.es)'s passwords (for those who don't
 know it, the format is `[a-z]{3}[[:punct:]][0-9]{4}`). That makes the task easier. After
 a couple of minutes, we have the answer:
 
-![hashcat result](/assets/posts/2017-08-11-ciberseg-crypto/cracked-hash.png
-"Result obtained with HashCat")
-
+{% include image.html
+	src="/assets/posts/2017-08-11-ciberseg-crypto/cracked-hash.png"
+	title="Result obtained with HashCat"
+	alt="HashCat result"
+%}
 
 The last flag is `flag{uah#5674}`

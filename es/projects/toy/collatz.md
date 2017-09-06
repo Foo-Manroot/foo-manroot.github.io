@@ -43,8 +43,11 @@ directorio:
   - AWK
 
 
-![ejemplo en Prolog](/assets/projects/images/collatz-prolog.png
-"Ejecución de ejemplo en Prolog")
+{% include image.html
+	src="/assets/projects/images/collatz-prolog.png"
+	title="Ejecución de ejemplo en Prolog"
+	alt="Ejemplo en Prolog"
+%}
 
 ----
 

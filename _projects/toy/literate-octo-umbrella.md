@@ -19,7 +19,11 @@ execute it. To execute the gui part, the main class to use is `GUI_main`.
 We didn't have time to give it a name (nor we wanted to), so we chose the name
 automatically suggested by Github.
 
-![game running](/assets/projects/images/literate-octo-umbrella.png "Playing on level 1")
+{% include image.html
+	src="/assets/projects/images/literate-octo-umbrella.png"
+	title="Game running"
+	alt="Playing on level 1"
+%}
 
 ----
 

@@ -17,7 +17,11 @@ Apart from the main script, `installer.sh` with its auxiliary data (`tools.json`
 `aux_installers`...), there is also a directory with a configuration for vim (with its
 `vimrc` and syntax files).
 
-![script being executed](/assets/projects/images/tools.png "Example of execution")
+{% include image.html
+	src="/assets/projects/images/tools.png"
+	title="Example of execution"
+	alt="Script being executed"
+%}
 
 ----
 

@@ -35,13 +35,19 @@ actions that need identification (like writing articles).
 With some access control also based on Unix file system's access control, one can view
 available files (the ones that has permissions to be viewed) and manage its own files:
 
-![file downloading](/assets/projects/images/crispy-potato_Files-download.png
-"Files downloading page")
+{% include image.html
+	src="/assets/projects/images/crispy-potato_Files-download.png"
+	title="Files downloading page"
+	alt="File download"
+%}
 
 Also, one can upload new files:
 
-![file uploading](/assets/projects/images/crispy-potato_Files-upload.png
-"Uploading page")
+{% include image.html
+	src="/assets/projects/images/crispy-potato_Files-upload.png"
+	title="Uploading page"
+	alt="File uploading"
+%}
 
 
 ### Articles

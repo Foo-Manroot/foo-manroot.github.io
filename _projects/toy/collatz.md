@@ -39,8 +39,11 @@ directory:
   - Ruby
   - AWK
 
-
-![example in Prolog](/assets/projects/images/collatz-prolog.png "Example run on Prolog")
+{% include image.html
+	src="/assets/projects/images/collatz-prolog.png"
+	title="Example run on Prolog"
+	alt="Example in Prolog"
+%}
 
 ----
 

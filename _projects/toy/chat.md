@@ -13,7 +13,11 @@ on the '_Networking_' course.
 
 I learned everything I had to, so this project is mostly abandoned.
 
-![chat example](/assets/projects/images/chat.png "Example conversation")
+{% include image.html
+	src="/assets/projects/images/chat.png"
+	title="Example conversation"
+	alt="Chat example"
+%}
 
 ---
 

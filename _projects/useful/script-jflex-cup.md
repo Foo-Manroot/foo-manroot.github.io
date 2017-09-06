@@ -30,7 +30,11 @@ Also, I added some examples and even [the final work](https://github.com/Foo-Man
 /Script-JFlex-CUP/blob/master/test/sem/Memoria.pdf) resulting from that semester, with
 the report and full source code (everyhing in spanish, of course).
 
-![parser output](/assets/projects/images/script-jflex-cup.png "Parser in action")
+{% include image.html
+	src="/assets/projects/images/script-jflex-cup.png"
+	title="Parser in action"
+	alt="Parser output"
+%}
 
 ----
 

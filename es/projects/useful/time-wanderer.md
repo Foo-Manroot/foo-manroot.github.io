@@ -14,8 +14,8 @@ ref: projects-time-wanderer
 	alt="Cover de Time-Wanderer"
 %}
 
-Este es un videojuego que hicimos (unos compañeros y yo) para la clase '_Tecnología de
-Videojuegos_', de la universidad, como proyecto final.
+Este es un videojuego que hicimos (unos compañeros, mencionados más abajo, y yo) para
+la clase '_Tecnología de Videojuegos_', de la universidad, como proyecto final.
 
 
 Está escrito en Java, usando [Slick2D](http://slick.ninjacave.com/), un motor gráfico
@@ -36,6 +36,32 @@ activar algunas palancas para eliminar esos bloqueos.
 
 Como se ha dicho antes, Slick2D es solamente un envoltorio alrededor de OpenGL; así que
 este juego está hecho casi desde cero (incluyendo las físicas y la IA).
+
+
+### Créditos
+
+Como he puesto antes, este juego ha sido realizado con un equipo de 5 personas:
+
+  - **Alberto Serrano Ibaibarriaga**: Todas las pistas de audio han sido compuestas por
+	él. Además, el inventario y el motor de sonido son obra suya.
+
+  - **Miguel García Martín** (yo): Jefe de proyecto. La IA de los enemigos y las armas
+	(salvo el diseño de los gráficos); además de diversos arreglos generales.
+
+	  - Github: {% include icon-github.html username="Foo-Manroot" %}
+	  - Contacto: [miguel.garciamartin@hotmail.com](mailto:miguel.garciamartin@hotmail.com)
+
+  - **Pablo Peña Romero**: Autor de los objetos especiales (como pociones y runas) y
+	algunos arreglos globales por diversas partes del juego.
+
+  - **Sergio Sánchez López**: Autor único del motor de físicas (un trabajo muy duro que
+	le fue recompensado con mayor nota), y las _tilesets_ de las habitaciones.
+
+	  - Github: {% include icon-github.html username="sergio-sanchezl" %}
+
+  - **Zamar-Elahi Fazal Roura**: Diseñador de los personajes y los objetos. Además, como
+	a Pablo, se le asignaron algunos arreglos globales en diversas partes.
+
 
 ----
 

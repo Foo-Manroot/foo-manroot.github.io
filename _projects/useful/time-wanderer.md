@@ -43,8 +43,8 @@ As I stated before, this game has been made with a team of 5 people:
   - **Alberto Serrano Ibaibarriaga**: All the sound tracks has been composed by him. Also,
 	the inventory and the sound engine is his work.
 
-  - **Miguel García Martín** (me): Team leader. As a remarkable contribution, the AI of
-	the enemies and some things of the weapons.
+  - **Miguel García Martín** (me): Team leader. Coded the enemies' AI and weapons
+	(except the graphics design). Also, general bugfixes.
 
 	  - Github: {% include icon-github.html username="Foo-Manroot" %}
 	  - Contact: [miguel.garciamartin@hotmail.com](mailto:miguel.garciamartin@hotmail.com)
@@ -57,7 +57,7 @@ As I stated before, this game has been made with a team of 5 people:
 
 	  - Github: {% include icon-github.html username="sergio-sanchezl" %}
 
-  - **Zamar-Elahi**: Designer of the characters and objects . Also, as Pablo, he was
+  - **Zamar-Elahi Fazal Roura**: Designer of the characters and objects . Also, as Pablo, he was
 	assigned some global fixes around the game.
 
 ----

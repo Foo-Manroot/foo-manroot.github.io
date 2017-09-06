@@ -393,10 +393,14 @@ que pensé que era más rápida y sencilla.
 Hay un par de caracteres extraños, así que es mejor guardar el archivo decompilado
 (desde el menú del decompilador) y luego modificarlo que copiarlo a mano. Después de
 todos los cambios apropiados, podemos imprimir la bandera:
+
+__NOTA: como los caracteres extraños dan problemas a la hora de interpretar el XML (para
+el feed RSS), han sido eliminados del texto (en particular, el carácter `0x1f`)__ 
+
 ```sh
 $ javac Flag.java
 $ java Flag
-flag{693f'$da %d""d"ac#"#'a"ce333 3##$}
+flag{693f'$da %d""d"ac#"#'a"ce333 3##$}
 $ java Flag | xxd
 00000000: 666c 6167 7b36 3933 6627 2464 6120 2564  flag{693f'$da %d
 00000010: 2222 6422 6163 2322 2327 6122 6365 3333  ""d"ac#"#'a"ce33

@@ -390,10 +390,14 @@ faster and easier.
 There are a couple of strange characters, so it's better to save the decompiled file
 (from the decompiler's menu) and then modify it than to copy it from by hand. After all
 the appropriate changes, we can print the flag:
+
+__NOTE: as the strange characters gives problems parsing the XML (for the RSS Feed),
+they have been removed from the text (in particular, the character `0x1f`)__
+
 ```sh
 $ javac Flag.java
 $ java Flag
-flag{693f'$da %d""d"ac#"#'a"ce333 3##$}
+flag{693f'$da %d""d"ac#"#'a"ce333 3##$}
 $ java Flag | xxd
 00000000: 666c 6167 7b36 3933 6627 2464 6120 2564  flag{693f'$da %d
 00000010: 2222 6422 6163 2322 2327 6122 6365 3333  ""d"ac#"#'a"ce33

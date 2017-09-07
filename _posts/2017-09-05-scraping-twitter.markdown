@@ -164,7 +164,7 @@ Sometimes there are too much updates and some are not shown, so I should try to 
 another method to really get a useful feeder.
 
 
-# Using the scraper with other purposes
+## Using the scraper with other purposes
 
 Although the initial idea was just to get the tweets of the people I "follow" (Im not
 really following them with my account, as I have none...), this scraper may result more

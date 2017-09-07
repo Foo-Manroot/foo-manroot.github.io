@@ -163,7 +163,7 @@ actualizaciones mientras hago otras cosas, como jugar a videojuegos o trabajar.
 A veces a demasiadas actualizaciones y algunas no se muestran, así que debería intentar
 buscar otro método para obtener una herramienta más útil.
 
-# Usando el _scraper_ con otro propósito
+## Usando el _scraper_ con otro propósito
 
 Aunque la idea inicial es simplemente obtener los tweets de la gente a la que "sigo"
 (realmente no les sigo con mi cuenta, porque no tengo...), este _scraper_ puede

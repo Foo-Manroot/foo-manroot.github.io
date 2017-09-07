@@ -7,8 +7,6 @@ categories: scraping twitter
 ref: scraping-twitter
 ---
 
-## Scraping Twitter for fun... but no profit
-
 A week ago, after reading a
 [Reddit post](https://www.reddit.com/r/netsecstudents/comments/6wj7xq
 /most_efficenteffective_way_to_keep_up_with_netsec/) with some Twitter accounts to follow
@@ -31,7 +29,7 @@ And I didn't really wanted to create an account, nor use their app; so I just cr
 my own script to gather the data I wanted.
 
 
-### Reconnaissance
+## Reconnaissance
 
 As with every project, the first thing to do is to design it; and that implies to know
 how does the Twitter page (on desktop, with JavaScript enabled) load more content when
@@ -41,7 +39,7 @@ available.
 To this end, we just have to inspect the traffic between the browser and the server; and
 Firefox's developer tools are sufficient for this task.
 
-#### Getting updates
+### Getting updates
 
 The first thing we notice inspecting the traffic (the 'network' tab, on the developer
 tools) is that, periodically (every half a minute, or so), there are some requests to
@@ -122,7 +120,7 @@ Perfect, now we can get the new tweets. It's just a matter of parse the HTML (I 
 get all the data we want.
 
 
-#### Infinite scrolling
+### Infinite scrolling
 
 With all the knowledge we acquired investigating the update, we have now an easier task,
 as we already have some valuable information about the organization of the page.
@@ -150,7 +148,7 @@ the `max_position` and `min_position` parameters, that are taken the first time 
 the stream container and later updated with the response JSONs.
 
 
-### Building the scraper and notifying the updates
+## Building the scraper and notifying the updates
 
 After getting all the information, it's trivial to build a program that requests that
 pages and parses the HTML (as I said earlier, you can use BeautifulSoup with Python) to

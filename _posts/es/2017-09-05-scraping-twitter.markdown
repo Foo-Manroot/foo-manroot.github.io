@@ -1,14 +1,12 @@
 ---
 layout: post
-title:  "Scraping Twitter"
+title:  "Scraping Twitter por diversión... y necesidad"
 date:	2017-09-05 13:19:12 +0200
 author: foo
 categories: es scraping twitter
 lang: es
 ref: scraping-twitter
 ---
-
-## Scraping Twitter por diversión... y necesidad
 
 Hace como una semana, después de leer un
 [post en Reddit](https://www.reddit.com/r/netsecstudents/comments/6wj7xq
@@ -32,7 +30,7 @@ aplicación de Twitter) para estar al tanto de las noticias.
 Y la verdad es que no me apetecía crearme una cuenta, ni usar su aplicación; así que
 creé mi propio _script_ para obtener los datos que quería.
 
-### Reconocimiento
+## Reconocimiento
 
 Como con cualquier proyecto, lo primero que hay que hacer es el diseño; y eso implica
 saber cómo la página Twitter (en escritorio, con JavaScript habilitado) carga más
@@ -42,7 +40,7 @@ disponibles.
 Para ello, sólo tenemos que inspeccionar el tráfico entre el navegador y el servidor; y
 las herramientas de desarrollo de Firefox son suficientes para esta tarea.
 
-#### Obteniendo actualizaciones
+### Obteniendo actualizaciones
 
 La primera cosa que notamos inspeccionando el tráfico (la pestaña 'network', en las
 herramientas de desarrollo) es que, periódicamente (cada medio minuto, más o menos), hay
@@ -121,7 +119,7 @@ Perfecto, ahora podemos obtener tweets. Ahora simplemente se trata de interpreta
 HTML (yo usé [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/) para ello)
 y obtener todos los datos que queramos.
 
-#### Página infinita
+### Página infinita
 
 Con todo lo que hemos aprendido de cómo se obtienen los tweets nuevos, tenemos una tarea
 más fácil, puesto que tenemos mucha información interesante sobre la organización de la
@@ -150,7 +148,7 @@ con los parámetros `max_position` y `min_position`, que son tomados por primera
 contenedor de los tweets y luego actualizados con las respuestas JSON.
 
 
-### Construyendo el scraper y notificando las actualizaciones
+## Construyendo el scraper y notificando las actualizaciones
 
 Tras obtener toda la información, es trivial construir un programa que pida las páginas
 e interprete el HTML (como ya dije antes, se puede usar BeautifulSoup con Python) para

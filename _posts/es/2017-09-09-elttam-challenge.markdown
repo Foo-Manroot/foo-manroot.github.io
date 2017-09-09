@@ -1,42 +1,43 @@
 ---
 layout: post
-title:  "Elttam challenge"
+title:  "Reto de Elttam"
 date:	2017-09-09 16:41:04 +0200
 author: foo
-categories: write-up challenge elttam
-lang: en
+categories: es write-up challenge elttam
+lang: es
 ref: elttam-challenge
 ---
 
-Some time ago I read an interesting post on the [Elttam](https://www.elttam.com.au/blog)
-(an infosec company) blog, and I decided to take a look on the rest of the webpage.
-I don't know how, but I ended on the [jobs section](https://www.elttam.com.au/careers/),
-where a little challenge has to be completed before applying.
+Hace un tiempo leí un post interesante en el blog de
+[Elttam](https://www.elttam.com.au/blog) (una empresa de seguridad), y decidí echar un
+vistazo al resto de la página. No sé cómo, pero acabé en la
+[sección de ofertas de trabajo](https://www.elttam.com.au/careers/),
+donde se debe completar un pequeño reto antes de solicitar un puesto.
 
-I didn't have any intention to apply, because I don't think I have the skills they're
-searching for (basically, because I haven't even ended my degree yet...); but the
-challenge seemed fun, so I decided to give it a shot.
-
----
-
-**NOTE: I've changed some of the data to not reveal the real solution of the
-challenge, although the methodology to solve it is exactly the same.**
+No tenía ninguna intención de solicitar nada, porque no creo que tenga las capacidades
+que estén buscando (básicamente, porque aún ni siquiera he acabado el Grado...); pero
+el reto parecía divertido, así que decidí intentarlo.
 
 ---
 
-## The challenge
+**NOTA: He cambiado algunos datas para no revelar la solución real del reto, aunque la
+metodología para resolverlo es exactamente la misma.**
+
+---
+
+## El reto
 
 {% include image.html
 	src="/assets/posts/2017-09-09-elttam-challenge/challenge-screenshot.png"
-	title="Screenshot of the challenge"
-	alt="Screenshot of the challenge page"
+	title="Captura de pantalla del reto"
+	alt="Captura de pantalla de la página del reto"
 %}
 
 
-The first thing to do is to get the hexdump and reverse it, to see what data is being
-represented. Maybe we can find some recognizable format. Here, I'm doing everything in
-just one step, so there's an extra `0d 0a 00` at the end (that doesn't affect us in
-any way):
+La primera cosa que hay que hacer es obtener el volcado hexadecimal y obtener el binario,
+para ver qué datos se están representando. Quizá podamos encontrar algún formato
+reconocible. Aquí hago todo en un sólo paso, así que hay un `0d 0a 00` de más al final
+(eso no nos afecta para nada):
 ```
 $ cat - | tr -d "\n" | sed -e "s/ //g" | xxd -r -ps > dump.bin
 2c 54 2d f0 0d 2a 08 00 27 c3 59 62 08 00 45 00
@@ -96,38 +97,40 @@ $ xxd dump.bin
 000001a0: 2b49 502b 6164 6472 6573 730d 0a0d 0a00  +IP+address.....
 ```
 
-It turns out that it's a POST request, and there are a couple of clues on the parameters:
-  - **q**: The email address is hidden in this request
-  - **bonus**: What is source IP address
+Resulta que es una petición POST, y hay un par de pistas en los parámetros:
+  - **q**: El email está escondido en esta petición
+  - **bonus**: Cuál es la dirección IP fuente
 
-Now we must find those two things.
+Ahora debemos encontrar esas dos cosas.
 
-### Email address
+### Dirección de email
 
-As stated by the first clue, the email address has to be hidden somewhere on the request,
-so we can try to find it first on the other parameters of the request... like the cookie.
-Lets see what does that base64 encoded string decode to:
+Como dice la primera pista, la dirección de email tiene que estar escondida en algún
+lugar de la petición,, así que podemos intentar encontrar primero en los otros parámetros
+de la petición... como la *cookie*. Vamos a ver qué se decodifica en esa cadena
+codificada en base64:
 ```sh
 $ cat - | base64 -d
 ZW1haWw9MWMwMDA0MGQyNTAwMDkxMTExMDQwODRiMDYwYTA4NGIwNDEw
 email=1c00040d250009111104084b060a084b0410
 ```
 
-Great! We have an email address that doesn't look like an address at all...
-Mail addresses [**MUST**](https://tools.ietf.org/html/rfc5322#section-3.4.1) have a local
-part (some string, using a subset of ASCII, to identify the mail account), an '@'
-symbol, and then a domain string (using another, more restrictive, subset of ASCII).
-Thus, that hexadecimal string that we're given has to be encoded or enciphered.
+¡Genial! Tenemos una dirección de email que no parece para nada una dirección...
+Las direcciones de correo [**DEBEN**](https://tools.ietf.org/html/rfc5322#section-3.4.1)
+tener una parte local (una cadena, usando un subconjunto del ASCII, para identificar la
+cuenta de correo), un símbolo '@', y luego una cadena para el dominio (usando otro
+subconjunto, más restrictivo, del ASCII). Por lo tanto, la cadena hexadecimal que se nos
+ha dado tiene que estar codificada o cifrada.
 
-The tries to decode the string doesn't pay off, so lets have a closer look at the
-string, taking for granted that it's a cipher, and start assuming that it's a simple
-substitution cipher. As with any other cipher, the first thing is to count the different
-used symbols:
+Los intentos de decodificar la cadena no da frutos, así que vamos a la cadena, dando
+por hecho que es un cirado, y empezar asumiendo que es una simple sustitución. Como con
+cualquier otro cifrado, la primera cosa que hacer es contar los diferentes símbolos
+usados:
 ```
-String: 1c 00 04 0d 25 00 09 11 11 04 08 4b 06 0a 08 4b 04 10
+Cadena: 1c 00 04 0d 25 00 09 11 11 04 08 4b 06 0a 08 4b 04 10
 
-Count:
-    Symbol    Count
+Conteo:
+   Símbolo   Cuenta
       1c       1
       00       2
       04       3
@@ -144,69 +147,72 @@ Count:
       10       1
 ```
 
-There's not a lot of information there... Maybe 0x04 is an 'e', but there's not enough
-text to conclude anything.
+No hay mucha información ahí... Quizá 0x04 sea una 'e', pero no hay suficiente texto para
+concluir nada.
 
-Anyway, we can try to extract some information from there; because, as I said before, the
-email addresses have a clearly defined format (`<local>@<domain>`), and the domain will
-most likely be `elttam.au`, or `elttam.com.au`; or something like that.
+De cualquier modo, podemos intentar extraer alguna información de ahí; porque, como
+dije antes, las direcciones de email tienen un formato claramente definido
+(`<local>@<domain>`), y el dominio será seguramente `elttam.au`, or `elttam.com.au`; o
+algo así.
 
-If this is a monoalphabetic substitution (meaning that every character is enciphered
-always with the same character) and the domain is `elttam.<something>`, that pattern
-should be visible at the end of the string (the domain part).
+Si se trata de una sustitución monoalfabética simple (significando que cada carácter
+se cifra siempre con el mismo carácter) y el dominio es `elttam.<algo>`, ese patrón
+debería ser visible al final de la cadena (la parte del dominio).
 
-There's only one position where a symbol is repeated two times, one after another (that
-would be the 'tt' part of 'elttam'), so there's only one candidate:
+Sólo hay una posición en la que un símbolo es repetido dos veces, uno después del otro
+(que sería la parte 'tt' de 'elttam'), así que sólo hay un candidato:
 ```
 1c 00 04 0d 25 00 09 11 11 04 08 4b 06 0a 08 4b 04 10
                 e  l  t  t  a  m
 ```
 
-With that info, we can try to recover some other parts of the text (again, only if our
-initial assumption is right):
+Con esa información, podemos intentar recuperar algunas partes del texto (de nuevo,
+sólo si nuestra suposición inicial es correcta):
 ```
 1c 00 04 0d 25 00 09 11 11 04 08 4b 06 0a 08 4b 04 10
     e  a        e  l  t  t  a  m           m     a
 ```
 
-That's not much text; but enough to make us thing of one of the possible domains:
+No es mucho texto; pero suficiente para hacernos pensar en uno de los posibles dominios:
 ```
 1c 00 04 0d 25 00 09 11 11 04 08 4b 06 0a 08 4b 04 10
     e  a        e  l  t  t  a  m  .  c  o  m  .  a  u
 ```
 
-Now we can say with some confidence that we're on the right track. Then, we should
-recover the encipherment method. One thing that can help us is to note that the cipher
-generates binary data (non-printable characters), so it's almost sure that it's not
-about the classical methods (Vigenère, Caesar...), but a relatively modern one, maybe
-operating at the bit level. The first thing coming to our minds is
-[Vernam](https://en.wikipedia.org/wiki/Gilbert_Vernam#The_Vernam_cipher). Now it's time
-to test this hypothesis:
+Ahora ya podemos decir con cierta confianza que vamos por buen camino. Luego deberíamos
+recuperar el método de cifrado. Una cosa que nos puede ayudar es notar que el cifrado
+genera datos binarios (caracteres no imprimibles), así que es casi seguro que no se trata
+de métodos clásicos (Vigenère, César...), sino de uno relativamente moderno, quizá
+operando a nivel de bit. La primera cosa que nos viene a la cabeza es
+[Vernam](https://en.wikipedia.org/wiki/Gilbert_Vernam#The_Vernam_cipher). Ahora es el
+momento de probar esta hipótesis:
 ```sh
 $ cat - > /dev/null
-# Hex char codes (can be consulted with `man ascii`):
+# Valores hexadecimales de los caracteres (pueden consultarse con `man ascii`):
 e -> 0x65
 l -> 0x6c
 t -> 0x74
 a -> 0x61
 m -> 0x6d
-$ # First test to recover the key: 'e' xor 0x00 (obviously, it will be 'e')
+$ # Primera prueba para recuperar la clave: 'e' xor 0x00 (obviamente, será 'e')
 $ printf "%#x\n" "$((0x65 ^ 0x00))"
 0x65
-$ # Second test: 'l' xor 0x09
+$ # Segunda prueba: 'l' xor 0x09
 $ printf "%#x\n" "$((0x6c ^ 0x09))"
 0x65
-$ # Okay, I'm going to say that the key is 0x65 ('e')
+$ # Vale, voy a decir que la clave es 0x65 ('e')
 $ printf "%#x\n" "$((0x74 ^ 0x11))"
 0x65
-$ # Wow! What a surprise! I didn't expect it to be 0x65 at all...
+$ # ¡Wow! ¡Menuda sorpresa! No esperaba que fuera 0x65 para nada...
 $ printf "%#x\n" "$((0x61 ^ 0x04))"
 0x65
 ```
 
-Well, that's enough. Definitely, the algorithm used is to xor every character with 'e'.
+Bueno, ya es suficiente. Definitivamente, el algoritmo es hacer la xor de cada carácter
+con 'e'.
 
-Now, we only have to recover the whole address. I used this simple Python script:
+Ahora sólo tenemos que recuperar la dirección completa. Yo usé este simple *script*
+de Python:
 ```sh
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -224,33 +230,34 @@ print "Mail address: " \
     + "".join ( [ binascii.unhexlify (hex (x).lstrip ("0x")) for x in xored ] )
 ```
 
-And we finnaly have the mail address (as I said before, that's not the real address):
+Y ya tenemos la dirección de email (como ya dije antes, esta no es la dirección real):
 ```sh
 $ ./decrypt_mail.py
 Mail address: yeah@elttam.com.au
 ```
 
-### The source IP
+### La dirección IP
 
-This is a simpler task, as we only have to read the Bytes of packet and, as it has a
-standarized format, get the source IP. To do that, we can use a tool like
-[scapy](http://www.secdev.org/projects/scapy/) and simply build the packet with the
-request and read the data:
+Esta es una tarea más simple, pues sólo tenemos que leer los Bytes del paquete y, como
+tiene un formato estandarizado, obtener la IP fuente. Para hacer esto, podemos usar una
+herramienta como [scapy](http://www.secdev.org/projects/scapy/) y simplemente construir
+el paquete con la petición y leer los datos:
 ```python
 >>> data = open ("dump.bin").read ()
 >>> Ether (data)
 <Ether  dst=2c:54:2d:f0:0d:2a src=08:00:27:c3:59:62 type=0x800 |<IP  version=4L ihl=5L tos=0x0 len=417 id=62259 flags=DF frag=0L ttl=64 proto=tcp chksum=0xbd8d src=192.168.123.45 dst=104.105.106.107 options=[] |<TCP  sport=34960 dport=http seq=3385423760 ack=535155389 dataofs=5L reserved=0L flags=PA window=229 chksum=0x8a29 urgptr=0 options=[] |<Raw  load='POST /career HTTP/1.1\r\nHost: www.elttam.com.au\r\nUser-Agent: elttam rocks!\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate\r\nCookie: ZW1haWw9MWMwMDA0MGQyNTAwMDkxMTExMDQwODRiMDYwYTA4NGIwNDEw\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: 81\r\nConnection: close\r\n\r\nq=The+email+address+is+hidden+in+this+request&bonus=What+is+source+IP+address\r\n\r\n' |<Padding  load='\x00' |>>>>>
 ```
 
-And, just like that, we have the source and destination IP addresses (as the email, they
-have been changed):
-  - **Source**: 192.168.123.45
-  - **Destination**: 104.105.106.107
+Y ya está, ya tenemos las direcciones IP fuente y destino (igual que el email, han sido
+cambiadas):
+  - **Fuente**: 192.168.123.45
+  - **Destino**: 104.105.106.107
 
 
+!Y eso es todo!
 
-That's all, folks!
 
-I think it's good when sometimes companies do these kind of challenges to filter out
-candidates and avoid spam (just in case there's some bot scraping email addresses on
-the wild). Also, it's quite fun and I enjoyed the time it took me to complete it.
+Creo que es bueno cuando a veces las compañías hacen este tipo de retos para filtrar las
+posibles solicitudes y evitar el *spam* (por si acaso hay algún *bot* sacando
+direcciones de email por ahí). Además es bastante divertido y he disfrutado el tiempo que
+me llevó el completarlo.

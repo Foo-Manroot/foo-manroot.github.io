@@ -76,11 +76,11 @@ Más ejemplos de esto están en [esta página](https://gridbyexample.com/learn/)
 aprendí todo lo que sé sobre CSS grid.
 
 
-Aparte de estos cambios técnicos, he hecho otros para cambiar la organización de la
-página a mi gusto (aparte de cambiar los colores, por supuesto), siendo los más notables
-el uso del [truco del _checkbox_](https://stackoverflow.com/a/32721572) para simular el
-evento `onClick`de JavaScript para mostrar la barra lateral (excepto en móviles, donde
-hay otra plantilla). Esa es la razón por la que hay un _div_ alrededor de casi todo el
+Aparte de estos cambios técnicos, he hecho otros para reorganizar la página a mi gusto
+(aparte de cambiar los colores, por supuesto), siendo los más notables el uso del
+[truco del _checkbox_](https://stackoverflow.com/a/32721572) para simular el evento
+`onClick`de JavaScript para mostrar la barra lateral (excepto en móviles, donde hay otra
+plantilla). Esa es la razón por la que hay un _div_ alrededor de casi todo el
 contenido de la página llamado "page-wrap", para poder moverlo a un lado cuando la
 barra de navegación está visible.
 

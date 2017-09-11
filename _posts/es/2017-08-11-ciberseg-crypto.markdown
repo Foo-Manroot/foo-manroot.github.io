@@ -19,10 +19,10 @@ del CTF (y yo gané el primer premio :D).
 
 ## Primer reto
 
-Este era un reto sencillo de resolver, si resolvemos cuál es el método usado; pero era
-bastante complicado darse cuenta del método de cifrado
+Este era un reto sencillo de resolver, si averiguamos cuál es el método usado; pero era
+bastante complicado darse cuenta del método de cifrado.
 
-El criptograma es `MzkuM3gyLKA5K2AlrKO0ZS99`
+El criptograma es `MzkuM3gyLKA5K2AlrKO0ZS99`.
 
 A pesar de que puede resultar difícil verlo, ya que no hay relleno (el símbolo '=' del
 final), porque los bytes del mensaje original están alineados, el alfabeto usado hace
@@ -38,14 +38,14 @@ como alguna transposición o una substitución monoalfabética, como el cifrado 
 hecho, ROT13 (un caso especial del César, con un desplazamiento de 13), parece un buen
 candidato.
 
-Para descifrarlo usando ROT13, se puede usar cualquier servicio en internet (de hecho,
-[duckduckgo](https://duckduckgo.com/html?q=rot13%20MzkuM3gyLKA5K2AlrKO0ZS99) responde
-directamente a la búsqueda 'rot13 MzkuM3gyLKA5K2AlrKO0ZS99') o implementarlo por cuenta
-propia.
+Para descifrarlo usando ROT13, se puede usar cualquier servicio en internet (incluso con
+[duckduckgo](https://duckduckgo.com/html?q=rot13%20MzkuM3gyLKA5K2AlrKO0ZS99), que
+responde directamente a la búsqueda 'rot13 MzkuM3gyLKA5K2AlrKO0ZS99') o implementarlo
+por cuenta propia.
 
-La cadena descifrada es `ZmxhZ3tlYXN5X2NyeXB0MF99`
+La cadena descifrada es `ZmxhZ3tlYXN5X2NyeXB0MF99`.
 
-Ahora, la cadena decodificada nos da la bandera:
+Ahora, decodificando la cadena obtenemos la bandera:
 ```sh
 $ echo "ZmxhZ3tlYXN5X2NyeXB0MF99" | base64 -d | xxd
 00000000: 666c 6167 7b65 6173 795f 6372 7970 7430  flag{easy_crypt0
@@ -60,7 +60,7 @@ Finalmente, la bandera es `flag{easy_crypt0_}`.
 
 ## Segundo reto
 
-El siguiente reto es el siguiente texto cifrado:
+El segundo reto es el siguiente texto cifrado:
 ```
 Pivfwrrk hl tairrvr cvkdr vk xnr lhceafa uw fiwjddf ernfsofrthtzud, ec ulfisgo uw
 yixwqeiw hs ggoirdiaswwitg. Hs dmb ielhrvkdnkw dpiwqdvj hskg soiixe, rmqqlw hn cs
@@ -70,11 +70,12 @@ H.G. Sv vlcv ulfisu, nf wqciastrj.
 
 Claramente, el trozo con la cadena 'fcsj{mvyxsksglfkftw}' se corresponde con el texto
 plano 'flag{...}'. Además, parece que está cifrado con algún cifrado de sustitución
-(esto lo sabemos porque las frecuencias de las letras difieren de las esperadas en un
-texto plano). Otra información importante es que el texto puede estar en castellano.
+polialfabético (esto lo sabemos porque las frecuencias de las letras difieren de las
+esperadas en un texto plano). Otra información importante es que el texto puede estar en
+castellano.
 
 
-Con todo esto, podemos intentar ver si el método de cifrado es el bastante usado cifrado
+Con todo esto, podemos intentar ver si el método de cifrado es la muy popular cifra
 de Vigenère. Con esto en mente, podemos intentar sacar la clave (o, al menos, revelar
 una porción de ésta) con el cacho de texto plano conocido.
 
@@ -126,7 +127,7 @@ podemos encontrar la partes primera y última de la bandera:
 %}
 
 Desafortunadamente, la parte del medio de la bandera no ha sido encontrada. Sin embargo,
-podemos usar la pista que nos dan, de que es como una contraseña de la
+podemos usar la pista que nos dan, diciendo que es como una contraseña de la
 [UAH](https://www.uah.es) (para quienes no lo sepan, el formato es
 `[a-z]{3}[[:punct:]][0-9]{4}`). Eso hace la tarea más sencilla. Después de un par de
 minutos tenemos la respuesta:

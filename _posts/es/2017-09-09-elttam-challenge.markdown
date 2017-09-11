@@ -20,7 +20,7 @@ el reto parecía divertido, así que decidí intentarlo.
 
 ---
 
-**NOTA: He cambiado algunos datas para no revelar la solución real del reto, aunque la
+**NOTA: He cambiado algunos datos para no revelar la solución real del reto, aunque la
 metodología para resolverlo es exactamente la misma.**
 
 ---
@@ -34,7 +34,7 @@ metodología para resolverlo es exactamente la misma.**
 %}
 
 
-La primera cosa que hay que hacer es obtener el volcado hexadecimal y obtener el binario,
+La primera cosa que hay que hacer es obtener el volcado hexadecimal y sacar el binario,
 para ver qué datos se están representando. Quizá podamos encontrar algún formato
 reconocible. Aquí hago todo en un sólo paso, así que hay un `0d 0a 00` de más al final
 (eso no nos afecta para nada):

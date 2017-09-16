@@ -1,14 +1,15 @@
 ---
 layout:
-permalink: /sitemaps.xml
+permalink: /sitemap.xml
 ---
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+	xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
 	{% for post in site.posts %}
 		{% if post.id contains "404" %}{% else %}
 			<url>
-				<loc>{{ site.baseurl | xml_escape }}{{ post.url | xml_escape }}</loc>
+				<loc>{{ site.url | xml_escape }}{{ site.baseurl | xml_escape }}{{ post.url | xml_escape }}</loc>
 				{% assign versions = site.posts | where:"ref", post.ref %}
 				{% for version in versions %}
 					<xhtml:link rel="alternate" hreflang="{{ version.lang | xml_escape }}" href="{{ site.base | xml_escape }}{{ version.url | xml_escape }}" />
@@ -21,7 +22,7 @@ permalink: /sitemaps.xml
 	{% for page in site.pages %}
 		{% if page.id contains "404" %}{% else %}
 			<url>
-				<loc>{{ site.baseurl | xml_escape }}{{ page.url | xml_escape }}</loc>
+				<loc>{{ site.url | xml_escape }}{{ site.baseurl | xml_escape }}{{ page.url | xml_escape }}</loc>
 				{% assign versions = site.pages | where:"ref", page.ref %}
 				{% for version in versions %}
 					<xhtml:link rel="alternate" hreflang="{{ version.lang | xml_escape }}" href="{{ site.base | xml_escape}}{{ version.url | xml_escape }}" />

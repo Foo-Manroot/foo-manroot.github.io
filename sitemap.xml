@@ -1,19 +1,24 @@
+---
+---
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-	xmlns:xhtml="http://www.w3.org/1999/xhtml"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
->
+	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+	xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
 	{% for post in site.posts %}
 		{% if post.id contains "404" %}{% else %}
 			<url>
 				<loc>{{ site.url | xml_escape }}{{ site.baseurl | xml_escape }}{{ post.url | xml_escape }}</loc>
-				{% assign versions = site.posts | where:"ref", post.ref %}
+<!--				{% assign versions = site.posts | where:"ref", post.ref %}
 				{% for version in versions %}
-					<xhtml:link rel="alternate" hreflang="{{ version.lang | xml_escape }}" href="{{ site.base | xml_escape }}{{ version.url | xml_escape }}" />
+					<xhtml:link
+						rel="alternate"
+						hreflang="{{ version.lang | xml_escape }}"
+						href="{{ site.base | xml_escape }}{{ version.url | xml_escape }}"
+					/>
 				{% endfor %}
-				<lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
+-->				<lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
 				<changefreq>weekly</changefreq>
 			</url>
 		{% endif %}
@@ -22,11 +27,11 @@
 		{% if page.id contains "404" %}{% else %}
 			<url>
 				<loc>{{ site.url | xml_escape }}{{ site.baseurl | xml_escape }}{{ page.url | xml_escape }}</loc>
-				{% assign versions = site.pages | where:"ref", page.ref %}
+<!--				{% assign versions = site.pages | where:"ref", page.ref %}
 				{% for version in versions %}
 					<xhtml:link rel="alternate" hreflang="{{ version.lang | xml_escape }}" href="{{ site.base | xml_escape}}{{ version.url | xml_escape }}" />
 				{% endfor %}
-				<changefreq>weekly</changefreq>
+-->				<changefreq>weekly</changefreq>
 			</url>
 		{% endif %}
 	{% endfor %}

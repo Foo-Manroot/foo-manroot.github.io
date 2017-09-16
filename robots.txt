@@ -1,0 +1,1 @@
+Sitemap: https://foo-manroot.github.io/sitemap.xml

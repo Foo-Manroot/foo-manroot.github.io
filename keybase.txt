@@ -1,0 +1,55 @@
+==================================================================
+https://keybase.io/foo_manroot
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://foo-manroot.github.io
+  * I am foo_manroot (https://keybase.io/foo_manroot) on keybase.
+  * I have a public key ASAlJJKe2tzXaLa1LgBTvDGVDx3gJL3Y0Z8GhRiCA1Tlogo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "010187e58cc37b97ea996fea2c94544b08477cc7423adf754d99aa6f5d81f2fd0ce20a",
+      "host": "keybase.io",
+      "kid": "01202524929edadcd768b6b52e0053bc31950f1de024bdd8d19f068518820354e5a20a",
+      "uid": "673238619a85e8e52cfeebb4026d8f19",
+      "username": "foo_manroot"
+    },
+    "merkle_root": {
+      "ctime": 1506077665,
+      "hash": "bf298285932034d0166cec0092fbf8d12703c956809563fc581122df7352a75c38116fd086a41253e12ef789c23a62de66914a5ce25c4ed300c5f240df7c9301",
+      "hash_meta": "5589d637c1ecc3a1098ef9d272d8a50a7e12baff68a03683a268437da0e7ef79",
+      "seqno": 1442879
+    },
+    "service": {
+      "hostname": "foo-manroot.github.io",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "1.0.31"
+  },
+  "ctime": 1506077677,
+  "expire_in": 504576000,
+  "prev": "a274d054e5b24698c264d581cb7cb72df89eeba27e6e91b89fd40d8c1308da39",
+  "seqno": 6,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgJSSSntrc12i2tS4AU7wxlQ8d4CS92NGfBoUYggNU5aIKp3BheWxvYWTFA1B7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxODdlNThjYzM3Yjk3ZWE5OTZmZWEyYzk0NTQ0YjA4NDc3Y2M3NDIzYWRmNzU0ZDk5YWE2ZjVkODFmMmZkMGNlMjBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwMjUyNDkyOWVkYWRjZDc2OGI2YjUyZTAwNTNiYzMxOTUwZjFkZTAyNGJkZDhkMTlmMDY4NTE4ODIwMzU0ZTVhMjBhIiwidWlkIjoiNjczMjM4NjE5YTg1ZThlNTJjZmVlYmI0MDI2ZDhmMTkiLCJ1c2VybmFtZSI6ImZvb19tYW5yb290In0sIm1lcmtsZV9yb290Ijp7ImN0aW1lIjoxNTA2MDc3NjY1LCJoYXNoIjoiYmYyOTgyODU5MzIwMzRkMDE2NmNlYzAwOTJmYmY4ZDEyNzAzYzk1NjgwOTU2M2ZjNTgxMTIyZGY3MzUyYTc1YzM4MTE2ZmQwODZhNDEyNTNlMTJlZjc4OWMyM2E2MmRlNjY5MTRhNWNlMjVjNGVkMzAwYzVmMjQwZGY3YzkzMDEiLCJoYXNoX21ldGEiOiI1NTg5ZDYzN2MxZWNjM2ExMDk4ZWY5ZDI3MmQ4YTUwYTdlMTJiYWZmNjhhMDM2ODNhMjY4NDM3ZGEwZTdlZjc5Iiwic2Vxbm8iOjE0NDI4Nzl9LCJzZXJ2aWNlIjp7Imhvc3RuYW1lIjoiZm9vLW1hbnJvb3QuZ2l0aHViLmlvIiwicHJvdG9jb2wiOiJodHRwczoifSwidHlwZSI6IndlYl9zZXJ2aWNlX2JpbmRpbmciLCJ2ZXJzaW9uIjoxfSwiY2xpZW50Ijp7Im5hbWUiOiJrZXliYXNlLmlvIGdvIGNsaWVudCIsInZlcnNpb24iOiIxLjAuMzEifSwiY3RpbWUiOjE1MDYwNzc2NzcsImV4cGlyZV9pbiI6NTA0NTc2MDAwLCJwcmV2IjoiYTI3NGQwNTRlNWIyNDY5OGMyNjRkNTgxY2I3Y2I3MmRmODllZWJhMjdlNmU5MWI4OWZkNDBkOGMxMzA4ZGEzOSIsInNlcW5vIjo2LCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQH4g+GiNcpfCgcomXtV0Z4FBuT9SG0TEi99Z5f5qU5a+AMfYySOFAfZePaIibRF1DSwAz2bIvWuibttI0B/5OQyoc2lnX3R5cGUgpGhhc2iCpHR5cGUIpXZhbHVlxCCF5EwegrgYnc7cE6dliQ/aMrjIooP88NY++rFV3h5/oKN0YWfNAgKndmVyc2lvbgE=
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/foo_manroot
+
+==================================================================

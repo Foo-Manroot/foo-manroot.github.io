@@ -19,6 +19,9 @@ challenges on sites like [HackThisSite](https://www.hackthissite.org/) or
 if somebody wants to create a team or looks for members, just contact me (info is on the
 footer) and I'll be happy to colaborate.
 
+Also, you can check my profile on keybase:
+	{% include icon-keybase.html username="Foo_Manroot" %}
+
 
 ### About the blog
 The main topics on this page will be revolving around cybersecurity stuff; but maybe
@@ -35,4 +38,4 @@ details). I'll translate it any of these days...
 
 This blog is made with {% include icon-github.html username="jekyll" %} /
 [jekyll](https://github.com/jekyll/jekyll). You can find the source of this page on
-[my Github](https://github.com/Foo-Manroot/foo-manroot.github.io)
+i[my Github](https://github.com/Foo-Manroot/foo-manroot.github.io).

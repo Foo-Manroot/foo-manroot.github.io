@@ -23,6 +23,10 @@ Por cierto, si alguien quiere crear un equipo o tiene uno y busca miembros, pued
 contactar conmigo (al pie de la página está la información) y estaré encantado de
 colaborar.
 
+También se puede comprobar mi perfil en keybase:
+	{% include icon-keybase.html username="Foo_Manroot" %}
+
+
 ### Sobre el blog
 Los temas principales en la página girarán en torno a la seguridad; pero puede que haya
 algunas entradas con otros temas diferentes... ¿quién sabe?

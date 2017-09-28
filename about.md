@@ -38,4 +38,4 @@ details). I'll translate it any of these days...
 
 This blog is made with {% include icon-github.html username="jekyll" %} /
 [jekyll](https://github.com/jekyll/jekyll). You can find the source of this page on
-i[my Github](https://github.com/Foo-Manroot/foo-manroot.github.io).
+[my Github](https://github.com/Foo-Manroot/foo-manroot.github.io).

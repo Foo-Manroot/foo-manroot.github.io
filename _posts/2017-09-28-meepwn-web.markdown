@@ -151,7 +151,7 @@ Now we have to examine this new PHP code:
 After a couple of minutes reading this code, we can see that there's a flaw on the way
 the user input is handled, as it's not sanitized (on line 16). We can take advantage of
 the unserialization to
-[inject and object](https://www.owasp.org/index.php/PHP_Object_Injection), encoded in
+[inject an object](https://www.owasp.org/index.php/PHP_Object_Injection), encoded in
 base64 and passed using the parameter `input`.
 
 This vulnerability works as follows:

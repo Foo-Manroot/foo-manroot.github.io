@@ -1,0 +1,210 @@
+---
+layout: post
+title:  "Keybase, the rebirth of PGP"
+date:	2017-10-06 10:43:56 +0200
+author: foo
+categories: keybase pgp crypto privacy
+ref: keybase
+---
+
+## A bit of history
+
+Back in late 80s - early 90s, internet usage was on the rise, with more people connected
+and using these new technologies to communicate quickly with other people around the
+globe. Thus, many people were sending  messages through email. And all these
+communications were sent as is, without any encryption, waiting to be seen by any
+attacker...
+
+Of course, this wasn't a problem on the first days of the internet, when it was used only
+to transfer information between universities, or between military units (that encrypted
+their communications by themselves, as they had been doing for centuries).
+But, when ordinary people, who don't have access to any method to secure their
+communications aside from the typical (and easily breakable)
+[classical cipher](https://en.wikipedia.org/wiki/Classical_cipher), started to use these
+insecure methods to share their personal messages, a lot of new information could be
+gathered without any effort,
+[mainly by state agencies](https://en.wikipedia.org/wiki
+/List_of_government_mass_surveillance_projects), under the excuse of avoiding terrorist
+attacks.
+
+For example, in the US (the main location in this story, as there was were a great part
+of these technologies were developed), the senate tried to pass a
+[bill](https://www.congress.gov/bill/102nd-congress/senate-bill/266) that would force
+manufacturers to introduce backdoors on their secure communications systems for the
+government to have plaintext data:
+> Expresses the sense of the Congress that providers of electronic communications
+> services and manufacturers of electronic communications service equipment should
+> ensure that communications systems permit the Government to obtain the plain text
+> contents of voice, data, and other communications when appropriately authorized by law. 
+>
+> -- <cite>Subtitle B: Electronic Communications. Bill 266</cite>
+
+
+Here is when more people became aware of the problem that unsecured communications are
+for privacy (as anybody could read every one of your personal messages, simply by
+monitoring your email). One of these privacy activists,
+[Phil Zimmermann](https://philzimmermann.com/), wrote in 1991
+[Pretty Good Privacy (PGP)](https://en.wikipedia.org/wiki/Pretty_Good_Privacy), a tool
+aimed to encrypt email communications using modern algorithms.
+
+An example of signed message, from Phil Zimmermann:
+```
+- -----BEGIN PGP SIGNED MESSAGE-----
+
+My lead defense lawyer, Phil Dubois, received a fax this morning from
+the Assistant US Attorney in Northern District of California, William
+Keane.  The letter informed us that I "will not be prosecuted in
+connection with the posting to USENET in June 1991 of the encryption
+program Pretty Good Privacy.  The investigation is closed."
+
+This brings to a close a criminal investigation that has spanned the
+last three years.  I'd like to thank all the people who helped us in
+this case, especially all the donors to my legal defense fund.
+Apparently, the money was well-spent.  And I'd like to thank my very
+capable defense team:  Phil Dubois, Ken Bass, Eben Moglen, Curt Karnow,
+Tom Nolan, and Bob Corn-Revere.  Most of the time they spent on the case
+was pro-bono.  I'd also like to thank Joe Burton, counsel for the co-
+defendant.
+
+There are many others I can thank, but I don't have the presence of mind
+to list them all here at this moment.  The medium of email cannot express
+how I feel about this turn of events.
+
+
+  -Philip Zimmermann
+   11 Jan 96
+
+- -----BEGIN PGP SIGNATURE-----
+Version: 2.6.2
+
+iQCVAwUBMPDy4WV5hLjHqWbdAQEqYwQAm+o313Cm2ebAsMiPIwmd1WwnkPXEaYe9
+pGR5ja8BKSZQi4TAEQOQwQJaghI8QqZFdcctVYLm569I1/8ah0qyJ+4fOfUiAMda
+Sa2nvJR7pnr6EXrUFe1QoSauCASP/QRYcKgB5vaaOOuxyXnQfdK39AqaKy8lPYbw
+MfUiYaMREu4=
+=9CJW
+- -----END PGP SIGNATURE-----
+```
+
+This move bothered the US government, who tried to sue him for "exporting cryptography",
+as it was distributed through the internet (and therefore, outside the US borders).
+Fortunately,
+[the case was dropped on 1996](https://philzimmermann.com/EN/news/PRZ_case_dropped.html)
+and PGP could continue to be developed; although the "official" PGP (the one created by
+Zimermann) was discontinued. Despite this, other people took the idea and implemented
+their own free software, most of them following the
+[OpenPGP protocol](http://openpgp.org/about/history/).
+
+
+## Back to the present
+
+Over time, thanks to the community-created security tools and new standards to ensure
+secure communications, the laws that regulated cryptography lost their purpose and the
+communications weren't vulnerable to eavesdropping anymore (although the state agencies
+still have mediums to gather some information, but it's a more difficult task).
+
+Free software like [GPG](https://gnupg.org/) usually were CLI (command-line interface,
+text-based applications executed on a terminal) tools, and the concept of "encryption"
+and secure communications seems obscure to the common public. In spite of all the
+[good GUIs for all platforms](https://www.gpg4win.org/) available, the adoption of
+encryption didn't spread outside the groups of privacy activists and developers (PGP it's
+used to verify Debian packages).
+
+An example of gpg, a CLI tool (not very user-friendly):
+```sh
+$ printf "hey" | gpg --armour --recipient miguel.garciamartin@hotmail.com --encrypt
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+hQIMA5RVAISAcQHTARAAoJYER5mgfDFwcYFh/PREApj6EXfZKCxrVaibdeEcJnC3
+Km/ZxnG8WOPV36pVD9/Nz/fqKQh+/S/WP2TA1vMQ9MB6GqdDNwOeCgRRdRiZGNEK
+TA9GQP4ZwAEkdLbj2jmcXsctxMZdsxW0gnOklS/ieHw9b5SCJjGg84QiqVylIxgC
+ILjgdTVdlDRZ0N2gvkbBRUi7E0Dk/Qwv2nciWh+CNqHh/8Kr9LWjiNVyPd2fkyEy
+3vN2w7iYoVm7uneID1m89nLtFmn2Qc+GTfgQxhWWUMSYTJLVsAgdcSbFj9R3NIZZ
+n2j7mjlqjBPaj7gABNx7cqVLhqmNgamH+HTdG5QJpFEgLmpdFhGGWp7Zz65pK6Ha
+Zr5HOZusSNv8Bi9ndkXSv/qs0hVd2/e4MHIX6qKXIedp0WCFMIw6FcZ+lTn50joT
+y8D/MrVIcWkMKh5fm328xCFIEQZLOc/8UL2wQDxdJ+kQpXjQk8C7mXcNel2nKTUJ
+nA/TcbcsweTVsPvPhidHj9UCBes8TN6yFqAUVBuUNTAqOXOdVxhut+dSwQo9Cnuj
+HRfgVea+zyTOCS+Hht4o/5r3esj6Klib1lK8lXjZwptfIEFn+/fpptkewUZjanqB
+ushl41e25EkTYamI5klGUxOszNms+8DeLQTxOWFSLA+R1HMuIQ1u2f3RwZN+tQLS
+PgGtqTqJDIQmiOQ52tZtHabTJHnjc5MQ4XghzzNpx7wtol8x3lkJbXCivxf0OZji
+DESkPkghZ+xQReuQ3kWV
+=K9+f
+-----END PGP MESSAGE-----
+```
+
+It's not a surprise that the usage of this kind of software hasn't increase over time,
+and people still look at you with weird faces when you speak about encryption, arguing
+the usual "I have nothing to hide".
+
+
+## Keybase
+
+The new proposition to make this model more user-friendly, and to return to the people
+their right to privacy (which, by necessity, needs secret communications), is
+[Keybase](https://keybase.io/).
+
+Since the revelation of the [PRISM surveillance program](https://en.wikipedia.org/wiki
+/PRISM_%28surveillance_program%29), some popular services implemented end-to-end
+encrypted communications, like Whatsapp (close-source and owned by Facebook...), or
+[Signal](https://github.com/WhisperSystems) (which is open-source); but these tools only
+try to provide forward-secrecy (to maintain the secrecy, even if one of the messages or
+previous keys has been compromised). The problem to verify a user's identity persist.
+
+Keybase uses PGP to verify that a user is really who claims to be, and send them
+encrypted messages with a user-friendly interface. Also, there are another services like
+secure chat rooms and _teams_, chat rooms for groups. It's very useful for activists who
+don't want to end up beaten or in jail, enterprises that don't want the competence to get
+their secrets, or simply for ordinary people who like value their privacy.
+
+As I said, it's simply a user-friendly PGP implementation, with support for
+[all mainstream platforms](https://keybase.io/download).
+
+
+### Verification
+
+The first step, after creating an account, you have to verify all the accounts you want,
+to assure that, for example, certain Twitter account is really yours. In my case,
+(I'm {% include icon-keybase.html username="Foo_Manroot" %}), I wanted to verify
+[my Github account](https://gist.github.com/Foo-Manroot/aa0d3487e7af3f2fc5d20fa8609a4247)
+and [my website](https://foo-manroot.github.io/keybase.txt). You can also verify your
+accounts of Reddit, Facebook, Bitcoin...
+
+Once you have verified your accounts, you can start recieving encrypted messages by mail.
+It's as simple as encrypt the message using the CLI tools (`keybase pgp encrypt -m
+"message" foo_manroot`) or with the
+[web interface](https://keybase.io/encrypt#foo_manroot) and pasting it into the mail
+message. Then, when the message arrives, just do the oposite (`keybase pgp decrypt -m
+"message"`, or [the web interface](https://keybase.io/decrypt)). This can be done
+identically with signed messages.
+
+Also, you can securely store data on your private folders or to have encrypted Git
+repositories.
+
+
+### Followers
+
+The next step is to create a network of people you know (that means, with whom you have
+__personally__ verified your keys), so you are confident about who you're talking to.
+
+This is the most important thing in the system, as the network of trust is the thing
+that distinguishes this model from simple encryption, like signed certificates verifying
+HTTPS connections (otherwise, the connection would still be encrypted; but the page could
+be a pishing site).
+
+
+## Conclusion
+
+Althogh there's still a lot of work to do, I think the idea behind keybase (to develop
+user-friendly encryption applications) is very interesting, which could have good
+repercussions, allowing anybody to start recovering their privacy.
+
+Although not many _common people_ use this; I think this kind of free software (in
+cryptography it's very important the open source part), that tries to bring the people
+closer to security, allows more and more software to be developed with this ideas.
+
+Finnally, I highly recommend people to try this technology, and to lose fear of
+cryptography. The key idea is that you don't have to be an expert, nor to know exactly
+which algorithm is being used. It's like HTTPS, that is being used by a lot of people
+that only knows that it's better "that green lock on the bar" than "that red lock on
+the bar".
+

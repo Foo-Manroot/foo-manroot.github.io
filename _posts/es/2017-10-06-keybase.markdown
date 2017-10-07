@@ -1,0 +1,226 @@
+---
+layout: post
+title:  "Keybase y el renacimiento de PGP"
+date:	2017-10-06 10:43:56 +0200
+author: foo
+categories: es keybase pgp crypto privacy
+lang: es
+ref: keybase
+---
+
+## Un poco de historia
+
+
+A finales de los 80 / principios de los 90, el uso de internet estaba en auge, con más y
+más gente conectada y usando estas nuevas tecnologías para comunicarse rápidamente con
+otra gente alrededor del mundo. Así, muchos mensajes personales estaban siendo enviados
+por email; y todas estas comunicaciones se estaban enviando en claro, sin ningún cifrado,
+esperando a ser vistas por cualquier atacante...
+
+Por supuesto, esto no era un problema en los primeros días de internet, cuando se usaba
+sólo para transferir información entre universidades o unidades militares (que cifraban
+sus comunicaciones por su cuenta, como estaban haciendo desde hacía siglos).
+Pero, cuando la gente corriente, que no tiene acceso a ningún metodo para asegurar sus
+comunicaciones aparte del típico (y fácil de romper)
+[cifrado clásico](https://es.wikipedia.org/wiki/Cifrado_cl%C3%A1sico), empezó a usar
+estos métodos inseguros para compartir sus mensajes personales, una gran cantidad de
+nueva información podía ser obtenida sin ningún esfuerzo,
+[principalmente por agencias estatales](https://en.wikipedia.org/wiki
+/List_of_government_mass_surveillance_projects), bajo la excusa de evitar ataques
+terroristas.
+
+Por ejemplo, en los EEUU (la principal localización de esta hitoria, puesto que ahí es
+donde una gran parte de estas tecnologías fueron desarrolladas), el senado intentó
+aprobar un [proyecto de ley](https://www.congress.gov/bill/102nd-congress/senate-bill/266)
+que obligaría a las empresas a introducir puertas traseras (_backdoors_) en sus sistemas
+de comunicaciones seguras para que el gobierno pudiera obtener los datos en texto plano:
+
+> Expresses the sense of the Congress that providers of electronic communications
+> services and manufacturers of electronic communications service equipment should
+> ensure that communications systems permit the Government to obtain the plain text
+> contents of voice, data, and other communications when appropriately authorized by law. 
+>
+> -- <cite>Subtitle B: Electronic Communications. Bill 266</cite>
+
+
+Entonces fue cuando más gente se concienció sobre el problema que suponen las
+comunicaciones inseguras para la privacidad (puesto que cualquiera podría leer todos tus
+mensajes privados sólo con monitorizar tu email). Uno de estos activistas por la
+privacidad, [Phil Zimmermann](https://philzimmermann.com/), escribió en 1991
+[Pretty Good Privacy (PGP)](https://es.wikipedia.org/wiki/Pretty_Good_Privacy), una
+herramienta orientada a cifrar las comunicaciones por email usando algoritmos modernos.
+
+Esto molestó al govierno de los EEUU, que intentó demandarle por "exportar criptografía",
+puesto que fue distribuído por internet (y, por tanto, fuera de las fronteras de EEUU).
+Afortunadamente,
+[el caso se desestimó en 1996](https://philzimmermann.com/EN/news/PRZ_case_dropped.html)
+y PGP pudo continuar su desarrollo; aunque el PGP "oficial" (el creado por Zimermann) fue
+abandonado. A pesar de ello, otra gente cogió la idea e implementó su propio software
+libre, la mayoría siguiendo el [estándar OpenPGP](http://openpgp.org/about/history/).
+
+Un ejemplo de mensaje firmado, de Phil Zimmermann:
+```
+- -----BEGIN PGP SIGNED MESSAGE-----
+
+My lead defense lawyer, Phil Dubois, received a fax this morning from
+the Assistant US Attorney in Northern District of California, William
+Keane.  The letter informed us that I "will not be prosecuted in
+connection with the posting to USENET in June 1991 of the encryption
+program Pretty Good Privacy.  The investigation is closed."
+
+This brings to a close a criminal investigation that has spanned the
+last three years.  I'd like to thank all the people who helped us in
+this case, especially all the donors to my legal defense fund.
+Apparently, the money was well-spent.  And I'd like to thank my very
+capable defense team:  Phil Dubois, Ken Bass, Eben Moglen, Curt Karnow,
+Tom Nolan, and Bob Corn-Revere.  Most of the time they spent on the case
+was pro-bono.  I'd also like to thank Joe Burton, counsel for the co-
+defendant.
+
+There are many others I can thank, but I don't have the presence of mind
+to list them all here at this moment.  The medium of email cannot express
+how I feel about this turn of events.
+
+
+  -Philip Zimmermann
+   11 Jan 96
+
+- -----BEGIN PGP SIGNATURE-----
+Version: 2.6.2
+
+iQCVAwUBMPDy4WV5hLjHqWbdAQEqYwQAm+o313Cm2ebAsMiPIwmd1WwnkPXEaYe9
+pGR5ja8BKSZQi4TAEQOQwQJaghI8QqZFdcctVYLm569I1/8ah0qyJ+4fOfUiAMda
+Sa2nvJR7pnr6EXrUFe1QoSauCASP/QRYcKgB5vaaOOuxyXnQfdK39AqaKy8lPYbw
+MfUiYaMREu4=
+=9CJW
+- -----END PGP SIGNATURE-----
+```
+
+## De vuelta al presente
+
+Con el paso del tiempo, gracias a las herramientas de seguridad creadas por la comunidad
+y a los nuevos estándares para garantizar las comunicaciones seguras, las leyes que
+regulaban la criptografía perdieron su propósito y las comunicaciones ya no eran
+vulnerables al espionaje (aunque los agentes estatales siguen teniendo modos de obtener
+información, pero es una tarea más difícil).
+
+El software libre como [GPG](https://gnupg.org/) normalmente eran herramientas de CLI
+(_command-line interface_, aplicaciones en modo texto ejecutadas en una terminal), y
+los conceptos de "cifrado" y "comunicaciones seguras" son temas oscuros para el público.
+A pesar de las [buenas GUIs para todas las plataformas](http://openpgp.org/software/)
+disponibles, la adopción del cifrado no se difundió fuera de los grupos de activistas por
+la privacidad y de desarrollo (por ejemplo, PGP se usa para verificar los paquetes
+de Debian).
+
+Un ejemplo de `gpg`, una herramienta CLI (no muy _user-friendly_):
+```sh
+$ printf "hey" | gpg --armour --recipient miguel.garciamartin@hotmail.com --encrypt
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+hQIMA5RVAISAcQHTARAAoJYER5mgfDFwcYFh/PREApj6EXfZKCxrVaibdeEcJnC3
+Km/ZxnG8WOPV36pVD9/Nz/fqKQh+/S/WP2TA1vMQ9MB6GqdDNwOeCgRRdRiZGNEK
+TA9GQP4ZwAEkdLbj2jmcXsctxMZdsxW0gnOklS/ieHw9b5SCJjGg84QiqVylIxgC
+ILjgdTVdlDRZ0N2gvkbBRUi7E0Dk/Qwv2nciWh+CNqHh/8Kr9LWjiNVyPd2fkyEy
+3vN2w7iYoVm7uneID1m89nLtFmn2Qc+GTfgQxhWWUMSYTJLVsAgdcSbFj9R3NIZZ
+n2j7mjlqjBPaj7gABNx7cqVLhqmNgamH+HTdG5QJpFEgLmpdFhGGWp7Zz65pK6Ha
+Zr5HOZusSNv8Bi9ndkXSv/qs0hVd2/e4MHIX6qKXIedp0WCFMIw6FcZ+lTn50joT
+y8D/MrVIcWkMKh5fm328xCFIEQZLOc/8UL2wQDxdJ+kQpXjQk8C7mXcNel2nKTUJ
+nA/TcbcsweTVsPvPhidHj9UCBes8TN6yFqAUVBuUNTAqOXOdVxhut+dSwQo9Cnuj
+HRfgVea+zyTOCS+Hht4o/5r3esj6Klib1lK8lXjZwptfIEFn+/fpptkewUZjanqB
+ushl41e25EkTYamI5klGUxOszNms+8DeLQTxOWFSLA+R1HMuIQ1u2f3RwZN+tQLS
+PgGtqTqJDIQmiOQ52tZtHabTJHnjc5MQ4XghzzNpx7wtol8x3lkJbXCivxf0OZji
+DESkPkghZ+xQReuQ3kWV
+=K9+f
+-----END PGP MESSAGE-----
+```
+
+No es una sorpresa que el uso de este tipo de _software_ no haya incrementado a lo largo
+del tiempo, y la gente siga poniendo caras raras cuando alguien habla del cifrado,
+sacando el típico "no tengo nada que ocultar".
+
+
+## Keybase
+
+La nueva propuesta para hacer este modelo más amigable, y devolver a la gente su derecho
+a la privacidad (que, por necesidad, requiere comunicaciones cifradas), es
+[Keybase](https://keybase.io/).
+
+Desde la revelación de casos como el
+[programa de vigilancia PRISM](https://en.wikipedia.org/wiki
+/PRISM_%28surveillance_program%29), algunos servicios populares implementaron
+comunicaciones cifradas extremo a extremo, como Whatsapp (de código cerrado y propiedad
+de Facebook...), o [Signal](https://github.com/WhisperSystems) (que es _open source_);
+pero estas herramientas sólo intentan conseguir el secreto en el futuro
+(_forward-secrecy_, para mantener el secreto, incluso cuando uno de los mensajes o de las
+claves anteriores han sido comprometidos). El problema de verificar la identidad de una
+cuenta persiste.
+
+Keybase usa PGP para verificar que una persona en internet es quien dice ser, y enviarles
+mensajes cifrados con una interface amigable. Además, hay otros servicios como
+habitaciones seguras de chat y _equipos_, habitaciones de chat para grupos. Es muy útil
+para activistas que no quieren acabar apaleados o en la cárcel, empresas que no quieren
+que la competencia obtenga sus secretos, o simplemente gente corriente que valora su
+privacidad.
+
+Como he dicho, simplemente es una implementación amigable de PGP, con soporte para
+[las principales plataformas](https://keybase.io/download).
+
+
+### Verificación
+
+El primer paso, tras crear una cuenta, es verificar todas las cuentas que quieras, para
+asegurar que, por ejemplo, cierta cuenta de Twitter es realmente tuya. En mi caso,
+(soy {% include icon-keybase.html username="Foo_Manroot" %}), quise verificar
+[mi cuenta de Github](https://gist.github.com/Foo-Manroot/aa0d3487e7af3f2fc5d20fa8609a4247)
+y [mi página](https://foo-manroot.github.io/keybase.txt). También se pueden verificar
+las cuentas de Reddit, Facebook, Bitcoin...
+
+Una vez están verificadas, se pueden empezar a recibir mensajes cifrados por correo.
+Es tan simple como cifrar el mensaje usando las herramientas CLI (`keybase pgp encrypt
+-m "texto" foo_manroot`) o con la [interfaz web](https://keybase.io/encrypt#foo_manroot)
+y copiarlo en el correo. Luego, cuando el mensaje llega, simplemente hay que hacer lo
+contrario (`keybase pgp decrypt -m "mensaje"`, o con la
+[interfaz web](https://keybase.io/decrypt)). Para firmar o verificar mensajes, se puede
+hacer de forma idéntica.
+
+
+Además, se pueden almacenar datos en directorios privados o tener repositorios con Git
+cifrados.
+
+
+### _Followers_
+
+El siguiente paso es crear una red de gente que conoces (es decir, con las cuales has
+verificado __personalmente__ tus claves), de modo que sepas con certeza con quién estás
+hablando.
+
+Esto es lo más importante del sistema, pues la red de confianza es lo que distingue este
+modelo del simple cifrado, igual que los certificados firmados verificando las conexiones
+HTTPS (de otro modo, la conexión seguiría estando cifrada; pero la página podría ser
+una web de _phising_ o cualquier otro fraude).
+
+
+## Conclusión
+
+Aunque aún hay mucho trabajo por hacer, creo que la idea detrás de keybase (desarrollar
+aplicaciones de cifrado amigables) es muy interesante, lo que podría tener buenas
+repercusiones, permitiendo a cualquiera empezar a recuperar su privacidad.
+
+Aún cuando no mucha gente corriente lo use; creo que es este tipo de _software_ libre
+(en criptografía es muy importante la parte de "código abierto"), que intenta acercar
+la seguridad a la gente, permite que más y más _software_ sea desarrollado con estas
+ideas.
+
+Finalmente, recomiendo a la gente probar esta tecnología, y perder el miedo a la
+criptografía. La idea clave es que no hace falta tener grandes conocimientos sobre el
+tema, ni saber exactamente qué algoritmo se está usando. Es como HTTPS, que se usa todos
+los días y no hay que saber nada más que es mejor tener "ese pequeño candadito verde en
+la barra".
+
+{% include image.html
+	src="/assets/posts/2017-10-06-keybase/green-lock.png"
+	title="El bendito candadito verde"
+	alt="El sagrado candadito verde"
+%}
+

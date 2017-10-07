@@ -9,11 +9,11 @@ ref: keybase
 
 ## A bit of history
 
-Back in late 80s - early 90s, internet usage was on the rise, with more people connected
-and using these new technologies to communicate quickly with other people around the
-globe. Thus, many people were sending  messages through email. And all these
-communications were sent as is, without any encryption, waiting to be seen by any
-attacker...
+Back in late 80s early 90s, internet usage was on the rise, with more and more people
+connected and using these new technologies to communicate quickly with other people
+around the globe. Thus, many personal messages were being send through email. And all
+these communications were sent in clear, without any encryption, waiting to be seen by
+any attacker...
 
 Of course, this wasn't a problem on the first days of the internet, when it was used only
 to transfer information between universities, or between military units (that encrypted
@@ -27,7 +27,7 @@ gathered without any effort,
 /List_of_government_mass_surveillance_projects), under the excuse of avoiding terrorist
 attacks.
 
-For example, in the US (the main location in this story, as there was were a great part
+For example, in the US (the main location in this story, as there's where a great part
 of these technologies were developed), the senate tried to pass a
 [bill](https://www.congress.gov/bill/102nd-congress/senate-bill/266) that would force
 manufacturers to introduce backdoors on their secure communications systems for the
@@ -40,12 +40,21 @@ government to have plaintext data:
 > -- <cite>Subtitle B: Electronic Communications. Bill 266</cite>
 
 
-Here is when more people became aware of the problem that unsecured communications are
+Then is when more people became aware of the problem that unsecured communications are
 for privacy (as anybody could read every one of your personal messages, simply by
 monitoring your email). One of these privacy activists,
 [Phil Zimmermann](https://philzimmermann.com/), wrote in 1991
 [Pretty Good Privacy (PGP)](https://en.wikipedia.org/wiki/Pretty_Good_Privacy), a tool
 aimed to encrypt email communications using modern algorithms.
+
+This move bothered the US government, who tried to sue him for "exporting cryptography",
+as it was distributed through the internet (and therefore, outside the US borders).
+Fortunately,
+[the case was dropped on 1996](https://philzimmermann.com/EN/news/PRZ_case_dropped.html)
+and PGP could continue to be developed; although the "official" PGP (the one created by
+Zimermann) was discontinued. Despite this, other people took the idea and implemented
+their own free software, most of them following the
+[OpenPGP standard](http://openpgp.org/about/history/).
 
 An example of signed message, from Phil Zimmermann:
 ```
@@ -85,16 +94,6 @@ MfUiYaMREu4=
 - -----END PGP SIGNATURE-----
 ```
 
-This move bothered the US government, who tried to sue him for "exporting cryptography",
-as it was distributed through the internet (and therefore, outside the US borders).
-Fortunately,
-[the case was dropped on 1996](https://philzimmermann.com/EN/news/PRZ_case_dropped.html)
-and PGP could continue to be developed; although the "official" PGP (the one created by
-Zimermann) was discontinued. Despite this, other people took the idea and implemented
-their own free software, most of them following the
-[OpenPGP protocol](http://openpgp.org/about/history/).
-
-
 ## Back to the present
 
 Over time, thanks to the community-created security tools and new standards to ensure
@@ -106,8 +105,8 @@ Free software like [GPG](https://gnupg.org/) usually were CLI (command-line inte
 text-based applications executed on a terminal) tools, and the concept of "encryption"
 and secure communications seems obscure to the common public. In spite of all the
 [good GUIs for all platforms](https://www.gpg4win.org/) available, the adoption of
-encryption didn't spread outside the groups of privacy activists and developers (PGP it's
-used to verify Debian packages).
+encryption didn't spread outside the groups of privacy activists and developers (for
+example, PGP it's used to verify Debian packages).
 
 An example of gpg, a CLI tool (not very user-friendly):
 ```sh
@@ -133,7 +132,7 @@ DESkPkghZ+xQReuQ3kWV
 ```
 
 It's not a surprise that the usage of this kind of software hasn't increase over time,
-and people still look at you with weird faces when you speak about encryption, arguing
+and people still look with weird faces when someone speaks about encryption, arguing
 the usual "I have nothing to hide".
 
 

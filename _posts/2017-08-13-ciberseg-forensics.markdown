@@ -81,7 +81,7 @@ couldn't get the answer searching the strings.
 Extracting the files gives us the following image with the answer:
 
 {% include image.html
-	src="/assets/posts/2017-08-13-ciberseg-forensics/flag.png"
+	src="/assets/posts/2017-08-13-ciberseg-forensics/flag.jpg"
 	title="Flag"
 	alt="Image with the flag"
 %}
@@ -155,7 +155,7 @@ the flag on the first try using `hashcat -m 1000 -a 3 -o cracked ctf.hashes
 flag{?a?a?a?a?a}`, taking only a couple of minutes:
 
 {% include image.html
-	src="/assets/posts/2017-08-13-ciberseg-forensics/hashcat-crack.png"
+	src="/assets/posts/2017-08-13-ciberseg-forensics/hashcat-crack.jpg"
 	title="Cracked password by HashCat"
 	alt="Result of HashCat"
 %}
@@ -229,7 +229,7 @@ hide information on music files.
 As the data is unencrypted, we can simply extract it and get the flag:
 
 {% include image.html
-	src="/assets/posts/2017-08-13-ciberseg-forensics/deepsound.png"
+	src="/assets/posts/2017-08-13-ciberseg-forensics/deepsound.jpg"
 	title="Secret data extracted using DeepSound"
 	alt="Extracted file"
 %}

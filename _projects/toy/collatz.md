@@ -40,7 +40,7 @@ directory:
   - AWK
 
 {% include image.html
-	src="/assets/projects/images/collatz-prolog.png"
+	src="/assets/projects/images/collatz-prolog.jpg"
 	title="Example run on Prolog"
 	alt="Example in Prolog"
 %}

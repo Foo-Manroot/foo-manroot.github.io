@@ -14,7 +14,7 @@ on the '_Networking_' course.
 I learned everything I had to, so this project is mostly abandoned.
 
 {% include image.html
-	src="/assets/projects/images/chat.png"
+	src="/assets/projects/images/chat.jpg"
 	title="Example conversation"
 	alt="Chat example"
 %}

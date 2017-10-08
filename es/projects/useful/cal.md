@@ -22,7 +22,7 @@ ya no puede mandar mensajes. Esta debería ser una de las primeras cosas en las 
 ponerse trabajar.
 
 {% include image.html
-	src="/assets/projects/images/cal.png"
+	src="/assets/projects/images/cal.jpg"
 	title="Conversación de prueba"
 	alt="Ejemplo de chat"
 %}

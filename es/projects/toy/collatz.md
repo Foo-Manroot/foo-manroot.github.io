@@ -44,7 +44,7 @@ directorio:
 
 
 {% include image.html
-	src="/assets/projects/images/collatz-prolog.png"
+	src="/assets/projects/images/collatz-prolog.jpg"
 	title="Ejecución de ejemplo en Prolog"
 	alt="Ejemplo en Prolog"
 %}

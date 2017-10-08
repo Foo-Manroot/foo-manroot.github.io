@@ -9,7 +9,7 @@ ref: projects-time-wanderer
 ## Time Wanderer
 
 {% include image.html
-	src="/assets/projects/images/time-wanderer.png"
+	src="/assets/projects/images/time-wanderer.jpg"
 	title="Cover"
 	alt="Time-Wanderer cover"
 %}

@@ -27,7 +27,7 @@ challenge, although the methodology to solve it is exactly the same.**
 ## The challenge
 
 {% include image.html
-	src="/assets/posts/2017-09-09-elttam-challenge/challenge-screenshot.png"
+	src="/assets/posts/2017-09-09-elttam-challenge/challenge-screenshot.jpg"
 	title="Screenshot of the challenge"
 	alt="Screenshot of the challenge page"
 %}

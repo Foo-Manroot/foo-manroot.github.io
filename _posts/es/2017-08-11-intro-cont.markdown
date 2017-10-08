@@ -58,7 +58,7 @@ Estos son los dos modelos, mostrados usando las herramientas de desarrollo de Mo
 Firefox (el color de fondo se ha quitado para ver la rejilla más fácilmente):
 
 {% include image.html
-	src="/assets/posts/2017-08-11-intro-cont/footer-grid.png"
+	src="/assets/posts/2017-08-11-intro-cont/footer-grid.jpg"
 	title="Rejilla vista con las herramientas de desarrollo"
 	alt="Rejilla en dispositivos con pantallas grandes"
 %}
@@ -66,7 +66,7 @@ Firefox (el color de fondo se ha quitado para ver la rejilla más fácilmente):
 y para móviles:
 
 {% include image.html
-	src="/assets/posts/2017-08-11-intro-cont/footer-grid-mobile.png"
+	src="/assets/posts/2017-08-11-intro-cont/footer-grid-mobile.jpg"
 	title="Rejilla en móviles vista con las herramientas de desarrollo"
 	alt="Rejilla en dispositivos móviles"
 %}

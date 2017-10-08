@@ -208,7 +208,7 @@ which algorithm is being used. It's like HTTPS, that is being used by a lot of p
 that only has to know that it's better to have "that green lock on the bar".
 
 {% include image.html
-	src="/assets/posts/2017-10-06-keybase/green-lock.png"
+	src="/assets/posts/2017-10-06-keybase/green-lock.jpg"
 	title="The blessed green lock"
 	alt="The holy green lock"
 %}

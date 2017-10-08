@@ -33,7 +33,7 @@ Además, añadí ejemplo e incluso [el trabajo final](https://github.com/Foo-Man
 memoria y todo el código fuente.
 
 {% include image.html
-	src="/assets/projects/images/script-jflex-cup.png"
+	src="/assets/projects/images/script-jflex-cup.jpg"
 	title="Analizador semántico en acción"
 	alt="Salida del analizador"
 %}

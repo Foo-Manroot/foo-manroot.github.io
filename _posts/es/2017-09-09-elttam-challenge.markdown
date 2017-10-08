@@ -28,7 +28,7 @@ metodología para resolverlo es exactamente la misma.**
 ## El reto
 
 {% include image.html
-	src="/assets/posts/2017-09-09-elttam-challenge/challenge-screenshot.png"
+	src="/assets/posts/2017-09-09-elttam-challenge/challenge-screenshot.jpg"
 	title="Captura de pantalla del reto"
 	alt="Captura de pantalla de la página del reto"
 %}

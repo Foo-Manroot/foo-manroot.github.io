@@ -119,7 +119,7 @@ Using any online database, like [crackstation](https://crackstation.net/), we ca
 the first and last part of the flag:
 
 {% include image.html
-	src="/assets/posts/2017-08-11-ciberseg-crypto/crackstation.png"
+	src="/assets/posts/2017-08-11-ciberseg-crypto/crackstation.jpg"
 	title="Result obtained with CrackStation"
 	alt="CrackStation result"
 %}
@@ -130,7 +130,7 @@ know it, the format is `[a-z]{3}[[:punct:]][0-9]{4}`). That makes the task easie
 a couple of minutes, we have the answer:
 
 {% include image.html
-	src="/assets/posts/2017-08-11-ciberseg-crypto/cracked-hash.png"
+	src="/assets/posts/2017-08-11-ciberseg-crypto/cracked-hash.jpg"
 	title="Result obtained with HashCat"
 	alt="HashCat result"
 %}

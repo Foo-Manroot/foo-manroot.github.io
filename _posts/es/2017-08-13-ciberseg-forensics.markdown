@@ -80,7 +80,7 @@ obtener la respuesta buscando _strings_.
 Al extraer los ficheros obtenemos la siguiente imagen con la respuesta:
 
 {% include image.html
-	src="/assets/posts/2017-08-13-ciberseg-forensics/flag.png"
+	src="/assets/posts/2017-08-13-ciberseg-forensics/flag.jpg"
 	title="Imagen con la bandera"
 	alt="Bandera"
 %}
@@ -155,7 +155,7 @@ intento usando `hashcat -m 1000 -a 3 -o cracked ctf.hashes flag{?a?a?a?a?a}`, ta
 sólo un par de minutos:
 
 {% include image.html
-	src="/assets/posts/2017-08-13-ciberseg-forensics/hashcat-crack.png"
+	src="/assets/posts/2017-08-13-ciberseg-forensics/hashcat-crack.jpg"
 	title="Contraseña sacada con HashCat"
 	alt="Resultado de hashcat"
 %}
@@ -231,7 +231,7 @@ ocultar información en archivos de música.
 Como los datos están sin cifrar, podemos simplemente extraerlos y obtener la bandera:
 
 {% include image.html
-	src="/assets/posts/2017-08-13-ciberseg-forensics/deepsound.png"
+	src="/assets/posts/2017-08-13-ciberseg-forensics/deepsound.jpg"
 	title="Datos extraídos usando DeepSound"
 	alt="Fichero extraído"
 %}

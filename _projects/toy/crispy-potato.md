@@ -36,7 +36,7 @@ With some access control also based on Unix file system's access control, one ca
 available files (the ones that has permissions to be viewed) and manage its own files:
 
 {% include image.html
-	src="/assets/projects/images/crispy-potato_Files-download.png"
+	src="/assets/projects/images/crispy-potato_Files-download.jpg"
 	title="Files downloading page"
 	alt="File download"
 %}
@@ -44,7 +44,7 @@ available files (the ones that has permissions to be viewed) and manage its own 
 Also, one can upload new files:
 
 {% include image.html
-	src="/assets/projects/images/crispy-potato_Files-upload.png"
+	src="/assets/projects/images/crispy-potato_Files-upload.jpg"
 	title="Uploading page"
 	alt="File uploading"
 %}

@@ -30,7 +30,7 @@ De cualquier modo, el primer reto que miré era el titulado _Tsulott_. La págin
 que hay que buscar la bandera parece muy bonita:
 
 {% include image.html
-	src="/assets/posts/2017-09-28-meepwn-web/first_recon.png"
+	src="/assets/posts/2017-09-28-meepwn-web/first_recon.jpg"
 	title="Página web"
 	alt="Primer reconocimiento de la página web"
 %}
@@ -58,7 +58,7 @@ aprovecharnos del error de alguien simplemente haciendo una petición a
 `[url]/?is_debug=1`. Y _violà_, aquí está el código del servidor:
 
 {% include image.html
-	src="/assets/posts/2017-09-28-meepwn-web/code.png"
+	src="/assets/posts/2017-09-28-meepwn-web/code.jpg"
 	title="Opción de depuración puesta a 1"
 	alt="Respuesta del servidor cuando 'is_debug' está a 1"
 %}
@@ -194,7 +194,7 @@ Cuando se accede a `/?input=Tzo3OiJFeHBsb2l0IjowOnt9`, obtenemos la bandera:
 
 
 {% include image.html
-	src="/assets/posts/2017-09-28-meepwn-web/flag.png"
+	src="/assets/posts/2017-09-28-meepwn-web/flag.jpg"
 	title="Exploit en acción"
 	alt="Respuesta del servidor al exploit, con la bandera"
 %}

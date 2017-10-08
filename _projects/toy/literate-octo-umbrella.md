@@ -20,7 +20,7 @@ We didn't have time to give it a name (nor we wanted to), so we chose the name
 automatically suggested by Github.
 
 {% include image.html
-	src="/assets/projects/images/literate-octo-umbrella.png"
+	src="/assets/projects/images/literate-octo-umbrella.jpg"
 	title="Game running"
 	alt="Playing on level 1"
 %}

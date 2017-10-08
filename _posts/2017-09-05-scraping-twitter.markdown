@@ -55,7 +55,7 @@ https://twitter.com/i/profiles/show/malwareunicorn/timeline/tweets?composed_coun
 ```
 
 {% include image.html
-	src="/assets/posts/2017-09-05-scraping-twitter/twitter-update-requests.png"
+	src="/assets/posts/2017-09-05-scraping-twitter/twitter-update-requests.jpg"
 	title="Requests viewed with Firefox's developer tools"
 	alt="View from the developer tools"
 %}

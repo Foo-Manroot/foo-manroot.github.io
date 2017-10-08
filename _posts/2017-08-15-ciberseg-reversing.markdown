@@ -365,7 +365,7 @@ bit. It only has a button with the text (translated from spanish) "calculate fla
 once pressed, shows the text (again, translated from spanish) "flag calculated".
 
 {% include image.html
-	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-first-run.png"
+	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-first-run.jpg"
 	title="First run of the app"
 	alt="Exploration of the app"
 %}
@@ -380,7 +380,7 @@ a [Java decompiler](http://jd.benow.ca/), and we find a class named
 __CalculateFlagAction__, where we can see:
 
 {% include image.html
-	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-decompiled.png"
+	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-decompiled.jpg"
 	title="CalculateFlagAction viewed on the decompiler"
 	alt="Decompiled app"
 %}

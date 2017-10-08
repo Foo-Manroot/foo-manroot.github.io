@@ -367,7 +367,7 @@ explorarla un poco. Sólo tiene un botón con el texto "calcular flag"; y, una v
 accionado, muestra ek texto "flag calculada".
 
 {% include image.html
-	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-first-run.png"
+	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-first-run.jpg"
 	title="Primera ejecución de la aplicación"
 	alt="Exploración de la aplicación"
 %}
@@ -383,7 +383,7 @@ sus _.dex_, en un jar, con archivos _.class_. Luego, decompilamos el bytecode us
 __CalculateFlagAction__, donde podemos ver:
 
 {% include image.html
-	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-decompiled.png"
+	src="/assets/posts/2017-08-15-ciberseg-reversing/apk-decompiled.jpg"
 	title="CalculateFlagAction vista en el decompilador"
 	alt="App decompilada"
 %}

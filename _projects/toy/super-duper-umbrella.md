@@ -35,7 +35,7 @@ We didn't have time to give it a name (nor we wanted to), so we chose the name
 automatically suggested by Github.
 
 {% include image.html
-	src="/assets/projects/images/super-duper-umbrella.png"
+	src="/assets/projects/images/super-duper-umbrella.jpg"
 	title="Screenshot of the game with extra verbosity enabled"
 	alt="Game with extra verbosity option enabled"
 %}

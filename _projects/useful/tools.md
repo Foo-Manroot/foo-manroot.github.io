@@ -18,7 +18,7 @@ Apart from the main script, `installer.sh` with its auxiliary data (`tools.json`
 `vimrc` and syntax files).
 
 {% include image.html
-	src="/assets/projects/images/tools.png"
+	src="/assets/projects/images/tools.jpg"
 	title="Example of execution"
 	alt="Script being executed"
 %}

@@ -21,7 +21,7 @@ No tuvimos tiempo ni ganas para darle nombre, así que cogimos el nombre sugerid
 automáticamente por Github.
 
 {% include image.html
-	src="/assets/projects/images/literate-octo-umbrella.png"
+	src="/assets/projects/images/literate-octo-umbrella.jpg"
 	title="Jugando en el nivel 1"
 	alt="Juego en ejecución"
 %}

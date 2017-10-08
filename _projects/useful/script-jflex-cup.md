@@ -31,7 +31,7 @@ Also, I added some examples and even [the final work](https://github.com/Foo-Man
 the report and full source code (everyhing in spanish, of course).
 
 {% include image.html
-	src="/assets/projects/images/script-jflex-cup.png"
+	src="/assets/projects/images/script-jflex-cup.jpg"
 	title="Parser in action"
 	alt="Parser output"
 %}

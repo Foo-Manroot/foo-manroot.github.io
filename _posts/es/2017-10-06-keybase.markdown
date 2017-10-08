@@ -219,7 +219,7 @@ los días y no hay que saber nada más que es mejor tener "ese pequeño candadit
 la barra".
 
 {% include image.html
-	src="/assets/posts/2017-10-06-keybase/green-lock.png"
+	src="/assets/posts/2017-10-06-keybase/green-lock.jpg"
 	title="El bendito candadito verde"
 	alt="El sagrado candadito verde"
 %}

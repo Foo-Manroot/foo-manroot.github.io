@@ -27,7 +27,7 @@ Anyway, the first challenge I looked into was the one titled _Tsulott_. The webp
 we have to get the flag from looks beautiful:
 
 {% include image.html
-	src="/assets/posts/2017-09-28-meepwn-web/first_recon.png"
+	src="/assets/posts/2017-09-28-meepwn-web/first_recon.jpg"
 	title="Webpage"
 	alt="Webpage's first recon"
 %}
@@ -55,7 +55,7 @@ advantage of someone's mistake by simply requesting `[endpoint]/?is_debug=1`. _V
 here is the code of the server:
 
 {% include image.html
-	src="/assets/posts/2017-09-28-meepwn-web/code.png"
+	src="/assets/posts/2017-09-28-meepwn-web/code.jpg"
 	title="Debug option set to 1"
 	alt="Server's response when 'is_debug' is set to 1"
 %}
@@ -192,7 +192,7 @@ When we request `/?input=Tzo3OiJFeHBsb2l0IjowOnt9`, we get the flag:
 
 
 {% include image.html
-	src="/assets/posts/2017-09-28-meepwn-web/flag.png"
+	src="/assets/posts/2017-09-28-meepwn-web/flag.jpg"
 	title="Exploit in action"
 	alt="Server's response to the exploit, giving us the flag"
 %}

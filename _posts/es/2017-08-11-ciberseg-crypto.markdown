@@ -121,7 +121,7 @@ Usando cualquier base de datos online, como [crackstation](https://crackstation.
 podemos encontrar la partes primera y última de la bandera:
 
 {% include image.html
-	src="/assets/posts/2017-08-11-ciberseg-crypto/crackstation.png"
+	src="/assets/posts/2017-08-11-ciberseg-crypto/crackstation.jpg"
 	title="Resultado obtenido con CrackStation"
 	alt="Resultado de CrackStation"
 %}
@@ -133,7 +133,7 @@ podemos usar la pista que nos dan, diciendo que es como una contraseña de la
 minutos tenemos la respuesta:
 
 {% include image.html
-	src="/assets/posts/2017-08-11-ciberseg-crypto/cracked-hash.png"
+	src="/assets/posts/2017-08-11-ciberseg-crypto/cracked-hash.jpg"
 	title="Resultado obtenido con HashCat"
 	alt="Resultado de HashCat"
 %}

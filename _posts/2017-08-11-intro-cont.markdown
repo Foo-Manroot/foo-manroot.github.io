@@ -55,7 +55,7 @@ These are the layouts, shown using the Mozilla Firefox's developer tools (the ba
 colour has been removed to see the grid more easily):
 
 {% include image.html
-	src="/assets/posts/2017-08-11-intro-cont/footer-grid.png"
+	src="/assets/posts/2017-08-11-intro-cont/footer-grid.jpg"
 	title="Grid shown using the developer tools"
 	alt="Grid on non-mobile devices"
 %}
@@ -63,7 +63,7 @@ colour has been removed to see the grid more easily):
 and on mobile:
 
 {% include image.html
-	src="/assets/posts/2017-08-11-intro-cont/footer-grid-mobile.png"
+	src="/assets/posts/2017-08-11-intro-cont/footer-grid-mobile.jpg"
 	title="Grid shown using the developer tools"
 	alt="Grid on mobile devices"
 %}

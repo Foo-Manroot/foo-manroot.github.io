@@ -21,7 +21,7 @@ y sus archivos de syntaxis).
 
 
 {% include image.html
-	src="/assets/projects/images/tools.png"
+	src="/assets/projects/images/tools.jpg"
 	title="Ejemplo de ejecución"
 	alt="Script siendo ejecutado"
 %}

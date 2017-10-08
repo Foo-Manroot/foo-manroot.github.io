@@ -36,7 +36,7 @@ automáticamente por Github.
 
 
 {% include image.html
-	src="/assets/projects/images/super-duper-umbrella.png"
+	src="/assets/projects/images/super-duper-umbrella.jpg"
 	title="Juego con la opción de detalle extra activada"
 	alt="Captura de pantalla del juego con detalle extra"
 %}

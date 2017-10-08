@@ -36,7 +36,7 @@ ver los archivos disponibles (a los que se tiene permiso para acceder) y adminis
 propios.
 
 {% include image.html
-	src="/assets/projects/images/crispy-potato_Files-download.png"
+	src="/assets/projects/images/crispy-potato_Files-download.jpg"
 	title="Página de descarga de archivos"
 	alt="Descarga de archivos"
 %}
@@ -44,7 +44,7 @@ propios.
 También se pueden subir archivos nuevos:
 
 {% include image.html
-	src="/assets/projects/images/crispy-potato_Files-upload.png"
+	src="/assets/projects/images/crispy-potato_Files-upload.jpg"
 	title="Página para la subida de archivos"
 	alt="Subida de archivos"
 %}

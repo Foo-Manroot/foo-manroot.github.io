@@ -22,7 +22,7 @@ Should work well on LANs, but when a NAT is between the hosts, the chat is no mo
 to send message. That should be one of the main things to work on.
 
 {% include image.html
-	src="/assets/projects/images/cal.png"
+	src="/assets/projects/images/cal.jpg"
 	title="Test chat with nobody"
 	alt="Example of a chat"
 %}

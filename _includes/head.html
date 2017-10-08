@@ -20,19 +20,57 @@
 		Favicon, as stated on the instructions from https://realfavicongenerator.net/
 		The icon was extracted from https://www.freefavicon.com/
 	-->
-	<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="194x194" href="/icons/favicon-194x194.png">
-	<link rel="icon" type="image/png" sizes="192x192" href="/icons/android-chrome-192x192.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
-	<link rel="manifest" href="/icons/manifest.json">
-	<link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#17191f">
-	<link rel="shortcut icon" href="/icons/favicon.ico">
-	<meta name="msapplication-TileColor" content="#b91d47">
-	<meta name="msapplication-TileImage" content="/icons/mstile-144x144.png">
-	<meta name="msapplication-config" content="/icons/browserconfig.xml">
-	<meta name="theme-color" content="#17191f">
+	<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="194x194" href="/icons/favicon-194x194.png" />
+	<link rel="icon" type="image/png" sizes="192x192" href="/icons/android-chrome-192x192.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+	<link rel="manifest" href="/icons/manifest.json" />
+	<link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#17191f" />
+	<link rel="shortcut icon" href="/icons/favicon.ico" />
 
+	<meta name="msapplication-TileColor" content="#b91d47" />
+	<meta name="msapplication-TileImage" content="/icons/mstile-144x144.png" />
+	<meta name="msapplication-config" content="/icons/browserconfig.xml" />
+	<meta name="theme-color" content="#17191f" />
 
+	<!--
+		OpenGraph tags, to tell another websites what to show on the thumbnail
+	-->
+	<meta property="og:site_name" content="{{ site.title }}">
+	<meta property="og:image" content="{{ site.url }}/icons/favicon-32x32.png" />
+	<meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+	{% if page.layout == "post" %}
+		<meta property="og:title" content="{{ page.title }}" />
+		<meta property="og:type" content="article" />
+		{% assign author = site.data.authors [page.author] %}
+		<meta property="article:author" content="{{ author.name }}" />
+		<meta property="article:published_time" content="{{ page.date | date_to_xml_schema }}" />
+	{% else %}
+		<meta property="og:type" content="website" />
+	{% endif %}
+	<meta property="og:locale" content="{{ site.data.i18n [page.lang].locale }}" />
+	{% for lang in site.data.i18n %}
+		{% if lang[0] != page.lang %}
+			{% assign translated = site.pages
+									| where: "ref", page.ref
+									| where: "lang", lang [0]
+			%}
+			{% if translated [0] %}
+				<meta property="og:locale:alternate" content="{{ site.url }}{{ translated [0].url }}" />
+			{% else %}
+				<!-- Searches on the collections -->
+				{% for col in site.collections %}
 
+					{% for doc in col.docs %}
+						{% if doc.ref == page.ref
+							and doc.lang == lang [0]
+						%}
+							<meta property="og:locale:alternate" content="{{ site.url }}{{ doc.url }}" />
+						{% endif %}
+					{% endfor %}
+				{% endfor %}
+			{% endif %}
+		{% endif %}
+	{% endfor %}
 </head>

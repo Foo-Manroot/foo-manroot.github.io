@@ -1,4 +1,5 @@
 en:
+    locale: "en_GB"
     name: "english"
     written_by: "written by"
     more_projects: "more projects"
@@ -16,6 +17,7 @@ en:
         11: "October"
         12: "December"
 es:
+    locale: "es_ES"
     name: "español"
     written_by: "escrito por"
     more_projects: "más proyectos"

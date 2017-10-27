@@ -33,7 +33,7 @@ $0 [options] directory
 Where 'options' may be one of the following:
 	-d
 	--decrypt
-		 Decrypts the directory, instead of encrypting it.
+		Decrypts the directory, instead of encrypting it.
 	-h
 	--help
 		Show this message and exits.

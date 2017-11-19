@@ -182,8 +182,8 @@ from the GNURadio wiki.
 
 
 From now on, I'll be working with
-[this IQ file](/assets/posts/2017-11-18-gnuradio-ook/cap.iq), captured using GNURadio,
-for it's simpler to work with it than to plug the dongle.
+[this IQ file](/assets/posts/2017-11-18-gnuradio-ook/cap.iq.tar.bz2), captured using
+GNURadio, for it's simpler to work with it than to plug the dongle.
 
 
 ### Getting the digital signal

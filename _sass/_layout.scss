@@ -114,9 +114,9 @@ body {
 
 		/* On mobile, the text is selected when it's checked */
 		-khtml-user-select: none;
-	    -o-user-select: none;
-	    -moz-user-select: none;
-	    -webkit-user-select: none;
+		-o-user-select: none;
+		-moz-user-select: none;
+		-webkit-user-select: none;
 	}
 
 	#menu-checkbox {
@@ -247,9 +247,9 @@ body {
 
 	/* On mobile, the text is selected when it's checked */
 	-khtml-user-select: none;
-    -o-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
+	-o-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
 
 	> svg {
 		width: 36px;
@@ -627,6 +627,10 @@ body {
 
 	.inline-math {
 		display: inline;
+	}
+
+	video {
+		max-width: 100%;
 	}
 
 	h2 {

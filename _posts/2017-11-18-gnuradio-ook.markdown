@@ -8,17 +8,18 @@ ref: gnuradio-ook
 ---
 
 This is my last year in college, and for my end-of-degree project I'm investigating the
-usage of SDR (Software Defined Radio) to intercept and attack insecure radio
-communications.
+use of SDR
+[(Software Defined Radio)](https://en.wikipedia.org/wiki/Software-defined_radio) to
+intercept and attack insecure radio communications.
 
-The initial applications were just to intercept wireless keyboards and mice; but that
-work [has already been done](https://www.mousejack.com/), so I decided to give it a more
-broad scope and to study all radio communications, including garage remotes, wireless
-keys of some cars...
+The initial applications I had in mind were just to intercept wireless keyboards and
+mice; but that work [has already been done](https://www.mousejack.com/), so I decided to
+give it a more broad scope and to study all radio communications, including garage
+remotes, wireless keys of some cars...
 
-For now, I'm just playing around learning how to use [GNURadio](http://gnuradio.org/) and
-trying to decode simple signals from domotic remotes that used for things like turning
-on or off some lights on the house.
+For now, I'm just playing around learning to use [GNURadio](http://gnuradio.org/) and
+trying to decode simple signals from domotic remotes used for things like turning on or
+off some lights on the house.
 
 
 ## Hardware
@@ -35,8 +36,8 @@ Note that this cheap dongles **_won't allow you to transmit_**. They are good re
 though, and should be enough to start playing with SDR.
 
 More info about the RTL-SDR can be found on [rtl-sdr.com](https://www.rtl-sdr.com),
-including a store to buy hardware and multiple tutorials to build or buy an antenna that
-suits your needs, decode NOAA signals to get
+including a store to buy hardware and multiple tutorials, like how to build or buy an
+antenna that suits your needs, or to decode NOAA signals to get
 [amazing meteorologic images](https://www.reddit.com/r/RTLSDR/search?q=noaa&restrict_sr=on)...
 
 
@@ -120,7 +121,7 @@ example).
 {% include image.html
 	src="/assets/posts/2017-11-18-gnuradio-ook/signal-hand-decode.jpg"
 	title="Decoded data from the signal"
-	alt="Signal viewed on Audacity, showing the digital squared wave; and showing the decoded bits"
+	alt="Signal viewed on Audacity, showing the digital squared wave; and the decoded bits"
 %}
 
 
@@ -170,14 +171,14 @@ To know more about its usage, simply execute `./decode.py --help`.
 ## Using GNURadio
 
 Now that we know everything we have to know about the signal, we can start using GNURadio
-to analyze or decode in real time. I'll take for granted that you have some basic
+to analyze or decode it in real time. I'll take for granted that you have some basic
 knowledge of GNURadio or Digital Signal Processing (I'm not an expert either... just
 some basic concepts are enough to follow this part).
 
 To learn more about any of those subjects, there are a lot of useful tutorials on the
 internet, like [this series](https://greatscottgadgets.com/sdr/) about DSP, made by the
-creator of the HackRFi,
-or [this other series](https://wiki.gnuradio.org/index.php/Guided_Tutorial_Introduction),
+creator of the HackRF, or
+[this other series](https://wiki.gnuradio.org/index.php/Guided_Tutorial_Introduction),
 from the GNURadio wiki.
 
 
@@ -250,13 +251,13 @@ fly, as we capture signals.
 
 To decode the data, I'll substitute the `statistics sink` for
 [another custom block](/assets/posts/2017-11-18-gnuradio-ook/flowgraphs/ook2bin.py) to
-dump the bits on stdout. I guess there may be a simpler method to dump the data, but I
+dump the bits on STDOUT. I guess there may be a simpler method to dump the data, but I
 chose this one because Python is a language where development is very fast, and I didn't
 know how to do it with the available blocks.
 
 This flowgraph can be downloaded from
-[here](/assets/posts/2017-11-18-gnuradio-ook/flowgraphs/decode.grc); and this is an
-example of it decoding packets in real time:
+[here](/assets/posts/2017-11-18-gnuradio-ook/flowgraphs/decode.grc). This is an example
+of it decoding packets in real time:
 
 {% include video.html
 	src="/assets/posts/2017-11-18-gnuradio-ook/Screencast-flowgraph_decoding.webm"
@@ -284,8 +285,8 @@ Replaying the signal is a very easy method. We just have to store the signal int
 and then, use that file as a source to transmit.
 
 It's not the better method, as we'll have to capture every possible value, from every
-one of the different buttons; and this method doesn't scale. When you have more than
-three or four buttons, it's starting to get boring. Also, we should be careful with the
+one of the different buttons, and this method doesn't scale. When you have more than
+three or four buttons, it starts to get boring. Also, we should be careful with the
 parameters (frequency and sample rate), to replay the exact same signal we received.
 
 The flowgraphs are very simple.
@@ -300,8 +301,8 @@ Receive:
 Replay:
 {% include image.html
 	src="/assets/posts/2017-11-18-gnuradio-ook/flowgraph_replay.jpg"
-	title="Flowgraph to capture the signal to be replayed"
-	alt="Flowgraph with the needed blocks to store the signal into a file"
+	title="Flowgraph to replay the captured signal"
+	alt="Flowgraph with the needed blocks to read the capture file and replay it"
 %}
 
 

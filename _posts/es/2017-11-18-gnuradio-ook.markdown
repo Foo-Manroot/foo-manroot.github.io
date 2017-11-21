@@ -70,7 +70,7 @@ cientos de otros programas muy útiles.
 ## El mando
 
 Yo voy a trabajar con el mando que tengo en casa: [EM_MAN-001,
-hecho por by  Dinuy](http://dinuy.com/es/rss/86-productos/domotica/229-em-man-001). En
+hecho por Dinuy](http://dinuy.com/es/rss/86-productos/domotica/229-em-man-001). En
 la página enlazada hay un par de características de este mando; pero las más interesantes
 son:
 
@@ -96,7 +96,8 @@ nuevo, estos mandos suelen modular usando
 ## Interceptando y analizando la señal
 
 
-Una vez hemos ajustado el receptor a 433'92 MHz, podemos ver algo similar a esto en GQRX:
+Una vez hemos sintonizado el receptor a 433'92 MHz, podemos ver algo similar a esto en
+GQRX:
 
 {% include video.html
 	src="/assets/posts/2017-11-18-gnuradio-ook/Screencast-GQRX.webm"
@@ -184,7 +185,7 @@ soy un experto... sólo hacen falta algunos conceptos básicos para seguir esta 
 
 Para aprender más sobre cualquiera de estas materias, hay muchos tutoriales y recursos en
 internet, como [esta serie](https://greatscottgadgets.com/sdr/) sobre tratamiento digital
-de señales about, hecho por el creador del HackRF, o
+de señales, hecha por el creador del HackRF, o
 [esta otra serie](https://wiki.gnuradio.org/index.php/Guided_Tutorial_Introduction),
 sacada de la wiki de GNURadio.
 
@@ -216,7 +217,7 @@ De momento, sólo podemos ver la señal digital (junto con los diferentes estadi
 mientras se procesa la señal capturada). También podemos añadir un filtro de paso de
 banda (_band-pass filter_) para reducir el ruido.
 
-### Analzando la señal
+### Analizando la señal
 
 Para recuperar los datos de manera precisa mientras está siendo capturada la señal,
 debemos obtener algunas estadísticas, como la frecuencia base (para saber el número de
@@ -316,4 +317,4 @@ Repetir:
 
 
 Para el otro método, sintetizar la señal, crearé otro post nuevo; puesto que requiere
-una explicación más larga y este post es ya demasiado largo.
+más explicación y este post es ya demasiado largo.

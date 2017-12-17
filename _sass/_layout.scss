@@ -597,6 +597,11 @@ body {
 	@include media-query($on-palm) {
 		max-width: 90vw;
 	}
+
+	.embedded_pdf {
+		height: 80vh;
+		width: 100%;
+	}
 }
 
 .post-header {

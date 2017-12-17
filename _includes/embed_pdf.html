@@ -1,0 +1,8 @@
+<object data="{{ include.path }}"
+	class="embedded_pdf"
+	type="application/pdf"
+>
+	alt : <a href="{{ include.path }}">
+		{{ include.path | split: "/" | last }}
+	</a>
+</object>

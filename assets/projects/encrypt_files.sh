@@ -81,7 +81,7 @@ parse_args ()
 
 	# Guarda el resultado para manejar correctamente los errores
 	opts=$(getopt --options $SHORT_OPTS --longoptions $LONG_OPTS \
-		 --name "$0" -- "$@") || exit 1
+		--name "$0" -- "$@") || exit 1
 
 	eval set -- "$opts"
 
@@ -234,12 +234,10 @@ encrypt_file ()
 				then
 					if [ "$verbosity" -ge 2 ]
 					then
-						shred -v "$file"
+						shred -vu "$file"
 					else
-						shred "$file"
+						shred -u "$file"
 					fi
-
-					rm "$file"
 				else
 					printf "%s\\n" "$file" >> "$ERR_FILE"
 
@@ -336,12 +334,10 @@ decrypt_file ()
 				then
 					if [ "$verbosity" -ge 2 ]
 					then
-						shred -v "$file"
+						shred -uv "$file"
 					else
-						shred "$file"
+						shred -u "$file"
 					fi
-
-					rm "$file"
 				else
 					printf "%s\\n" "$file" >> "$ERR_FILE"
 
@@ -434,7 +430,7 @@ fi
 
 find "$CRYPT_DIR" -type f \
 	| while read -r file
-	  do
+	do
 		"$decrypt" && decrypt_file "$file"
 		"$decrypt" || encrypt_file "$file"
 	done

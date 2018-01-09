@@ -3,7 +3,7 @@ layout: post
 title:  "Charla de privacidad"
 date:	2017-12-17 11:37:02 +0100
 author: foo
-categories: es privacidad anonimato seguridad charla
+categories: es privacy anonimity security conference
 lang: es
 ref: privacy-conference-A.L
 ---

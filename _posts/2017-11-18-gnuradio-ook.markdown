@@ -7,8 +7,8 @@ categories: gnuradio sdr
 ref: gnuradio-ook
 ---
 
-This is my last year in college, and for my end-of-degree project I'm investigating the
-use of SDR
+This is my last year in university, and for my end-of-degree project I'm investigating
+the use of SDR
 [(Software Defined Radio)](https://en.wikipedia.org/wiki/Software-defined_radio) to
 intercept and attack insecure radio communications.
 

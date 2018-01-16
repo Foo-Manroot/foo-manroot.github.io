@@ -30,15 +30,16 @@ or at least take a look on your local regulations.
 ```
 
 
-Before diving into the technical details, it's important to note the legality of
-transmitting on certain ranges. We didn't have to worry about this on the previous part,
-listening to signals, as it's legal to do it (at least where I'm from, Spain) except some
-special frequencies like military communications and the like.
+Before diving into the technical details, it's important to know the legality of
+transmitting on certain frequency ranges. We didn't have to worry about this on the
+previous part, listening to signals, as it's legal to do it (at least where I'm from,
+Spain) except some special frequencies like military communications and the like.
 
-This is all I could find about the laws here on Spain (all cited sources are on Spanish):
+Regarding transmission, this is all I could find about the laws here on Spain (all cited
+sources are on Spanish):
   - According to the [E.U. regulation (p. 11)](https://www.boe.es/doue/2017/214/L00003-00027.pdf),
 	"unspecific short range devices" (telemetry, remotes, alarms...) on the
-	433'92 MHz band can freely transmit up to 10 mW of effective radiated power.
+	433'92 MHz band can freely transmit with up to 10 mW of effective radiated power.
   - On the latest [frequencies assignations table (p. 12)](http://www.minetad.gob.es/telecomunicaciones/espectro/CNAF/notas-UN-2017.pdf)
 	from the Spanish government it seems to corroborate the 10 mW limit, stating also
 	that anything that works on that band must accept interferences from other
@@ -66,7 +67,8 @@ That was the hardware. On the software side, this time I'll use only
 
 As a final note, the studied remote works with
 [On-Off Keying - OOK](https://en.wikipedia.org/wiki/On-off_keying), modulated in ASK, so
-the shown flowgraphs are designed to modulate in AM.
+the shown flowgraphs are designed to modulate in AM. This information was gathered on the
+previous post, along with the baseband frequency (needed to synthesize the signal).
 
 
 ## Replaying the signal
@@ -77,7 +79,7 @@ and store them to simply replay them whenever we want.
 The actual method to do it (with the flowgraphs) is more deeply explained on the
 [previous post]({% post_url 2017-11-18-gnuradio-ook %}#transmitting-the-signal).
 
-Although very rudimentary, it's a very simple first step that tells us a lot of things
+Although quite rudimentary, it's a very simple first step that tells us a lot of things
 about the signal, whether it works or not:
   - If the replayed signal generates a response from the receiver **every time** we
 	transmit, we can conclude that the packets are always the same, without rolling
@@ -88,8 +90,8 @@ about the signal, whether it works or not:
 	a captured signal is not good enough. However, if it only works sometimes, we can
 	stay a long time transmitting until the receiver accepts the message. This may
 	not be very useful when activating a light; but it can be even dangerous if our
-	car can be opened "sometimes" (this may be caused by a rolling code with a short
-	cycle).
+	car can be opened " _only sometimes_ " (this may be caused by a rolling code
+	with a short cycle).
 
 Even when we fail to replay the signal, we can extract some information about the target.
 
@@ -105,12 +107,12 @@ you could change your target to an easier one.
 ## Synthesizing the signal
 
 The next step is to create the desired signal on the fly, directly from GNURadio, without
-any stored file with the captured signal because this files tend to be very heavy and
+any stored file with the captured signal, because this files tend to be very heavy and
 it's very annoying to capture _all the possible packets_ by hand.
 
 So, how do we synthesize a signal?
 
-The first thing is to create a squared signal with the wave we want. In this case, the
+The first thing is to create a squared wave with the signal we want. In this case, the
 coding used by the remote is
 [On-Off Keying - OOK](https://en.wikipedia.org/wiki/On-off_keying), and so the generated
 wave has to be like this:

@@ -31,11 +31,6 @@ some posts will have different issues... who knows?
 On the other hand, aside from the normal posts, there's a section dedicated exclusively
 to my [personal projects](../projects), where I explain in detail their characteristics.
 
-
-For any potential employer, a CTF team looking for members, or anybody that's curious
-about it, I'll leave [here](/assets/CV.pdf) my CV (without some personal details). I'll
-translate it any of these days...
-
 This blog is made with {% include icon-github.html username="jekyll" %} /
 [jekyll](https://github.com/jekyll/jekyll). You can find the source of this page on
 [my Github](https://github.com/Foo-Manroot/foo-manroot.github.io).

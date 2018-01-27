@@ -33,12 +33,6 @@ algunas entradas con otros temas diferentes... ¿quién sabe?
 Por otro lado, aparte de los posts normales, hay una sección dedicada exclusivamente a
 mis [proyectos personales](../projects), donde explico con detalle sus características.
 
-
-Para las personas que quisieran contratarme, los equipos de _CTF_ que busquen gente, o
-cualquiera que tenga curiosidad, dejo por [aquí](/assets/CV.pdf) mi CV (sin
-alguna información personal que he decidido quitar).
-
-
 La página está hecha con {% include icon-github.html username="Jekyll" %} /
 [jekyll](https://github.com/jekyll/jekyll). Se puede encontrar el código completo del
 blog en [mi Github](https://github.com/Foo-Manroot/foo-manroot.github.io)

@@ -7,10 +7,10 @@ ref: about
 ---
 
 ### About me
-I'm Miguel García, (or {% include icon-github.html username="Foo-Manroot" %}, on Github
-and most places on the internet), a Computer Science Student on Alcalá de Henares
-(Madrid, Spain), on [UAH](https://www.uah.es). I've almost finished my degree, so I
-though that I could share my knowledge (about CS-related themes) with the world.
+I'm {% include icon-github.html username="Foo-Manroot" %}, (on Github
+and most places on the internet), a Computer Science Student. I've almost finished
+my degree, so I though that I could share my knowledge (about CS-related themes) with
+the world.
 
 I'm very interested on cybersecurity and my main goal is to work as a pentester or
 something similar (red team stuff). For the moment, I just like to complete the
@@ -33,8 +33,8 @@ to my [personal projects](../projects), where I explain in detail their characte
 
 
 For any potential employer, a CTF team looking for members, or anybody that's curious
-about it, I'll leave [here](/assets/Miguel-García_CV.pdf) my CV (without some personal
-details). I'll translate it any of these days...
+about it, I'll leave [here](/assets/CV.pdf) my CV (without some personal details). I'll
+translate it any of these days...
 
 This blog is made with {% include icon-github.html username="jekyll" %} /
 [jekyll](https://github.com/jekyll/jekyll). You can find the source of this page on

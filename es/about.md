@@ -7,11 +7,10 @@ ref: about
 ---
 
 ### Sobre mí
-Me llamo Miguel García, (o {% include icon-github.html username="Foo-Manroot" %} en
-Github y la mayoría de internet), un estudiante de Ingeniería Informática en Alcalá de
-Henares (Madrid), en la [UAH](https://www.uah.es). Casi he terminado el Grado,
-así que he pensado que podría compartir mis conocimientos (sobre temas relacionados con
-la informática) con el mundo.
+Me llamo {% include icon-github.html username="Foo-Manroot" %} (en Github y la mayoría
+de internet), un estudiante de Ingeniería Informática. Casi he terminado el Grado, así
+que he pensado que podría compartir mis conocimientos (sobre temas relacionados con la
+informática) con el mundo.
 
 Estoy muy interesado en la ciberseguridad y mi objetivo principal es trabajar de
 _pentester_ o algo similar (cosas de _red team_). Por el momento, me gusta hacer los
@@ -36,7 +35,7 @@ mis [proyectos personales](../projects), donde explico con detalle sus caracter�
 
 
 Para las personas que quisieran contratarme, los equipos de _CTF_ que busquen gente, o
-cualquiera que tenga curiosidad, dejo por [aquí](/assets/Miguel-García_CV.pdf) mi CV (sin
+cualquiera que tenga curiosidad, dejo por [aquí](/assets/CV.pdf) mi CV (sin
 alguna información personal que he decidido quitar).
 
 

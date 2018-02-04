@@ -25,6 +25,7 @@ helpful.
   - [Time Wanderer](useful/time-wanderer.html)
   - [CAL](useful/cal.html)
   - [Encrypt folders](useful/encrypt.html)
+  - [ToR crawler](useful/tor-crawler.html)
 
 ----
 

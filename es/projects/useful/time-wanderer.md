@@ -49,7 +49,6 @@ Como he puesto antes, este juego ha sido realizado con un equipo de 5 personas:
 	(salvo el diseño de los gráficos); además de diversos arreglos generales.
 
 	  - Github: {% include icon-github.html username="Foo-Manroot" %}
-	  - Contacto: [miguel.garciamartin@hotmail.com](mailto:miguel.garciamartin@hotmail.com)
 
   - **Pablo Peña Romero**: Autor de los objetos especiales (como pociones y runas) y
 	algunos arreglos globales por diversas partes del juego.
@@ -62,6 +61,7 @@ Como he puesto antes, este juego ha sido realizado con un equipo de 5 personas:
   - **Zamar-Elahi Fazal Roura**: Diseñador de los personajes y los objetos. Además, como
 	a Pablo, se le asignaron algunos arreglos globales en diversas partes.
 
+	  - Github: {% include icon-github.html username="HetheMan" %}
 
 ----
 

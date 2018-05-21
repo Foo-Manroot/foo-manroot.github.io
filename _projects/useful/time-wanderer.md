@@ -47,18 +47,19 @@ As I stated before, this game has been made with a team of 5 people:
 	(except the graphics design). Also, general bugfixes.
 
 	  - Github: {% include icon-github.html username="Foo-Manroot" %}
-	  - Contact: [miguel.garciamartin@hotmail.com](mailto:miguel.garciamartin@hotmail.com)
 
   - **Pablo Peña Romero**: Author of the special items (like potions and runes) and some
 	global fixes around the game.
 
   - **Sergio Sánchez López**: Sole author of the physics engine (a really hard work that
-	got rewarded with extra points), and the tilesets for the rooms.
+	got him rewarded with extra points), and the tilesets for the rooms.
 
 	  - Github: {% include icon-github.html username="sergio-sanchezl" %}
 
-  - **Zamar-Elahi Fazal Roura**: Designer of the characters and objects . Also, as Pablo, he was
+  - **Zamar-Elahi Fazal Roura**: Designer of the characters and objects . Also, he was
 	assigned some global fixes around the game.
+
+	  - Github: {% include icon-github.html username="HetheMan" %}
 
 ----
 

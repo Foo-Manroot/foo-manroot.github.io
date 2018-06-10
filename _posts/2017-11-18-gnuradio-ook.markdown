@@ -64,8 +64,8 @@ take a look at the received signals. Two popular options are [GQRX](http://gqrx.
 ## The remote
 
 I'm going to work with the remote I had on my home: [EM_MAN-001
-, made by  Dinuy](http://dinuy.com/es/rss/86-productos/domotica/229-em-man-001). On the
-linked page there are a couple of characteristics of this remote; but the interesting
+, made by  Dinuy](http://dinuy.com/es/rss/86-productos/domotica/229-em-man-001)[^1]. On
+the linked page there are a couple of characteristics of this remote; but the interesting
 ones are (translated from spanish):
 
 	- Comunication:	By radio frequency (433,92MHz)
@@ -308,3 +308,12 @@ Replay:
 
 For the other method, synthesizing a signal, I'll create another post, as it requires a
 longer explanation and this post is already too long.
+
+--------------
+
+# Update 2018-06-10: the following post is available [over here]({{ site.baseurl }}{% post_url 2018-01-15-gnuradio-ook-transmit %}).
+
+--------------
+
+[^1]: The linked page isn't available anymore. You'll have to trust me when I say that
+	the information cited here was indeed true...

@@ -70,7 +70,7 @@ cientos de otros programas muy útiles.
 ## El mando
 
 Yo voy a trabajar con el mando que tengo en casa: [EM_MAN-001,
-hecho por Dinuy](http://dinuy.com/es/rss/86-productos/domotica/229-em-man-001). En
+hecho por Dinuy](http://dinuy.com/es/rss/86-productos/domotica/229-em-man-001)[^1]. En
 la página enlazada hay un par de características de este mando; pero las más interesantes
 son:
 
@@ -318,3 +318,13 @@ Repetir:
 
 Para el otro método, sintetizar la señal, crearé otro post nuevo; puesto que requiere
 más explicación y este post es ya demasiado largo.
+
+
+--------------
+
+# Actualización 2018-06-10: la siguiente parte está [disponible aquí](/post/es/gnuradio/sdr/2018/01/15/gnuradio-ook-transmit.html).
+
+--------------
+
+[^1]: La página ya no está disponible. Tendréis que creerme cuando digo que esa es la
+	información que venía ahí...

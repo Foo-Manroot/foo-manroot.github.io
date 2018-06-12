@@ -1,7 +1,7 @@
 " File: signal.vim
-" Author: Miguel García Martín
+" Author: Foo-Mamroot
 " Description: syntax file for *.signal files
-" Last Modified: August 02, 2017
+" Last Modified: 2018-06-12
 
 if exists ("b:current_syntax")
 	finish

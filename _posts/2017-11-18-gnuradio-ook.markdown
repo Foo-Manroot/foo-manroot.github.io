@@ -277,7 +277,7 @@ frequencies they can handle; but little chips that transmit on 433 MHz should co
 and, along with one of those chips, synthesize the desired signal.
 
 
-Anyway, there are to methods to impersonate the remote: replaying the captured signals,
+Anyway, there are two methods to impersonate the remote: replaying the captured signals,
 or creating our own signal and broadcast it for the end point (the light, the doorbell,
 etc.) to receive it.
 

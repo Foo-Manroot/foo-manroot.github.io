@@ -1,6 +1,6 @@
 #!/bin/sh
 
-AUTHOR="Miguel García Martín"
+AUTHOR="Foo-Manroot"
 DATE="2017-08-06"
 
 PRETTY_RESET=$(tput sgr0)

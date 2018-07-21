@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Setting up an OCSP responder with ActiveMQ"
-date:   2018-07-15 14:01:40 +0200
+date:   2018-07-21 14:01:40 +0200
 author: foo
 categories: ocsp activemq programming
 ref: activemq-ocsp

@@ -114,7 +114,7 @@ de Debian).
 
 Un ejemplo de `gpg`, una herramienta CLI (no muy _user-friendly_):
 ```sh
-$ printf "hey" | gpg --armour --recipient miguel.garciamartin@hotmail.com --encrypt
+$ printf "hey" | gpg --armour --recipient foomanroot@disroot.org --encrypt
 -----BEGIN PGP MESSAGE-----
 Version: GnuPG v1
 

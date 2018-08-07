@@ -110,7 +110,7 @@ example, PGP it's used to verify Debian packages).
 
 An example of `gpg`, a CLI tool (not very user-friendly):
 ```sh
-$ printf "hey" | gpg --armour --recipient miguel.garciamartin@hotmail.com --encrypt
+$ printf "hey" | gpg --armour --recipient foomanroot@disroot.org --encrypt
 -----BEGIN PGP MESSAGE-----
 Version: GnuPG v1
 

@@ -14,10 +14,15 @@ congress.
 These are the write-ups for the CTF quals that took place a couple of weeks ago. As the
 results have already been announced[^1] and [they said that we can upload our
 write-ups](https://twitter.com/CybercampEs/status/1048129712491569152), I'm writing here
-my solutions for the challenges I solved. All challenges are available for download
-[here](/assets/posts/2018-10-12-cybercamp-easy/easy.7z).
+my solutions for the challenges I solved. The materials for the challenges in this post
+are available for download here:
 
-In this post, there will be the solutions for the challenges labelled as _easy_.
+  - [Challenge 1](/assets/posts/2018-10-12-cybercamp-easy/1_Easy.7z)
+  - [Challenge 2](/assets/posts/2018-10-12-cybercamp-easy/2_Easy.7z)
+  - [Challenge 3](/assets/posts/2018-10-12-cybercamp-easy/3_Easy.7z)
+  - [Challenge 4](/assets/posts/2018-10-12-cybercamp-easy/4_Easy.7z)
+
+Here, I'll explain my solutions for the challenges labelled as _easy_.
 
 -----------------------------------------------------------------------------------------
 
@@ -33,7 +38,7 @@ format. Could you help him? (Answer: flag {MAC address in format: XX:XX:XX:XX:XX
 the attacked host} - example: flag{xx:xx:xx:xx:xx:xx})
 ```
 
-We are provided a network capture of all Wi-Fi networks on the area. We can see the
+We are provided a traffic capture of all Wi-Fi networks on the vicinity. We can see the
 different APs in the area (like _MiFibra_A3E0_, _MOVISTAR-F43B_...). One of the first
 attacks that we should look for is the [deauthentication
 attack](https://en.wikipedia.org/wiki/Wi-Fi_deauthentication_attack), because the network
@@ -174,7 +179,9 @@ gpg: decryption failed: secret key not available
 ```
 
 So, we have an encrypted file (`extract_2`) and the private key to decrypt it
-(`extract_2`). Let's try to decrypt the message, then[^3]:
+(`extract_2`). Easy peasy!
+
+Let's try to decrypt the message, then[^3]:
 ```
 $ gpg --import extract_1
 gpg: key D28DA6DB: secret key imported
@@ -195,11 +202,11 @@ Enter passphrase:
 Hmm... Which may be the passphrase? Let's ask our friend
 [John](https://www.openwall.com/john/)!
 
-John the ripper is a powerful password cracker; but, in my opinion, the best advantage it
+John The Ripper is a powerful password cracker; but, in my opinion, the best advantage it
 has is that it's easy to use for a quick run (just `john [hash_file]` and you're done),
 and it counts with a ton of utilities to convert encrypted files to JTR format (like
-`7z2john`, `keepass2john` or `luks2john`). In this case, we'll be using `gpg2john`, and
-use a simple wordlist, to check if the passphrase is an easy one (after all, this is in
+`7z2john`, `keepass2john` or `luks2john`). In this case, we'll be using `gpg2john` and
+use a simple wordlist to check if the passphrase is an easy one (after all, we're in
 the _easy_ category...):
 ```
 $ gpg2john extract_1 > hash
@@ -221,7 +228,7 @@ Use the "--show" option to display all of the cracked passwords reliably
 Session completed
 ```
 
-After a couple of seconds, we have our passphrase: `elviselvis`. Now, we can decrypt the
+After a couple of seconds, we have our passphrase: `elviselvis`. Now we can decrypt the
 file and get the flag:
 ```
 $ gpg --decrypt extract_2
@@ -422,9 +429,9 @@ There's no connection open by any of the suspect processes (324, 640 and 1688).
 
 However, our hope isn't lost yet. There's a second suspicious file! If we examine again
 the running processes, we can see that there's a samba service. Maybe the attacker used
-a [SMB](https://en.wikipedia.org/wiki/Server_Message_Block) vulnerability to get in? We
-can search connections to one of the ports used by that protocol, like the 445 (direct
-communication via TCP), or the 137, 138 and 139 (via the NetBIOS API):
+a samba vulnerability to get in? We can search connections to one of the ports used by
+that protocol, like the 445 (direct communication via TCP), or the 137, 138 and 139 (via
+the NetBIOS API):
 ```
 $ volatility --profile WinXPSP2x86 -f memdump connections | grep -P ":(445|137|138|139)"
 Volatility Foundation Volatility Framework 2.5

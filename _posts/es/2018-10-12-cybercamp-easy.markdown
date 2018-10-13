@@ -40,7 +40,7 @@ atacado} – ejemplo: flag{xx:xx:xx:xx:xx:xx})
 ```
 
 Se nos da una captura de tráfico de todas las redes _Wifi_ en la zona. Podemos ver los
-diferentes puntos de acceso (**AP**, _Access Points_) en el área, como like
+diferentes puntos de acceso (**AP**, _Access Points_) en el área, como
 _MiFibra_A3E0_ o _MOVISTAR-F43B_. Uno de los primeros ataques que debemos buscar es el de
 [_fake deauthentication_](https://en.wikipedia.org/wiki/Wi-Fi_deauthentication_attack),
 porque si la red "no va bien" es posible que se deba a un atacante intentando echar a los
@@ -300,8 +300,8 @@ Sí, debería haber pensado eso desde el principio...
 %}
 
 Para esta tarea es más sencillo usar Windows (mi sistema principal es GNU/Linux), así que
-usaré una máquina virtual para esto. Tras instalar [mimikatz
-binaries](https://github.com/gentilkiwi/mimikatz/releases), sólo tenemos que obtener las
+usaré una máquina virtual para esto. Tras obtener los [binarios de
+mimikatz](https://github.com/gentilkiwi/mimikatz/releases), sólo tenemos que obtener las
 credenciales de `ThatDude`:
 {% include image.html
 	src="/assets/posts/2018-10-12-cybercamp-easy/03.- Mimikatz.jpg"
@@ -341,7 +341,7 @@ INFO    : volatility.debug    : Determining profile based on KDBG search...
 ```
 
 Ahora sabemos que estamos tratando con una imagen de un Windows XP. El siguiente paso es
-revisar los procesos en ejecución, para identificat cualquier actividad que pueda estar
+revisar los procesos en ejecución, para identificar cualquier actividad que pueda estar
 relacionada con el virus:
 ```
 $ volatility --profile WinXPSP2x86 -f memdump pstree
@@ -458,11 +458,11 @@ La _flag_ es: `192.168.21.161`
     alrededor de los 3100 puntos... :(
 
 [^2]: Recordad, niños: empezad siempre comprobando las cosas más obvias. Confiad en mí
-    cuando digo que no queréis pasar cantidades ridículas de tiempo ensando en cosas
+    cuando digo que no queréis pasar cantidades ridículas de tiempo pensando en cosas
     complicadas cuando las solución es tan simple como mirar `strings`...
 
 [^3]: Para que GPG funcione, primero tenemos que importar la clave. Podríamos crear otro
-    _keyring_ o hacer alguno de los truqillos que vienen en internet; pero de este modo
+    _keyring_ o hacer alguno de los truquillos que vienen en internet; pero de este modo
     es más sencillo. Podemos borrar la clave luego usando
     `gpg --delete-secret-keys D28DA6DB`.
 

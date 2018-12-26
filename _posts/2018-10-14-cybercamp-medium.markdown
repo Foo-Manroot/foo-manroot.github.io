@@ -104,7 +104,7 @@ Reading packets, please wait...
 (...)
 ```
 
-YAY!, After around 10 minutes we get the key: `iw4108604`. Now it's time to decrypt the
+YAY! After around 10 minutes we get the key: `iw4108604`. Now it's time to decrypt the
 capture file. Again, we can do it in multiple ways (doing it from within Wireshark would
 be an easy option). In this case, we're going to use another tool from the _aircrack-ng_
 suite: `airdecap-ng`.
@@ -136,7 +136,7 @@ we see a strange ICMP _ping_ request with 605 Bytes of data _and no response_:
 	alt="While inspecting the decrypted capture, we can see an unusually large ICMP packet. Inspecting it, we can see that there's HTML data in it."
 %}
 
-The data of this suspicious packet seems to be an HTML request. Copying the value gives
+The data of this suspicious packet seems to be an HTTP request. Copying the value gives
 the data captured by the attacker (remember that our goal is to recover the stolen
 credentials):
 ```http
@@ -236,7 +236,7 @@ As you can see, there are redundant parameters (we only really need `n` and `e`)
 This way, in our partial private key we may have enough information to decrypt the file.
 
 
-Let's begin by creating a file, `partial_key.der`, with the known bytes of our key:
+Let's begin by creating a file, `partial_key.der`, with the known Bytes of our key:
 ```sh
 $ base64 -d > partial_key.der
 MIIBOwIBAAJBAMSwf+/I42wFwNpDQiGuv0fb9w5Ria2JJAjzrYEYKp4HAKB8nXxm
@@ -248,10 +248,10 @@ base64: invalid input
 ```
 
 The decoder complains about `invalid input`, because the last Base64 block is incomplete,
-and it can't be used to recover the last byte of information. However, we don't care
+and it can't be used to recover the last Byte of information. However, we don't care
 about it right now.
 
-The next step is to interpret the bytes with the described ASN.1 format. To do that, we
+The next step is to interpret the Bytes with the described ASN.1 format. To do that, we
 can either do it by hand (I'd rather not, please), or using one of the available
 libraries to do it for us. In this case, I chose the Python library
 [pyasn1](http://snmplabs.com/pyasn1/). Also, the [pyasn1gen](https://github.com/kimgr/asn1ate)
@@ -339,7 +339,7 @@ the value of the object itself. The message `104-octet short` is telling us that
 object is defined to have 104 octets more than it has. To solve this we could carefully
 analyse `partial_key.der` to modify the record length and successfully decode it (in
 which case we would be better decoding the object by hand)... Or we could just add 104
-more octets of pure junk. Of course, I decided to do it by appending 104 bytes from
+more octets of pure junk. Of course, I decided to do it by appending 104 Bytes from
 `/dev/zero` :D
 ```sh
 $ cp partial_key.der partial_key_append.der

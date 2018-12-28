@@ -535,6 +535,90 @@ The flag is `TOO_MANY_SECRETS`.
 
 -----------------------------------------------------------------------------------------
 
+## 10.- The Knights Templar Order
+
+The description of this challenge states:
+```
+The computer of a suspect of terrorism is seized. Within it there are files that could be
+considered of vital importance to continue with the investigation, but many of those
+files are encrypted and known to be symmetric PGP.
+
+Thanks to the investigation of the suspect, your colleagues have given you the following
+guidelines that the suspect follows when creating his passwords:
+
+     They are of length of 6 to 7 characters.
+     Only contain lowercase letters
+     Only these letters are used: eghotu
+     None of the letters of the password are repeated
+     Some of them contain two numbers among these: 0134
+
+Your job will be to try to decipher the file thanks to the research done on the suspect
+and the data provided to determine if the content is of vital importance for the
+investigation in progress.
+```
+
+This is a pretty simple exercise, as the description already provides the guidelines to
+create the correct dictionary. Oddly enough, these are the kind of exercises where I
+struggle the most :(
+
+However, thanks to John The Ripper's
+[mask mode](https://github.com/magnumripper/JohnTheRipper/blob/bleeding-jumbo/doc/MASK),
+I've finally been able to crack the first part of this challenge (two months after the
+deadline, I think it's rather late) in around an hour or two, with this simple command:
+```
+john -mask=[eghotu0134] -min-len=6 -max-len=7 medium_11.gpg_HASH --format=gpg-opencl
+```
+
+The explanation of all the switches:
+
+  - `-mask` tells JTR to use the _mask_ mode, using `eghotu0134` as a charset. Though it
+	doesn't follows exactly the guidelines, concretely the _no repeated letters_ and
+	_contains **two** numbers_, I think it's easier to just through _all_ the
+	combinations instead of triaging the dictionary. Obviously, someone with more
+	knowledge on JTR's rules will get to the answer more quickly.
+
+  - `-min-len` and `-max-len` are there because the guidelines state that the length of
+	the password is either 6 or 7 characters.
+
+  - `medium_11.gpg_HASH` is the hash as extracted by `gpg2john`, another of those
+	incredibly useful tools to convert anything to a format that can be cracked by
+	JTR.
+
+  - Finally, `--format` is there to tell JTR to use the GPU, instead of the CPU (which is
+	way slower).
+
+
+After an hour and a half, JTR cracks the password: `eg1u03`. Is interesting to note that
+there are _three_ numbers there, while the guidelines told us that it may have _two_
+numbers. I'll take that as a lesson that these guidelines may not be always 100% correct.
+If you can't crack the password and you're sure that your dictionary is correct, try to
+expand the search to other cases that may not follow all the guides but only some of them
+(like using three numbers instead of two).
+
+
+Anyways, the decrypted data is the following image:
+
+{% include image.html
+	src="/assets/posts/2018-12-26-cybercamp-medium-2/ordendelos.png"
+	title="Decrypted data"
+	alt="A big croix pattée (a Templar symbol) with some strange symbols, like triangles with dots inside, on the corners"
+%}
+
+
+Some may recognized the symbols that appear on that image as similar as the ones used
+in the [Pigpen Cipher](https://en.wikipedia.org/wiki/Pigpen_cipher#Variants). The symbols
+on the top and the bottom are the same; and, decrypted, give the following plaintext
+(with the spaces fixed by me):
+> ERES MUY GOLOSO
+
+Which, translated from Spanish, means:
+> YOU ARE VERY GREEDY
+
+So, the flag is (at least I guess so, because I couldn't complete the challenge in time)
+`ERESMUYGOLOSO`
+
+-----------------------------------------------------------------------------------------
+
 
 [^1]: Unfortunately, I only got something around 2900-3000 points, while the minimum
     necessary to enter the finals was like 3100... :(

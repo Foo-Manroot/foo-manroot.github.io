@@ -8,6 +8,23 @@ dl, dd, ol, ul, figure {
     padding: 0;
 }
 
+hr {
+	margin-top: 1em;
+	margin-bottom: 1em;
+
+    border: none;
+    border-top: 3px double $brand-color-dark;
+    color: $brand-color;
+    overflow: visible;
+    text-align: center;
+}
+
+hr:after {
+    content: '§';
+    padding: 0 4px;
+    position: relative;
+    top: -13px;
+}
 
 
 /**

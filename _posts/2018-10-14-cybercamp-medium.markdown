@@ -421,6 +421,11 @@ After all the dead ends and thinking too much, we got the flag: `flag{gk83h280fw
 
 -----------------------------------------------------------------------------------------
 
+**UPDATE**: The [second part]({% post_url 2018-12-26-cybercamp-medium-2 %}) is already
+available, with the rest of the _medium_ challenges.
+
+-----------------------------------------------------------------------------------------
+
 [^1]: Unfortunately, I only got something around 2900-3000 points, while the minimum
     necessary to enter the finals was like 3100... :(
 

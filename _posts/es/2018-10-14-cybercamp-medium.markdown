@@ -436,6 +436,12 @@ Después de todos esos callejones sin salida y pensar demasiado, obtenemos nuest
 
 -----------------------------------------------------------------------------------------
 
+**ACTUALIZACIÓN**: Ya está disponible la
+[segunda parte](/post/es/ctf/cybercamp/write-up/2018/12/26/cybercamp-medium-2.html) con
+el resto de los retos.
+
+-----------------------------------------------------------------------------------------
+
 [^1]: Desgraciadamente, sólo saqué unos 2900-3000 puntos; mientras que el corte se hizo
     alrededor de los 3100 puntos... :(
 

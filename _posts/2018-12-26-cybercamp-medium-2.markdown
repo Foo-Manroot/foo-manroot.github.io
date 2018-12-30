@@ -122,13 +122,14 @@ Found AES-128 key schedule at offset 0xe4158f8:
 _Et voilà_, we have two possible candidates. We have to wait to know which one to use.
 
 
-We can't decrypt the normal file like that. We can only decrypt a _device file_. In Unix
-filesystems everything is a file, and devices (disks, keyboards, mics...) aren't an
-exception. However, there are different types of files (named pipes, regular files,
-sockets...) To convert a _regular file_ into a _device file_ we use the _loop device_,
-combined with the `losetup` utility. After executing
-`sudo losetup /dev/loop0 volume.bin -o 32256` (remember that we want to decrypt the
-partition that starts at sector 63) we may continue working with `/dev/loop0`.
+As the utility to decrypt the partition expects the image to be a _device_ file and we
+only have a _regular_ file, we have to first make the conversion. In Unix filesystems
+everything is a file, and devices (disks, keyboards, mics...) aren't an exception.
+However, there are different types of files (named pipes, regular files, sockets...). To
+convert a _regular file_ into a _device file_ we use the _loop device_, using the
+`losetup` utility. After executing `sudo losetup /dev/loop0 volume.bin -o 32256`
+(remember that we want to decrypt the partition that starts at sector 63) we may continue
+working with `/dev/loop0`.
 
 Now that we have the partition ready, we can use the `cryptsetup` utility to gather more
 information about the key that we should use:
@@ -145,7 +146,7 @@ MK bits:        128
 (...)
 ```
 
-So, it's AES-128, so let's use that key:
+Good, it's AES-128. So, let's use the key we obtained before:
 ```sh
 $ printf "84 bc d9 8c fc f2 de db 26 06 35 bf ca a9 a4 7d" | tr -d ' ' | xxd -r -ps > key_file
 $ sudo cryptsetup open /dev/loop0 cybercamp-7-decrypted --master-key-file key_file
@@ -335,8 +336,7 @@ just unable to know what this means:
 
 Is this the flag? How do I enter the solution in the CTF webpage?
 
-I was quite lost with this final step, so I decided to get a clue from the webpage, and
-this is the clue:
+I was quite lost with this final step, so I decided to get a clue from the webpage:
 ```
 The second message has been hidden with the PIET programming language
 https://gabriellesc.github.io/piet/
@@ -471,7 +471,7 @@ without any special reason other than that being the first result in DuckDuckGo 
 time.
 
 As a side note, I found [this other repo](https://github.com/mgp25/Crypt12-Decryptor)
-where they explain less the encryption method of Crypt12 (AES-GCM), which I find quite
+where they explain the encryption method of Crypt12 (AES-GCM), which I find quite
 interesting.
 
 That user, @mgp25, has some other interesting stuff. I recommend you to take a look at

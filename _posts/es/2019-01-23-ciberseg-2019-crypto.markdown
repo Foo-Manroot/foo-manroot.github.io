@@ -27,7 +27,7 @@ recursos necesarios que nos aportaron para intentar el reto por vuestra cuenta.
 # 1.- Complutum message (15 puntos)
 
 La descripción de este reto solamente tenía el siguiente texto:
-`PbzcyhgvHeovfHavirefvgnf`.
+> PbzcyhgvHeovfHavirefvgnf
 
 Entre que valía tan poquito y el nombre del reto, está bastante claro que es cifrado
 César. Para quien no conozca _Complutum_ era el nombre de la ciudad romana que había
@@ -46,9 +46,8 @@ La _flag_ es `flag{COMPLUTIURBISUNIVERSITAS}`.
 # 2.- Alien message from XXXI century (50 puntos)
 
 La descripción de este reto dice así:
-```
-Hemos recibido un mensaje alienígena!! ¿Nos puedes ayudar a entenderlo?
-```
+> Hemos recibido un mensaje alienígena!! ¿Nos puedes ayudar a entenderlo?
+
 
 Y además se adjunta una imagen:
 {% include image.html
@@ -75,19 +74,19 @@ La _flag_ es `flag{PLANETEXPRESSUAH}`
 # 3.- Clásica (75 puntos)
 
 La descripción de este reto dice así:
-```
-En la criptografía, como en la cerveza. Siempre viene bien alguna clásica:
 
-sa okhbx dpejaja gc uad ei wlk tau becufwielhtkfaf effi uw sa okhbx pvmxauan ne zlm
-sgygjigxtbv oszvfaa fo chdohs jw btkvimdce xrhvn fo cbudls p ubyc loghmpe jw llcloedce
-eillscxaypfrxv hhsq k drqpqmesysg waurv gprkpcc on zlm rsmwjigxtbv oszvfaa a drrv ei
-gfdvr fyrngp ewgwjtq lrvomerkw f cworcr nshvjhdq nefwbge ggy sw caors wyrnl y deea
-hrymcairky ea epge jm hrqwa rv mmkvjv ahbugdes gff aopys sopvecwz dg vúphop psj
-hyipmicdmiw zfnrgnirquiw jgu lgfaqxse plhblq kghd z qeclh sqwof pvc gcszieys rq ushf
-hhrc va phsziqs f pcba yd dvmglvgtkfvd qsv vkv hgwof gfgmuako ootru fwxv tvnkdo ilhirvjl
-lc plnj fw lrurapnbrhsw ulw zop nof fpwej ibe uo lyhwer dmf bkon crs iwf vllgqaplpr
-siyhnkjaod fp zzsqe c va sdcvmts ke nk cruwidr
-```
+> En la criptografía, como en la cerveza. Siempre viene bien alguna clásica:
+>
+> sa okhbx dpejaja gc uad ei wlk tau becufwielhtkfaf effi uw sa okhbx pvmxauan ne zlm
+> sgygjigxtbv oszvfaa fo chdohs jw btkvimdce xrhvn fo cbudls p ubyc loghmpe jw llcloedce
+> eillscxaypfrxv hhsq k drqpqmesysg waurv gprkpcc on zlm rsmwjigxtbv oszvfaa a drrv ei
+> gfdvr fyrngp ewgwjtq lrvomerkw f cworcr nshvjhdq nefwbge ggy sw caors wyrnl y deea
+> hrymcairky ea epge jm hrqwa rv mmkvjv ahbugdes gff aopys sopvecwz dg vúphop psj
+> hyipmicdmiw zfnrgnirquiw jgu lgfaqxse plhblq kghd z qeclh sqwof pvc gcszieys rq ushf
+> hhrc va phsziqs f pcba yd dvmglvgtkfvd qsv vkv hgwof gfgmuako ootru fwxv tvnkdo
+> ilhirvjl lc plnj fw lrurapnbrhsw ulw zop nof fpwej ibe uo lyhwer dmf bkon crs iwf
+> vllgqaplpr siyhnkjaod fp zzsqe c va sdcvmts ke nk cruwidr
+
 
 Como ya ha aparecido el cifrado César, lo más probable es que se trate de algo como
 Vigenère, otro de los que siempre salen en los CTFs. Para estos casos no me suelo
@@ -116,9 +115,9 @@ Como dice en el texto, en la penúltima línea, la _flag_ es `flag{hackandbeers}
 # 4.- Cryptography is not steganography (150 puntos)
 
 La descripción del reto dice así:
-```
-¡Que quede claro! ¡Ocultar no es cifrar!
-```
+
+> ¡Que quede claro! ¡Ocultar no es cifrar!
+
 
 También se adjunta el siguiente vídeo:
 
@@ -181,10 +180,9 @@ La _flag_ es `flag{dancing_pixel}`.
 # 5.- To be XOR not to be (200 puntos)
 
 La descripción de este reto dice:
-```
-Han censurado la emisión de video, pero a ver si conseguimos el nombre del personaje que
-aperece en él.
-```
+> Han censurado la emisión de video, pero a ver si conseguimos el nombre del personaje
+> que aperece en él.
+
 Y además se adjunta [este vídeo](/assets/posts/2019-01-23-ciberseg-2019-crypto/result.mp4).
 
 
@@ -246,9 +244,8 @@ Como nos pedían el nombre del personaje que salía en esta escena, la _flag_ es
 # 6.- YUVEYUVEYU (350 puntos)
 
 La descripción del reto dice así:
-```
-Desde las llanuras de Ulan Bator nos llega una extraña señal...
-```
+> Desde las llanuras de Ulan Bator nos llega una extraña señal...
+
 Además, se nos proporciona el archivo **20190116_120900Z_106520122Hz_IQ.wav** que, al ser
 muy grande para Github Pages, he tenido que comprimir en 8 partes:
   - [Parte 1](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav.7z.001)

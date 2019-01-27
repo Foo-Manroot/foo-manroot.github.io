@@ -3,7 +3,7 @@ layout: post
 title:  "Ciberseg 2019: criptología"
 date:	2019-01-23 15:38:22 +0100
 author: foo
-categories: es
+categories: es ctf ciberseg write-up crypto
 lang: es
 ref: ciberseg-2019-crypto
 ---
@@ -39,7 +39,7 @@ cualquier página en internet), el texto en claro nos sale que es
 
 Sencillo, ¿verdad? No está mal para ir calentando y subir la moral :D
 
-La flag es `flag{COMPLUTIURBISUNIVERSITAS}`.
+La _flag_ es `flag{COMPLUTIURBISUNIVERSITAS}`.
 
 -----------------------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ Una vez tenemos el alfabeto, se puede ir letra a letra comparando con la tabla y
 el siguiente texto: `PLANETEXPRESSUAH`. Y ya está, ya tenemos 50 puntos más sin siquiera
 despeinarnos :D
 
-La flag es `flag{PLANETEXPRESSUAH}`
+La _flag_ es `flag{PLANETEXPRESSUAH}`
 
 -----------------------------------------------------------------------------------------
 
@@ -108,7 +108,7 @@ organizaba el viaje a la fabrica de la cerveza
 ```
 
 Y ya está.
-Como dice en el texto, en la penúltima línea, la flag es `flag{hackandbeers}`.
+Como dice en el texto, en la penúltima línea, la _flag_ es `flag{hackandbeers}`.
 
 
 -----------------------------------------------------------------------------------------
@@ -169,11 +169,11 @@ sacamos lo siguiente:
 01101100	l
 ```
 
-Pues ahí está la flag. Al final sólo había que darse cuenta del pixel bailarín :)
+Pues ahí está la _flag_. Al final sólo había que darse cuenta del pixel bailarín :)
 
 Supongo que me faltó apuntar el último Byte y por eso falta la llave de cierre, _}_.
 
-La flag es `flag{dancing_pixel}`.
+La _flag_ es `flag{dancing_pixel}`.
 
 
 -----------------------------------------------------------------------------------------
@@ -236,7 +236,7 @@ los fotogramas, sacamos esto:
 
 Después de buscar en internet, finalmente llegamos a la escena del
 [monólogo de Shylock](https://www.youtube.com/watch?v=VydfEXZYmyU), el personaje de la
-obra de Shakespeare _El mercader de venecia_.
+obra de Shakespeare _El mercader de Venecia_.
 
 Como nos pedían el nombre del personaje que salía en esta escena, la _flag_ es
 `flag{shylock}`.
@@ -249,7 +249,7 @@ La descripción del reto dice así:
 ```
 Desde las llanuras de Ulan Bator nos llega una extraña señal...
 ```
-Además, se nos propociona el archivo [20190116_120900Z_106520122Hz_IQ.wav](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav)
+Además, se nos proporciona el archivo [20190116_120900Z_106520122Hz_IQ.wav](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav)
 
 Como yo [he hecho](/post/es/gnuradio/sdr/2017/11/18/gnuradio-ook.html) ya
 [un par de cosas](post/es/gnuradio/sdr/2018/01/15/gnuradio-ook-transmit.html) con SDR, el

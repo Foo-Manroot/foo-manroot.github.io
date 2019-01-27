@@ -181,6 +181,7 @@ La _flag_ es: `flag{credit_cards.txt}`
 
 La descripción dice:
 > No network traffic
+
 Y se adjunta [esta](/assets/posts/2019-01-23-ciberseg-2019-forensics/captura2.zip)
 captura.
 

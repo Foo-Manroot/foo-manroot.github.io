@@ -249,7 +249,17 @@ La descripción del reto dice así:
 ```
 Desde las llanuras de Ulan Bator nos llega una extraña señal...
 ```
-Además, se nos proporciona el archivo [20190116_120900Z_106520122Hz_IQ.wav](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav)
+Además, se nos proporciona el archivo **20190116_120900Z_106520122Hz_IQ.wav** que, al ser
+muy grande para Github Pages, he tenido que comprimir en 8 partes:
+  - [Parte 1](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav.7z.001)
+  - [Parte 2](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav.7z.002)
+  - [Parte 3](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav.7z.003)
+  - [Parte 4](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav.7z.004)
+  - [Parte 5](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav.7z.005)
+  - [Parte 6](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav.7z.006)
+  - [Parte 7](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav.7z.007)
+  - [Parte 8](/assets/posts/2019-01-23-ciberseg-2019-crypto/20190116_120900Z_106520122Hz_IQ.wav.7z.008)
+
 
 Como yo [he hecho](/post/es/gnuradio/sdr/2017/11/18/gnuradio-ook.html) ya
 [un par de cosas](post/es/gnuradio/sdr/2018/01/15/gnuradio-ook-transmit.html) con SDR, el

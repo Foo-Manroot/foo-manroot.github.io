@@ -189,9 +189,9 @@ Si la abrimos vemos que es una captura USB. Sé que habría que extraer el ID de
 nos interesa, estudiar los valores y blablabla; pero no tenía ganas de hacer eso y
 preferí buscar en internet algún _script_ porque este es un reto muy común y normalmente
 basta con extraer las pulsaciones del teclado. Si queréis una explicación más detallada,
-[aquí](https://xbytemx.github.io/post/ciberseg19-writeups/#pcap2-300pts) los write-ups de
-otra persona que participó en la competición. Está muy bien explicado y se sigue con
-facilidad.
+[aquí están](https://xbytemx.github.io/post/ciberseg19-writeups/#pcap2-300pts) los
+write-ups de **@xbytemx** otra persona que participó en la competición. Está muy bien
+explicado y se sigue con facilidad.
 
 En fin, el caso es que yo utilicé este _script_, que lo saqué de [este artículo](https://medium.com/@ali.bawazeeer/kaizen-ctf-2018-reverse-engineer-usb-keystrok-from-pcap-file-2412351679f4):
 ```python

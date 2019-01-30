@@ -22,7 +22,7 @@ recursos necesarios que nos aportaron para intentar el reto por vuestra cuenta.
 
 -----------------------------------------------------------------------------------------
 
-# 1.- Exfiltration files (25pts)
+# 1.- Exfiltration files (25 puntos)
 
 La descripción de este primer reto dice:
 > Hemos interceptado esta foto parece que oculta algún mensaje.
@@ -69,7 +69,7 @@ De cualquier forma, la _flag_ es: `flag{RapidoYFurioso}`.
 
 -----------------------------------------------------------------------------------------
 
-# 2.- Break the gesture (50pts)
+# 2.- Break the gesture (50 puntos)
 
 Este reto no tenía descripción. Simplemente hay un archivo:
 [gesture.key](/assets/posts/2019-01-23-ciberseg-2019-forensics/gesture.key).
@@ -122,7 +122,7 @@ La _flag_ es: `flag{210345876}`.
 
 -----------------------------------------------------------------------------------------
 
-# 3.- Pcap (250pts)
+# 3.- Pcap (250 puntos)
 
 La descripción del reto dice así:
 >  Creo que se han llevado algo. ¿Me puedes decir el nombre del archivo?
@@ -177,7 +177,7 @@ La _flag_ es: `flag{credit_cards.txt}`
 
 -----------------------------------------------------------------------------------------
 
-# 4.- Pcap2 (300pts)
+# 4.- Pcap2 (300 puntos)
 
 La descripción dice:
 > No network traffic
@@ -271,7 +271,7 @@ La _flag_ es: `flag{usbmonitor}`
 
 -----------------------------------------------------------------------------------------
 
-# 5.- Creo que me espían... (350pts)
+# 5.- Creo que me espían... (350 puntos)
 
 La descripción dice así:
 > Sospechamos que el dispositivo Android ha sido comprometido y queremos que lo

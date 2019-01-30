@@ -401,10 +401,10 @@ $ objdump -d crackme2
 (...)
 ```
 
-Lo más interesante de este reto es que empieza llamando a `ptrace` para detectar si hay
-un depurador enganchado. Si es así, directamente termina la ejecución. Tampoco es un
-problema, claro, porque podemos sencillamente modificar _$eip_ o _$eflags_ y hacemos que
-siga como si nada. Simplemente es algo a tener en cuenta, sin más.
+Lo más interesante de este reto es que empieza llamando a `ptrace` en **:1233** para
+detectar si hay un depurador enganchado. Si es así, directamente termina la ejecución.
+Tampoco es un problema, claro, porque podemos sencillamente modificar _$eip_ o _$eflags_
+y hacemos que siga como si nada. Simplemente es algo a tener en cuenta, sin más.
 
 
 Después de comprobar si se está ejecutando directamente o con un depurador, imprime una
@@ -413,8 +413,56 @@ función `xor` con nuestra cadena y compara el resultado con algo que hay en mem
 
 
 Parece que es tan sencillo como coger `gdb`, saltarse la restricción del `ptrace` y mirar
-lo que devuelve la función `xor`. Después de un rato dándole a _gdb_ pasito a pasito,
-sacamos la solución:
+lo que devuelve la función `xor`.
+
+A grandes rasgos, lo que hace esta función es, así a ojo:
+```c
+void xor (char * str_in)
+{
+	int i;
+	char a, b;
+
+	for (i = 0; i <= 8; i++)
+	{
+		a = str_in [i]
+		b = i + 0x69	// i + 105 Supongo que algún valor habría que darle... XD
+
+		str_in [i] = a ^ b
+	}
+}
+```
+
+La respuesta, entonces, es ver el contenido de la cadena que se está comparando luego con
+el contador (que sabemos que tiene los valores 0x69, 0x6a, 0x6b...). La cadena ofuscada
+está en la memoria, así que la podemos consultar:
+```
+$ objdump -s -j .data crackme2
+
+crackme2:     file format elf64-x86-64
+
+Contents of section .data:
+ 4038 00000000 00000000 40400000 00000000  ........@@......
+ 4048 3a060a1c 0e060000 500000             :.......P..
+```
+
+Y ahora es tan simple como calcular la _XOR_ con el contador. Por ejemplo, en Python se
+puede hacer en un par de líneas:
+```python
+# Python 3.7.2 (...)
+# [...] on linux
+# Type "help", "copyright", "credits" or "license" for more information.
+>>> a = '\x3a\x06\x0a\x1c\x0e\x06\x00\x00\x50'
+>>> b = [ chr (i) for i in range (0x69, 0x69 + 9, 1) ]
+>>> b
+['i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q']
+>>> "".join ([ chr ( ord (a [i]) ^ ord (b [i])  ) for i in range (8) ])
+'Slapchop'
+>>> "".join ([ chr ( ord (a [i]) ^ ord (b [i])  ) for i in range (9) ])
+'Slapchop!'
+>>>
+```
+
+Ahora sólo queda comprobar que es el valor correcto y ver qué devuelve el programa:
 ```
 $ ./crackme2
 Esto te va a Fascinar!! Dame la contraseña: Slapchop!

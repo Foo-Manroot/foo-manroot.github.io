@@ -287,7 +287,7 @@ parada es el directorio `app`, que parece que tiene un par de aplicaciones candi
 pero sólo están ahí para despistar.
 
 Lo que nos importa realmente es mirar las aplicaciones instaladas (es decir, las que
-están bajo `/data/`. De todas estas, sólo unas pocas tienen datos y apenas un par son
+están bajo `/data/`). De todas estas, sólo unas pocas tienen datos y apenas un par son
 instaladas por el usuario. El resto son las que vienen por defecto para usar el sistema
 (teléfono, contactos, etc.); así que, en lugar de buscar la aplicación maliciosa, podemos
 intentar buscar el **punto de entrada** de esta aplicación. Los candidatos más

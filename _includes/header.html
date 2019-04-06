@@ -33,7 +33,8 @@
 
 					{% for p in site.pages %}
 						{% if p.ref == "about"
-							or p.ref == "categories-idx" %}
+							or p.ref == "categories-idx"
+							or p.ref == "useful-links" %}
 							{% assign pages = pages | push: p %}
 						{% endif %}
 					{% endfor %}

@@ -1,0 +1,732 @@
+options:
+  parameters:
+    author: ''
+    category: Custom
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: bruteforce
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: ''
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [24, 5]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: baseband_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: '676'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [24, 77]
+    rotation: 0
+    state: enabled
+- name: carrier_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 432.867e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [136, 77]
+    rotation: 0
+    state: enabled
+- name: packet
+  id: variable
+  parameters:
+    comment: ''
+    value: '"010000010[01]0[01]0101000[01]0[01]0[01]0"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 77]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: 2e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [24, 149]
+    rotation: 0
+    state: enabled
+- name: samples_per_symbol
+  id: variable
+  parameters:
+    comment: ''
+    value: int (samp_rate / baseband_freq)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [120, 149]
+    rotation: 0
+    state: enabled
+- name: blocks_float_to_complex_0
+  id: blocks_float_to_complex
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [488, 537]
+    rotation: 0
+    state: enabled
+- name: blocks_moving_average_xx_0
+  id: blocks_moving_average_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    length: int(samples_per_symbol / 4)
+    max_iter: '4000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '1'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [268, 390]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [497, 401]
+    rotation: 0
+    state: enabled
+- name: blocks_throttle_0
+  id: blocks_throttle
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [757, 505]
+    rotation: 0
+    state: enabled
+- name: blocks_uchar_to_float_0
+  id: blocks_uchar_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [576, 257]
+    rotation: 0
+    state: enabled
+- name: blocks_unpack_k_bits_bb_0
+  id: blocks_unpack_k_bits_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    k: '4'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 252]
+    rotation: 0
+    state: enabled
+- name: digital_map_bb_0
+  id: digital_map_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    map: '[0x8, 0xE, 0x0]'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 252]
+    rotation: 0
+    state: enabled
+- name: gen_packets
+  id: epy_block
+  parameters:
+    _source_code: "\"\"\"\r\nEmbedded Python Blocks:\r\n\r\nEach this file is saved,\
+      \ GRC will instantiate the first class it finds to get\r\nports and parameters\
+      \ of your block. The arguments to __init__  will be the\r\nparameters. All of\
+      \ them are required to have default values!\r\n\"\"\"\r\nimport re \\\r\n  \
+      \  , exrex\r\n\r\nimport numpy as np\r\nfrom gnuradio import gr\r\n\r\nclass\
+      \ blk (gr.sync_block):\r\n    \"\"\"\r\n    Generates all possible combinations\
+      \ of 'n' bits packets that match the given pattern\r\n    \"\"\"\r\n\r\n   \
+      \ def __init__ (self\r\n                , n = 2\r\n                , repetitions\
+      \ = 1\r\n                , pattern = \".*\"\r\n                , spacing = 3\r\
+      \n                , comb_spacing = 30\r\n    ):  # only default arguments here\r\
+      \n        \"\"\"\r\n        Constructor\r\n\r\n        Args:\r\n           \
+      \ n -> Number of bits per packet\r\n\r\n            repetitions -> Number of\
+      \ times that every matched combination should be\r\n                repeated\r\
+      \n\r\n            pattern -> Regex (accepted by 're') to filter the accepted\
+      \ bit strings\r\n\r\n            spacing -> Number of periods left blank between\
+      \ packets\r\n\r\n            comb_spacing -> Number of periods left blank between\
+      \ the last packet\r\n                    of one combination and the first of\
+      \ the next combination.\r\n        \"\"\"\r\n        gr.sync_block.__init__\
+      \ (\r\n            self,\r\n            name = 'Packet source',\r\n        \
+      \    in_sig = [],\r\n            out_sig = [np.int8]\r\n        )\r\n\r\n  \
+      \      self.n = n\r\n        self.repetitions = repetitions\r\n        self.pattern\
+      \ = pattern\r\n        self.spacing = spacing\r\n        self.comb_spacing =\
+      \ comb_spacing\r\n\r\n        self.remaining = []\r\n        self.generator\
+      \ = self.gen_packet ()\r\n\r\n\r\n    def gen_packet (self):\r\n        \"\"\
+      \"\r\n        Infinite generator\r\n        Generates all combinations of n_bits\
+      \ that matches the given pattern and repeats\r\n        them again.\r\n\r\n\
+      \        Returns:\r\n            A list with the generated combination\r\n \
+      \       \"\"\"\r\n        n = self.n\r\n        spacing = self.spacing\r\n \
+      \       repetitions = self.repetitions\r\n        pattern = self.pattern\r\n\
+      \r\n        # Substitues '.' for '[01]', as packets are a binary string\r\n\
+      \        pattern = re.sub (\"[.]\", \"[01]\", pattern)\r\n        # Python's\
+      \ regex substitutes '*' for {0, 4294967295}, and '+' for {1, 4294967295}.\r\n\
+      \        # To reduce the output of exrex, 4294967295 is changed for n\r\n  \
+      \      pattern = re.sub (\"[*]\", \"{0,\" + str (n) +  \"}\", pattern)\r\n \
+      \       pattern = re.sub (\"[+]\", \"{1,\" + str (n) +  \"}\", pattern)\r\n\r\
+      \n\r\n        if exrex.count (pattern, limit = n + 1) < (2 ** self.n):\r\n\r\
+      \n            # Generated with exrex (reversing the regular expression)\r\n\r\
+      \n            while True:\r\n                for b in exrex.generate (pattern,\
+      \ limit = n + 1):\r\n\r\n                    # Spacing between packets\r\n \
+      \                   yield [2] * self.comb_spacing\r\n\r\n                  \
+      \  if len (b) == n:\r\n                        # Repeats the current combination\
+      \ 'repetitions' times, if it matches\r\n                        for i in range\
+      \ (repetitions):\r\n\r\n                            yield [ int (x) for x in\
+      \ b ] + [2] * spacing\r\n                            print (b)\r\n\r\n     \
+      \   else:\r\n            # Normal generation (pure bruteforcing)\r\n\r\n   \
+      \         regex = re.compile (pattern)\r\n            b = 0\r\n            while\
+      \ True:\r\n\r\n                s = \"{0:b}\".format (b).zfill (n)\r\n\r\n  \
+      \              if regex.match (s):\r\n                    # Spacing between\
+      \ packets\r\n                    yield [2] * self.comb_spacing\r\n\r\n     \
+      \               # Repeats the current combination 'repetitions' times, if it\
+      \ matches\r\n                    for i in range (repetitions):\r\n\r\n     \
+      \                   yield [ int (x) for x in s ] + [2] * spacing\r\n       \
+      \                 print (s)\r\n\r\n                # Restarts the counter\r\n\
+      \                if b >= ((2 ** n) - 1):\r\n                    b = 0\r\n  \
+      \              else:\r\n                    b += 1\r\n\r\n\r\n    def work (self,\
+      \ input_items, output_items):\r\n        \"\"\"\r\n        Signal processing\r\
+      \n        \"\"\"\r\n        extra_pkt = []\r\n        # Fills the buffer with\
+      \ the current packet\r\n        room = (len (output_items [0]) - len (self.remaining))\r\
+      \n\r\n        # To avoid exceptions when output_items is little, takes only\
+      \ the previous items\r\n        if room <= 0:\r\n            output_items [0][:]\
+      \ = np.array (self.remaining [:len (output_items [0])])\r\n            self.remaining\
+      \ = self.remaining [len (output_items [0]):]\r\n\r\n            return len (output_items\
+      \ [0])\r\n\r\n\r\n        packet = []\r\n        acc_len = 0\r\n\r\n       \
+      \ while len (packet) < room:\r\n            tmp = next (self.generator)\r\n\
+      \            acc_len += len (tmp)\r\n            packet += tmp\r\n\r\n\r\n \
+      \       output_items [0][:] = np.array (\r\n                               \
+      \ self.remaining\r\n                                + packet [:room]\r\n   \
+      \     )\r\n\r\n        # Stores the remaining bits to be sent on the next buffer\r\
+      \n        if acc_len > room:\r\n            self.remaining = packet [room:]\r\
+      \n        else:\r\n            self.remaining = []\r\n\r\n\r\n        return\
+      \ len (output_items [0])"
+    affinity: ''
+    alias: ''
+    comb_spacing: '10'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: '25'
+    pattern: packet
+    repetitions: '5'
+    spacing: '3'
+  states:
+    _io_cache: ('Packet source', 'blk', [('n', '2'), ('repetitions', '1'), ('pattern',
+      "'.*'"), ('spacing', '3'), ('comb_spacing', '30')], [], [('0', 'byte', 1)],
+      "\n    Generates all possible combinations of 'n' bits packets that match the
+      given pattern\n    ", ['comb_spacing', 'n', 'pattern', 'repetitions', 'spacing'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 224]
+    rotation: 0
+    state: enabled
+- name: osmosdr_sink_0
+  id: osmosdr_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    ant0: ''
+    ant1: ''
+    ant10: ''
+    ant11: ''
+    ant12: ''
+    ant13: ''
+    ant14: ''
+    ant15: ''
+    ant16: ''
+    ant17: ''
+    ant18: ''
+    ant19: ''
+    ant2: ''
+    ant20: ''
+    ant21: ''
+    ant22: ''
+    ant23: ''
+    ant24: ''
+    ant25: ''
+    ant26: ''
+    ant27: ''
+    ant28: ''
+    ant29: ''
+    ant3: ''
+    ant30: ''
+    ant31: ''
+    ant4: ''
+    ant5: ''
+    ant6: ''
+    ant7: ''
+    ant8: ''
+    ant9: ''
+    args: ''
+    bb_gain0: '20'
+    bb_gain1: '20'
+    bb_gain10: '20'
+    bb_gain11: '20'
+    bb_gain12: '20'
+    bb_gain13: '20'
+    bb_gain14: '20'
+    bb_gain15: '20'
+    bb_gain16: '20'
+    bb_gain17: '20'
+    bb_gain18: '20'
+    bb_gain19: '20'
+    bb_gain2: '20'
+    bb_gain20: '20'
+    bb_gain21: '20'
+    bb_gain22: '20'
+    bb_gain23: '20'
+    bb_gain24: '20'
+    bb_gain25: '20'
+    bb_gain26: '20'
+    bb_gain27: '20'
+    bb_gain28: '20'
+    bb_gain29: '20'
+    bb_gain3: '20'
+    bb_gain30: '20'
+    bb_gain31: '20'
+    bb_gain4: '20'
+    bb_gain5: '20'
+    bb_gain6: '20'
+    bb_gain7: '20'
+    bb_gain8: '20'
+    bb_gain9: '20'
+    bw0: '0'
+    bw1: '0'
+    bw10: '0'
+    bw11: '0'
+    bw12: '0'
+    bw13: '0'
+    bw14: '0'
+    bw15: '0'
+    bw16: '0'
+    bw17: '0'
+    bw18: '0'
+    bw19: '0'
+    bw2: '0'
+    bw20: '0'
+    bw21: '0'
+    bw22: '0'
+    bw23: '0'
+    bw24: '0'
+    bw25: '0'
+    bw26: '0'
+    bw27: '0'
+    bw28: '0'
+    bw29: '0'
+    bw3: '0'
+    bw30: '0'
+    bw31: '0'
+    bw4: '0'
+    bw5: '0'
+    bw6: '0'
+    bw7: '0'
+    bw8: '0'
+    bw9: '0'
+    clock_source0: ''
+    clock_source1: ''
+    clock_source2: ''
+    clock_source3: ''
+    clock_source4: ''
+    clock_source5: ''
+    clock_source6: ''
+    clock_source7: ''
+    comment: ''
+    corr0: '0'
+    corr1: '0'
+    corr10: '0'
+    corr11: '0'
+    corr12: '0'
+    corr13: '0'
+    corr14: '0'
+    corr15: '0'
+    corr16: '0'
+    corr17: '0'
+    corr18: '0'
+    corr19: '0'
+    corr2: '0'
+    corr20: '0'
+    corr21: '0'
+    corr22: '0'
+    corr23: '0'
+    corr24: '0'
+    corr25: '0'
+    corr26: '0'
+    corr27: '0'
+    corr28: '0'
+    corr29: '0'
+    corr3: '0'
+    corr30: '0'
+    corr31: '0'
+    corr4: '0'
+    corr5: '0'
+    corr6: '0'
+    corr7: '0'
+    corr8: '0'
+    corr9: '0'
+    freq0: carrier_freq
+    freq1: 100e6
+    freq10: 100e6
+    freq11: 100e6
+    freq12: 100e6
+    freq13: 100e6
+    freq14: 100e6
+    freq15: 100e6
+    freq16: 100e6
+    freq17: 100e6
+    freq18: 100e6
+    freq19: 100e6
+    freq2: 100e6
+    freq20: 100e6
+    freq21: 100e6
+    freq22: 100e6
+    freq23: 100e6
+    freq24: 100e6
+    freq25: 100e6
+    freq26: 100e6
+    freq27: 100e6
+    freq28: 100e6
+    freq29: 100e6
+    freq3: 100e6
+    freq30: 100e6
+    freq31: 100e6
+    freq4: 100e6
+    freq5: 100e6
+    freq6: 100e6
+    freq7: 100e6
+    freq8: 100e6
+    freq9: 100e6
+    gain0: '10'
+    gain1: '10'
+    gain10: '10'
+    gain11: '10'
+    gain12: '10'
+    gain13: '10'
+    gain14: '10'
+    gain15: '10'
+    gain16: '10'
+    gain17: '10'
+    gain18: '10'
+    gain19: '10'
+    gain2: '10'
+    gain20: '10'
+    gain21: '10'
+    gain22: '10'
+    gain23: '10'
+    gain24: '10'
+    gain25: '10'
+    gain26: '10'
+    gain27: '10'
+    gain28: '10'
+    gain29: '10'
+    gain3: '10'
+    gain30: '10'
+    gain31: '10'
+    gain4: '10'
+    gain5: '10'
+    gain6: '10'
+    gain7: '10'
+    gain8: '10'
+    gain9: '10'
+    if_gain0: '20'
+    if_gain1: '20'
+    if_gain10: '20'
+    if_gain11: '20'
+    if_gain12: '20'
+    if_gain13: '20'
+    if_gain14: '20'
+    if_gain15: '20'
+    if_gain16: '20'
+    if_gain17: '20'
+    if_gain18: '20'
+    if_gain19: '20'
+    if_gain2: '20'
+    if_gain20: '20'
+    if_gain21: '20'
+    if_gain22: '20'
+    if_gain23: '20'
+    if_gain24: '20'
+    if_gain25: '20'
+    if_gain26: '20'
+    if_gain27: '20'
+    if_gain28: '20'
+    if_gain29: '20'
+    if_gain3: '20'
+    if_gain30: '20'
+    if_gain31: '20'
+    if_gain4: '20'
+    if_gain5: '20'
+    if_gain6: '20'
+    if_gain7: '20'
+    if_gain8: '20'
+    if_gain9: '20'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nchan: '1'
+    num_mboards: '1'
+    sample_rate: samp_rate
+    sync: sync
+    time_source0: ''
+    time_source1: ''
+    time_source2: ''
+    time_source3: ''
+    time_source4: ''
+    time_source5: ''
+    time_source6: ''
+    time_source7: ''
+    type: fc32
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1003, 538]
+    rotation: 0
+    state: disabled
+- name: qtgui_sink_x_0
+  id: qtgui_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    bw: samp_rate
+    comment: ''
+    fc: carrier_freq
+    fftsize: '1024'
+    gui_hint: 0, 0, 1, 1
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    plotconst: 'True'
+    plotfreq: 'True'
+    plottime: 'True'
+    plotwaterfall: 'True'
+    rate: '10'
+    showports: 'True'
+    showrf: 'True'
+    type: complex
+    wintype: firdes.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [920, 255]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_x_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'True'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: 1, 0, 1, 1
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '""'
+    nconnections: '1'
+    size: '1024'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [978, 385]
+    rotation: 0
+    state: enabled
+- name: rational_resampler_xxx_0
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: '1'
+    fbw: '4'
+    interp: int(samples_per_symbol / 4)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: '1'
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [36, 392]
+    rotation: 0
+    state: enabled
+
+connections:
+- [blocks_float_to_complex_0, '0', blocks_throttle_0, '0']
+- [blocks_float_to_complex_0, '0', osmosdr_sink_0, '0']
+- [blocks_moving_average_xx_0, '0', blocks_multiply_const_vxx_0, '0']
+- [blocks_multiply_const_vxx_0, '0', blocks_float_to_complex_0, '0']
+- [blocks_throttle_0, '0', qtgui_sink_x_0, '0']
+- [blocks_throttle_0, '0', qtgui_time_sink_x_0, '0']
+- [blocks_uchar_to_float_0, '0', rational_resampler_xxx_0, '0']
+- [blocks_unpack_k_bits_bb_0, '0', blocks_uchar_to_float_0, '0']
+- [digital_map_bb_0, '0', blocks_unpack_k_bits_bb_0, '0']
+- [gen_packets, '0', digital_map_bb_0, '0']
+- [rational_resampler_xxx_0, '0', blocks_moving_average_xx_0, '0']
+
+metadata:
+  file_format: 1

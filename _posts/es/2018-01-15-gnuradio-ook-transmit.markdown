@@ -8,6 +8,21 @@ lang: es
 ref: gnuradio-ook-transmit
 ---
 
+```
+ACTUALIZACIÓN - 2020-04-11
+```
+
+Desde que escribí este artículo, GNURadio ha sacado una nueva versión, que usa YAML para
+guardar los diagramas de flujo en lugar de XML. Por eso, he intentado añadir las
+versiones actualizadas de los recursos. Si algo no funciona correctamente, puedes
+contactar conmigo y te intentaré ayudar en lo que pueda.
+
+Si arreglas por tu cuenta algún problema y quieres que lo suba a la página, puedes
+mandarme un mensaje (o [un pull request](https://github.com/Foo-Manroot/foo-manroot.github.io))
+y lo actualizo :)
+
+---
+
 
 Hace unos meses [escribí un artículo](/post/es/gnuradio/sdr/2017/11/18/gnuradio-ook.html)
 sobre las capacidades del SDR, permitiéndonos escuchar comunicaciones por radio con

@@ -7,6 +7,22 @@ categories: gnuradio sdr
 ref: gnuradio-ook-transmit
 ---
 
+```
+UPDATE - 2020-04-11
+```
+
+Since writing this article, GNURadio released a new version, which uses YAML to store the
+block configuration, instead of XML. Because of that, I tried to provide updated versions
+for all of the assets. However, if any of those don't work, feel free to contact me and
+I'll help you if I can.
+
+Also, if you happened to fix any of those problems and want me to upload them here, just
+drop me a message (or [a pull request](https://github.com/Foo-Manroot/foo-manroot.github.io))
+and will update this post :)
+
+---
+
+
 A couple of months ago I [wrote a post]({% post_url 2017-11-18-gnuradio-ook %}) talking
 about the capabilities of SDR, allowing us to sniff radio communications with very cheap
 hardware; and now I'm going to talk about the next step: using that same hardware to
@@ -173,7 +189,8 @@ create the pretty signal that can be seen on the following image:
 Now it's just a matter of modulating this squared wave to AM and send it. In fact... we
 don't even need to modulate it (I guess the HackRF does it for us). This is the final
 flowgraph, that can be downloaded
-[here](/assets/posts/2018-01-15-gnuradio-ook-transmit/transmit.grc):
+[here](/assets/posts/2018-01-15-gnuradio-ook-transmit/transmit.grc)
+([here is the updated version](/assets/posts/2018-01-15-gnuradio-ook-transmit/transmit_updated.grc)):
 
 {% include image.html
 	src="/assets/posts/2018-01-15-gnuradio-ook-transmit/transmit_flowgraph.jpg"
@@ -191,9 +208,12 @@ combinations until the car opens...
 
 To this end, the flowgraph is left untouched, except the generator of numbers, where
 the `Vector Source` has been replace by a custom block whose code can be downloaded
-[here](/assets/posts/2018-01-15-gnuradio-ook-transmit/gen_packets.py). The new flowgraph
-can also be downloaded
-[over here](/assets/posts/2018-01-15-gnuradio-ook-transmit/bruteforce.grc).
+[here](/assets/posts/2018-01-15-gnuradio-ook-transmit/gen_packets.py)
+([this version](/assets/posts/2018-01-15-gnuradio-ook-transmit/gen_packets_py3.py) should
+work with Python3). The new flowgraph can also be downloaded
+[over here](/assets/posts/2018-01-15-gnuradio-ook-transmit/bruteforce.grc)
+([and here is](/assets/posts/2018-01-15-gnuradio-ook-transmit/bruteforce_updated.grc) the
+updated version).
 
 {% include image.html
 	src="/assets/posts/2018-01-15-gnuradio-ook-transmit/bruteforcer_flowgraph.jpg"

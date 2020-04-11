@@ -7,6 +7,22 @@ categories: gnuradio sdr
 ref: gnuradio-ook
 ---
 
+```
+UPDATE - 2020-04-11
+```
+
+Since writing this article, GNURadio released a new version, which uses YAML to store the
+block configuration, instead of XML. Because of that, I tried to provide updated versions
+for all of the assets. However, if any of those don't work, feel free to contact me and
+I'll help you if I can.
+
+Also, if you happened to fix any of those problems and want me to upload them here, just
+drop me a message (or [a pull request](https://github.com/Foo-Manroot/foo-manroot.github.io))
+and will update this post :)
+
+---
+
+
 This is my last year in university, and for my end-of-degree project I'm investigating
 the use of SDR
 [(Software Defined Radio)](https://en.wikipedia.org/wiki/Software-defined_radio) to

@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "Oscp exam preparation"
+title:  "Oscp exam proctoring preparation"
 date:	2020-04-12 11:51:37 +0200
 author: foo
 categories: oscp
-ref: oscp-exam-preparation
+ref: oscp-exam-proctoring-preparation
 ---
 
 `TL;DR: don't use Wayland for your OSCP exam`

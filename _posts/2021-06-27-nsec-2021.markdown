@@ -55,6 +55,7 @@ My first try was to see what happens if I just copy the contents of the file int
 Obviously, this fails spectacularly because the clipboard doesn't store the style information, and it just copies a bunch of X's without distinguishing their type.
 
 So, the question is "what does have style _and_ is easy to manipulate?"
+
 Different people might think of different solutions, but to me the answer would be: HTML
 
 Therefore, I started looking for a way to convert _.docx_ documents into HTML.
@@ -161,13 +162,14 @@ The description of the challenge has a subtle clue: the region is called "Cîtea
 Currently, it doesn't mean anything to us, but it will come handy for later.
 
 As with any challenge of the like, I started searching the web for keywords like "alien language", "runes ctf", etc.
-Another very useful resource, though, is to carefully look at the symbols ciphers list on [dcode.fr](https://www.dcode.fr/symbols-ciphers) (a great webpage which has a loot of tools for basic crypto challenges of most CTFs).
+Another very useful resource, though, is to carefully look at the symbols ciphers list on [dcode.fr/szmbols-ciphers](https://www.dcode.fr/symbols-ciphers) (a great webpage which has a loot of tools for basic crypto challenges of most CTFs).
 Among those ciphers, we find one that might look like our mysterious alphabet: the "Cistercian Monk Numerals".
+
 Don't you think that "Cîteaux" and "Cistercian" sound quite similar?
 
 This is basically a way to encode numbers using straight lines in a quadrant.
-The quadrants are interpreted from right to left and top to bottom (top-right: units; top-left: tens; bottom-right: hundreds; bottom-left: thousands), where each lines means a specific number.
-For more info, you can always head over to [dcode.fr](https://www.dcode.fr/cistercian-numbers), where it's really well explained.
+The quadrants are interpreted from right to left and top to bottom (top-right: units; top-left: tens; bottom-right: hundreds; bottom-left: thousands), where each pattern means a specific number.
+For more info, you can always head over to [dcode.fr/cistercian-numbers](https://www.dcode.fr/cistercian-numbers), where it's really well explained.
 
 Anyways, the decoding is written on the image above, and this yields a bunch of numbers.
 If we interpret them as ASCII, we get the following text: `The flag is: FLAG-MonksAre1337`
@@ -194,6 +196,7 @@ This is the most interesting (and harder) of the challenges I managed to solve.
 Unfortunately, I can't connect to the VPN anymore and can't take screenshots of the webpage.
 
 This page is just a login prompt doing client-side validation of the username and password.
+
 At first glance, it should be pretty easy.
 However, a quick look at the JS code that performs the validation crushes our hopes of an easy flag: it's validated via WebAssembly, and this is the [.wasm file](/assets/posts/2021-06-27-nsec-2021/spider_webs_tailor_assembly_password_validator_bg.wasm)
 
@@ -313,9 +316,12 @@ called host wbg.__wbg_setindex_977ce435f7b2f4ea(i32:0, i32:1, i32:76) =>
 called host wbg.__wbg_setindex_977ce435f7b2f4ea(i32:0, i32:2, i32:65) =>
 ```
 
-Note how the trace already gives us the correct value for the third argument: 70, 76, 65... Which, translated using the ASCII table, corresponds to "F", "L", and "G", respectively.
+Note how the trace already gives us the correct value for the third argument: 70, 76, 65... Which, translated using the ASCII table, corresponds to "F", "L", and "A", respectively.
+
 Hmmm...
+
 Might be the beginning of the word "FLAG"?
+
 Let's figure it out, grepping by the `__wbg_setindex_` function, extracting the values out of the third argument thanks to `sed`, converting them to hexadecimal thanks to `print` (using a little trick with `xargs` so the arguments can be piped), and finally converting it back to a string using `xxd`:
 ```sh
 $ wasm-interp --dummy-import-func --trace spider_webs_tailor_assembly_password_validator_bg.wasm --run-all-exports \
@@ -366,8 +372,12 @@ However, we can still use the trace method to seek the ".store" operations, to w
 
 To do so, we can again use a similar Bash one-liner, but grepping for the `.store` operations, instead:
 ```sh
-$ wasm-interp --dummy-import-func --trace spider_webs_tailor_assembly_password_validator_bg.wasm --run-all-exports | grep  '.store' | sed -e 's/^.\+, //' | xargs -I{} printf "%02x" "{}" | xxd -r -ps | xxd
-00000000: 7d34 3236 6662 6161 6537 6266 6634 6366  }426fbaae7bff4cf
+$ wasm-interp --dummy-import-func --trace spider_webs_tailor_assembly_password_validator_bg.wasm --run-all-exports \
+	| grep  '.store' \
+	| sed -e 's/^.\+, //' \
+	| xargs -I{} printf "%02x" "{}" \
+	| xxd -r -ps \
+	| xxd00000000: 7d34 3236 6662 6161 6537 6266 6634 6366  }426fbaae7bff4cf
 00000010: 6431 6131 6266 6530 3163 6338 6337 6662  d1a1bfe01cc8c7fb
 00000020: 6531 3539 6265 6366 347b 2d47 414c 4600  e159becf4{-GALF.
 00000030: f673 ec6a dd4e f7b6 9663 09e9 b6ce 365e  .s.j.N...c....6^
@@ -392,4 +402,4 @@ There's a good possibility I would have lost my mind trying to understand the in
 
 Although we didn't manage to get even close to the top of the classification, I really had fun with the challenges we managed to solve and, as always, I learned a few things on the way.
 
-I'm really looking forward to the next competition :D
+I'm really looking forward to the next edition :D

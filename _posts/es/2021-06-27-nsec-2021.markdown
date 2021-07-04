@@ -1,0 +1,408 @@
+---
+layout: post
+title:  "Write-Ups del Nsec 2021 CTF"
+date:	2021-06-27 18:02:52 +0100
+author: foo
+categories: es ctf
+lang: es
+ref: nsec-2021
+---
+
+
+El mes pasado se celebró la conferencia [NorthSec](https://nsec.io/) en formato virtual.
+Y, con ella, tuvo lugar un CTF muy entretenido.
+Por lo visto, la intención era que los participantes fueran grupos de unas 20 personas.
+Aún así, mis tres colegas de trabajo y yo decidimos intentarlo, y tampoco nos fue tan mal (acabamos sobre la mitad de la tabla :D).
+
+
+No tengo la lista completa de retos, ni tampoco todas las soluciones de los que resolvimos.
+Sin embargo, guardé un par de soluciones de algunos retos que me resultaron interesantes:
+ - A mysterious scroll
+ - Ancient Language
+ - Dressed to impress
+
+# A mysterious scroll
+
+La descripción de este reto dice así:
+```
+Under the summer’s dew
+Yours truly was taking a stroll
+Following the wealthy few
+In my hands, I received a scroll.
+
+Accidently, it fell out of a purse.
+Exquisite paper, a piece of secret.
+Cryptic letters and numbers, I curse.
+Decode it, and ample GPs you get.
+```
+Adjunto, hay este documento: [x.docx](/assets/posts/2021-06-27-nsec-2021/x.docx)
+
+Al abrir este documento, vemos algo que parece código Python, pero no del todo:
+
+{% include image.html
+	src="/assets/posts/2021-06-27-nsec-2021/x.jpg"
+	title="Contents of the x.docx document"
+	alt="Word document with some text that resembles Python code, but composed of just the letter X in different fonts."
+%}
+
+Como parece mucho un trozo de código, vamos a analizar lo que podría estar haciendo:
+ - Primero, declara la variable x (usando la fuente _Calibri_), que contiene un alfabeto
+ - Luego, realiza una serie de operaciones matemáticas, conversiones de tipo y accesos a un array para crear un montón de otras variables (cada una con una fuente diferente)
+ - Finalmente, imprime algunos caracteres (probablemente, la _flag_) usando esas variables para acceder al alfabeto declarado antes en X (en _Calibri_)
+
+Una posible solución sería transcribirlo todo a mano, en función de la fuente usada, e intentar ejecutarlo (seguramente, como Python).
+
+Puesto que mi paciencia es limitada y hacer estas tareas a mano no es divertido, decidí probar un método diferente.
+
+Mi primer intento fue ver qué pasa si simplemente copio el contenido del archivo a un documento de texto plano para empezar a manipularlo con vim.
+Obviamente, es un error garrafal porque el portapapeles sencillamente no almacena esa información, y simplemente copia un montón de X sin distinguir su tipo.
+
+La pregunta, entonces, es "¿qué tiene estilos _y_ es fácil de manipular?"
+
+Cada cual pensará en una solución diferente, pero la respuesta para mí es: HTML.
+
+Por eso, empecé a buscar una manera de convertir documentos _.docx_ en HTML.
+No recuerdo específicamente qué herramienta usé; pero básicamente probé un par de servicios online y, tras un par de intentos, obtuve resultados bastante decentes:
+
+{% include image.html
+	src="/assets/posts/2021-06-27-nsec-2021/to_html.jpg"
+	title="Result after converting the Word document to HTML"
+	alt="HTML showing the same contents as the docx, where each different font has a different CSS class assigned."
+%}
+
+Como puedes ver en la imagen anterior, cada elemento tiene una clase CSS asignada.
+Esto nos permite sustituir fácilmente cada "X" por un nombre de variable diferente, dependiendo de su fuente.
+Para ello, añadí este script de JS en el HTML:
+```js
+/**
+ * Change all elements with the given class name to the desired new value
+ */
+function changeTo (className, newVal) {
+
+  var text_1 = document.getElementsByClassName (className);
+
+  for (const c of text_1) {
+
+    if (c.innerText.trim ().toLowerCase () == "x") {
+      c.innerText = newVal;
+    }
+  }
+}
+
+changeTo ("text_1", " A ");
+changeTo ("text_2", " B ");
+changeTo ("text_3", " C ");
+changeTo ("text_4", " D ");
+changeTo ("text_5", " E ");
+changeTo ("text_6", " F ");
+changeTo ("text_7", " G ");
+changeTo ("text_8", " H ");
+changeTo ("text_9", " I ");
+changeTo ("text_10", " J ");
+changeTo ("text_11", " K ");
+changeTo ("text_12", " L ");
+changeTo ("text_13", " M ");
+changeTo ("text_14", " N ");
+changeTo ("text_15", " O ");
+changeTo ("text_16", " P ");
+changeTo ("text_17", " Q ");
+changeTo ("text_18", " R ");
+changeTo ("text_19", " S ");
+```
+
+
+Esto nos devuelve algo bastante más bonito y manejable:
+```py
+x = "abcdefghijklmnopqrstuvwxyz1234567891-"
+A = int(x[30])
+B = A + A +1
+C = A - A
+D = B - A + C
+E = D * D + C
+F = B - A - A + B - A - A + B - A - A + B - A - A + B - A - A + B - A - A + B - A - A + B - A - A
+G = ( A -(( B - A - A )*( B - A - A + B - A - A )))* B
+H = int( B + C + C + ( F * C )+ D /( B - A - A - A + B - A ))
+I = H + B - A - A - A + B - A + B - A - A
+J = int(str( E )[ C + B - A - A -1]+str( E )[ C ])
+K = len(x) - B
+L = int(( K + J * C )/( E - ( K + F )))
+M = K + ( H - L )
+N = int(( E -( K + F ))/( B - A - A ))
+O = ( J - G ) + B + B + B - D + A
+P = I + ( E -( K + F ))
+Q = int(x [( G - D + A )])
+R = int(str( B )[( G - J )]+str( L )[ P -( Q + Q + A )])
+S = int(( F * ( I - H ) - N ))
+print(x[ A ]+ x[ B ]+ x[ C ]+ x[ D ]+ x[ E ]+x[ F ]+x[ G ]+x[ H ]+x[ I ]+x[ J ]+x[ K ]+x[ L ]+x[ M ]+x[ N ]+x[ O ]+x[ P ]+x[ Q ]+x[ R ]+x[ S ])
+```
+
+Si lo ejecutamos con Python, tenemos la solución: `flag-i8or81n2c7thlw`
+
+# Ancient language
+
+La descripción de este reto dice así:
+```
+Our army has recently conquered the region of Cîteaux.
+Its population is not very cooperative nor interested in the ways of our King, mainly because they use a foreign language.
+
+We have found a tapestry in an abbey that could maybe be used to understand their language.
+
+Can we trust you to help us in our efforts to assimilate the region?
+```
+
+Adjunta había una imagen que, por desgracia, se me olvidó guardar.
+Sin embargo, aún tengo la transcripción que usé para resolver este reto:
+
+{% include image.html
+	src="/assets/posts/2021-06-27-nsec-2021/tapestry.jpg"
+	title="Manual transcript of the challenge code"
+	alt="Sheet of paper showing a matrix with symbols, each composed only by straight lines"
+%}
+
+En esa imagen se ve claramente la solución (los números al lado de cada símbolo), pero vamos a pretender que no está ahí :D
+
+La descripción del reto tiene una pista sutil: la región se llama "Cîteaux".
+Ahora mismo no nos dice nada, pero luego será útil (aunque no crucial).
+
+Al igual que con el resto de retos de este tipo, empecé buscando en internet por las palabras clave "alien language", "runes CTF", etc.
+Otro recurso bastante útil es buscar entre la lista de cifras de símbolos en [dcode.fr/szmbols-ciphers](https://www.dcode.fr/symbols-ciphers) (una gran página con muchos recursos para los retos básicos de criptografía en la mayoría de CTFs).
+Entre todas esas cifras, encontramos uno que se parece a nuestro alfabeto misterioso: los "numerales de los monjes Cistercianos".
+
+¿No crees que "Cîteaux" y "Cistercianos" suenan parecido?
+
+Básicamente, se trata de una manera de codificar números usando líneas rectas en un cuadrante.
+Cada cuadrante se interpreta de derecha a izquierda y de arriba hacia abajo, donde cada conjunto patrón significa un número específico.
+Para más información, siempre puedes encontrar una muy buena explicación en [dcode.fr/cistercian-numbers](https://www.dcode.fr/cistercian-numbers).
+
+En fin, la traducción está escrita en la imagen de arriba, y eso devuelve un montón de números.
+Si los interpretamos como ASCII, nos devuelve el siguiente texto: `The flag is: FLAG-MonksAre1337`
+
+# Dressed to impress
+
+La descripción de este reto dice así:
+```
+A prestigious ball is coming soon,
+And this humble bard is a guest.
+
+My goal is to impress the room,
+And make sure my outfit is the best.
+
+The Spider’s Web is an amazing tailor,
+And has an online order registry.
+
+Can you get in there and do me a favor,
+To make sure no one dresses like me?
+```
+Luego hay simplemente un enlace a http://swta.ctf
+
+Este fue el reto más interesante (y difícil) de todos los que conseguí resolver.
+Por desgracia, ya no puedo conectarme a la VPN y tomar capturas de pantalla de la página web.
+
+Esta página es simplemente un panel de _login_ haciendo en el navegador la validación de usuario y contraseña.
+
+A primera vista, debería ser bastante fácil.
+Sin embargo, un vistazo rápido al código JS que realiza la validación nos quita de un plumazo toda esperanza de una solución fácil: se valida mediante WebAssemly, y este es el [archivo .wasm](/assets/posts/2021-06-27-nsec-2021/spider_webs_tailor_assembly_password_validator_bg.wasm).
+
+WebAssembly es un estándar relativamente reciente (2015) que permite a los desarrolladores crear binarios que se puedan ejecutar en cualquier navegador y plataforma.
+Esto mejora el rendimiento y les permite, por ejemplo, desarrollar videojuegos complejos que puedan ejecutarse sin problemas en un navegador (o, como en este caso, ofuscar la validación de una contraseña).
+
+De repente, nuestro retillo web súper fácil se ha convertido en uno de _reversing_ de binarios :O
+
+El mayor reto aquí es la falta de herramientas.
+Especialmente, un _debugger_.
+No podemos simplemente ejecutar `gdb` con el archivo de ensamblador; porque para empezar no es un archivo ELF normal (ni un MachO/PE, para quien no use GNU/Linux), ya que WebAssembly define una arquitectura propia, de manera similar a Java y su arquitecura de la JVM.
+
+Primero, necesitamos herramientas para intentar decompilar y ejecutar este archivo.
+Aunque no soy un experto en el campo, el mejor conjunto de herramientas que encontré es el [WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt)
+Otra herramienta que usé para intentar decompilar el _.wasm_ es [wasmtime](https://wasmtime.dev/).
+
+Puede que haya más herramientas por ahí, pero esas son las que yo conozco ¯\\\_(ツ)\_/¯
+
+Usando `wasm2wat`, podemos ver que hay tres _exports_ interesantes:
+```lisp
+(export "fl1" (func 12))
+(export "fl2" (func 15))
+(export "verifyPassword" (func 66))
+```
+
+## Primera flag
+
+Para obtener la primera solución, podemos encontrar la función `fl1` y ver que es bastante fácil de seguir:
+
+```c
+/* This is actually a pointer to d_DX9m7KF8Qbj1BiPwvn2osTH_UVYO,
+which contains the obfuscated flags */
+global g_a:int = 1048576;
+/* ... */
+data d_DX9m7KF8Qbj1BiPwvn2osTH_UVYO(offset: 1048576) =
+  "\90\e2\85\a2\0cD\99#\86X9m\f17\8d{\d3K\c6!F\bb\148\da\8c\07\c2\19\ea\c4"
+	// The data block is like 10-20 lines more ...
+/* ... */
+export function fl1():int {
+  var a:int = g_a + -64;
+  g_a = a;
+  f_ua(a + 17);
+  /* Not available on the .wasm file because
+  it was defined on the JS code; but it basically
+  allocates N Bytes (47, in this case) for an Array */
+  a[3]:int = wbg_wbg_newwithlength_e0c461e90217842c(47);
+  f_ac(a + 12, 0, a[17]:ubyte);
+  f_ac(a + 12, 1, a[18]:ubyte);
+  f_ac(a + 12, 2, a[19]:ubyte);
+  f_ac(a + 12, 3, a[20]:ubyte);
+  f_ac(a + 12, 4, a[21]:ubyte);
+  /* ... */
+  f_ac(a + 12, 43, a[60]:ubyte);
+  f_ac(a + 12, 44, a[61]:ubyte);
+  f_ac(a + 12, 45, a[62]:ubyte);
+  f_ac(a + 12, 46, a[63]:ubyte);
+  let t0 = a[3]:int;
+  g_a = a - -64;
+  return t0;
+}
+/* ... */
+function f_ac(a:int_ptr, b:int, c:int) {
+  wbg_wbg_setindex_977ce435f7b2f4ea(a[0], b, c & 255)
+}
+```
+
+Resulta ser como el típico reto para calentar con _reversing_ en la mayoría de CTFs: simplemente mueve manualmente la _flag_, Byte a Byte, en memoria.
+
+En este caso, podemos resolverlo de dos maneras diferentes:
+ - Extrayendo los valores de `d_DX9m7KF8Qbj1BiPwvn2osTH_UVYO` y realizando la operación lógica `& 255`.
+ - Siendo un poco vagos y aprovechar la opción `wasm-interp --trace` para ver que valores se mueven realmente en memoria
+
+Como soy un vago, opté por la segunda opción.
+Es importante mencionar que, para que `wasm-interp` funcione, debemos pasarle la opción `--dummy-import-func`, que ignora los errores generados por las funciones externas que faltan (como `wbg_wbg_setindex_977ce435f7b2f4ea` y `wbg_wbg_newwithlength_e0c461e90217842c`):
+```sh
+$ wasm-interp --dummy-import-func --trace spider_webs_tailor_assembly_password_validator_bg.wasm --run-all-exports
+>>> running export "fl1":
+#0. 86896: V:0  | alloca 2
+#0. 86904: V:2  | global.get $0
+#0. 86912: V:3  | i32.const 4294967232
+#0. 86920: V:4  | i32.add 1048576, 4294967232
+// ...
+#1. 117956: V:3  | drop
+#1. 117960: V:2  | return
+#0. 86968: V:2  | local.get $2
+#0. 86976: V:3  | i32.const 47
+#0. 86984: V:4  | call_import $0
+called host wbg.__wbg_newwithlength_e0c461e90217842c(i32:47) => i32:0
+#0. 86992: V:4  | i32.store $0:1048512+$12, 0
+#0. 87004: V:2  | local.get $2
+#0. 87012: V:3  | i32.const 12
+#0. 87020: V:4  | i32.add 1048512, 12
+#0. 87024: V:3  | i32.const 0
+#0. 87032: V:4  | local.get $4
+#0. 87040: V:5  | i32.load8_u $0:1048512+$17
+#0. 87052: V:5  | call $78
+#1. 121948: V:5  | local.get $3
+#1. 121956: V:6  | i32.load $0:1048524+$0
+#1. 121968: V:6  | local.get $3
+#1. 121976: V:7  | local.get $3
+#1. 121984: V:8  | i32.const 255
+#1. 121992: V:9  | i32.and 70, 255
+#1. 121996: V:8  | call_import $1
+called host wbg.__wbg_setindex_977ce435f7b2f4ea(i32:0, i32:0, i32:70) =>
+#1. 122004: V:5  | drop_keep $3 $0
+#1. 122016: V:2  | return
+// ...
+#1. 121992: V:9  | i32.and 76, 255
+#1. 121996: V:8  | call_import $1
+called host wbg.__wbg_setindex_977ce435f7b2f4ea(i32:0, i32:1, i32:76) =>
+#1. 122004: V:5  | drop_keep $3 $0
+#1. 122016: V:2  | return
+// ...
+#1. 121992: V:9  | i32.and 65, 255
+#1. 121996: V:8  | call_import $1
+called host wbg.__wbg_setindex_977ce435f7b2f4ea(i32:0, i32:2, i32:65) =>
+```
+
+Puedes ver cómo la traza ya nos da el valor correcto del tercer argumento: 70, 76, 65... Que, traducidos usando la tabla ASCII, corresponden con "F", "L" y "A", respectivamente.
+
+Hmmm...
+
+¿No será el principio de la palabra "FLAG"?
+
+Vamos a adivinarlo, filtrando por la función `__wbg_setindex_`, extrayendo los valores del tercer argumento gracias a `sed`, convirtiéndolos a hexadecimal con `print` (y un truquillo con `xargs` para poder encadenar las llamadas con una tubería), y finalmente convirtiendo los valores a una cadena usando `xxd`:
+```sh
+$ wasm-interp --dummy-import-func --trace spider_webs_tailor_assembly_password_validator_bg.wasm --run-all-exports \
+	| grep -i __wbg_setindex_977ce435f7b2f4ea \
+	| sed -e 's/called host wbg.__wbg_setindex_977ce435f7b2f4ea(i32:0, i32:[0-9]\+, i32://' \
+	| sed -e 's/) =>//' \
+	| xargs -I{} printf "%02x" "{}" \
+	| xxd -r -ps
+FLAG-{4fceb951ebf7c8cc10efb1a1dfc4ffb7eaabf624}+�`�����$�R1�E9P�p��
+                                                                   (E92t
+```
+
+Y ahí está nuestra solución :)
+`FLAG-{4fceb951ebf7c8cc10efb1a1dfc4ffb7eaabf624}`
+
+## Segunda flag
+
+Esta segunda solución es graciosa, porque me frustré y la acabé haciendo de una manera no intencionada, lo que significa que básicamente usé el mismo truco que para la primera parte :D
+
+La función de esta _flag_ es _un pelín_ diferente a la de la primera:
+```c
+export function fl2():int {
+  var a:int = g_a - 48;
+  g_a = a;
+  f_u(a + 16);
+  a[3]:int = wbg_wbg_newwithlength_e0c461e90217842c(32);
+  f_ac(a + 12, 0, a[16]:ubyte);
+  f_ac(a + 12, 1, a[17]:ubyte);
+  f_ac(a + 12, 2, a[18]:ubyte);
+  f_ac(a + 12, 3, a[19]:ubyte);
+  /* ... */
+  f_ac(a + 12, 28, a[44]:ubyte);
+  f_ac(a + 12, 29, a[45]:ubyte);
+  f_ac(a + 12, 30, a[46]:ubyte);
+  f_ac(a + 12, 31, a[47]:ubyte);
+  let t0 = a[3]:int;
+  g_a = a + 48;
+  return t0;
+}
+```
+
+Aunque es sutil, las diferencias más importantes son:
+ - El puntero de inicio `a`. Mientras que en `fl1` el puntero tenía el valor `g_a + -64`, ahora es `g_a - 48`.
+ - La función de inicialización. En `fla1`, la primera función que se llama antes de empezar a manipular los Bytes es `f_ua(a + 17)`, mientras que ahora es `f_u(a + 16)`.
+
+Este pequeño segundo cambio básicamente nos impide usar el mismo método que para la primera _flag_, ya que `f_u()` realiza una serie de operaciones que sinceramente me aburrí al intentar comprender.
+Aun así, podemos seguir usando la traza buscando las operaciones de tipo ".store", para separar los movimientos de distracción de los reales.
+
+Para ello, podemos usar de nuevo un _one-liner_ de Bash, pero filtrando esta vez por las operaciones `.store`:
+```sh
+$ wasm-interp --dummy-import-func --trace spider_webs_tailor_assembly_password_validator_bg.wasm --run-all-exports \
+	| grep  '.store' \
+	| sed -e 's/^.\+, //' \
+	| xargs -I{} printf "%02x" "{}" \
+	| xxd -r -ps \
+	| xxd
+00000000: 7d34 3236 6662 6161 6537 6266 6634 6366  }426fbaae7bff4cf
+00000010: 6431 6131 6266 6530 3163 6338 6337 6662  d1a1bfe01cc8c7fb
+00000020: 6531 3539 6265 6366 347b 2d47 414c 4600  e159becf4{-GALF.
+00000030: f673 ec6a dd4e f7b6 9663 09e9 b6ce 365e  .s.j.N...c....6^
+00000040: 9b29 7660 9bae cce3 408e 3b0c d6e5 ee2b  .)v`....@.;....+
+00000050: 59a3 50cb dec9 e625 bbdb 29c6 146f 6c5b  Y.P....%..)..ol[
+# There are more Bytes, but we do not care about them...
+```
+
+¡Ahí está! ¡Nuestra _flag_ (del revés)!
+Sólo nos queda darle la vuelta y obtenemos: `FLAG-{4fceb951ebf7c8cc10efb1a1dfc4ffb7eaabf624}`
+
+
+## Tercera flag
+
+Por desgracia, me quedé sin tiempo para intentar la tercera _flag_.
+No sí siquiera si hubiera sido capaz de resolverla...
+
+Es bastante posible que hubiera perdido la cabeza intenando entender el código increíblemente complejo de `f_d` y `f_g` (llamadas desde `verifyPassword`) T_T
+
+
+# Conclusión
+
+Aunque no conseguimos llegar ni medio cerca de los primeros puestos de la clasificación, la verdad es que me lo pasé bien con los retos que conseguimos resolver y, como siempre, aprendí un par de cosas en el camino.
+
+Sin duda, estoy impaciente por participar en la próxima edición :D

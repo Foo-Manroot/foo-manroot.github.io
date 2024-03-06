@@ -8,7 +8,7 @@ ref: quick-transfer-server
 ---
 
 This post is simply for my own reference, to copy+paste my scripts below.
-If you're reading this and have no clue how these scripts work, do not hesitate to [/about](contact me).
+If you're reading this and have no clue how these scripts work, do not hesitate to [contact me](/about).
 
 * Table of Contents
 {:toc}
@@ -18,7 +18,7 @@ Sometimes I'm need to quickly transfer data between two clients in my local netw
 In those situations, I could of course use any file transfer solution like WeTransfer, OneDrive, etc.
 However, I'm wary of uploading any data to random sites in the internet, since I don't really know what happens later with my data (which I, of course, encrypt locally before uploading, just in case).
 
-Another alternative would be to host one such services, like [https://framagit.org/fiat-tux/hat-softwares/lufi](Lufi) in my own server.
+Another alternative would be to host one such services, like [Lufi](https://framagit.org/fiat-tux/hat-softwares/lufi) in my own server.
 That, however, requires two things I lack:
     - Planning skills
     - A server
@@ -105,7 +105,7 @@ The behaviour from the client-side is the same as usual, just with an _https_ UR
 # Obtain files over HTTPS
 
 Finally, to perform the equivalent of netcat's file upload server we showed before but over TLS this time, we can use the following script to serve using `openssl s_server`:
-```
+```sh
 #!/bin/bash
 
 PORT=8443

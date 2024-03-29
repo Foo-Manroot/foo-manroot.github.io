@@ -66,8 +66,15 @@ Content-Length: 5
 asdf
 ```
 
+# Generate self-signed certificates
 
-# Serve over HTTPS with Python
+This part is easy, just run this:
+```
+$ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
+```
+
+
+# Serve over HTTPS with Python 2
 
 Another situation I sometimes encounter is having to serve some files over HTTPS, because the target is behind a proxy that rejects plain HTTP.
 In those cases, I can wrap Python's SimpleHttpServer (Python2, for now) on a TLS socket and run it like this:
@@ -97,9 +104,37 @@ cd "$SERVE_DIR"
 python ../python_get_https.py
 ```
 
-Self-signed cert and key can be issued with the usual `openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 365 -nodes`
-
 The behaviour from the client-side is the same as usual, just with an _https_ URL.
+
+
+# Serve over HTTPS with Python 3
+
+Almost the same, with minor adjustments
+
+```py
+#!/usr/bin/python
+from http.server import SimpleHTTPRequestHandler
+import socketserver
+import ssl
+
+port = 1234
+
+# Create an HTTPS server with a custom request handler
+httpd = socketserver.TCPServer(('127.0.0.1', port), SimpleHTTPRequestHandler)
+
+ctx = ssl.SSLContext (ssl.PROTOCOL_TLS_SERVER)
+ctx.load_cert_chain ('cert.pem', keyfile = 'key.pem')
+httpd.socket = ctx.wrap_socket(httpd.socket, server_side = True)
+
+print (f"Starting server on 127.0.0.1:{port}")
+httpd.serve_forever()
+```
+
+Apparently, the documentation of [Python 3.12](https://docs.python.org/3.12/whatsnew/3.12.html#ssl) states:
+> Remove the ssl.wrap_socket() function, deprecated in Python 3.7: instead, create a ssl.SSLContext object and call its ssl.SSLContext.wrap_socket method.
+> Any package that still uses ssl.wrap_socket() is broken and insecure.
+> The function neither sends a SNI TLS extension nor validates server hostname. Code is subject to CWE-295: Improper Certificate Validation.
+> (Contributed by Victor Stinner in gh-94199.)
 
 
 # Obtain files over HTTPS

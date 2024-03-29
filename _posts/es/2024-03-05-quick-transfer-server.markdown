@@ -67,8 +67,15 @@ Content-Length: 5
 asdf
 ```
 
+# Generar los certificados autofirmados
 
-# Servir datos vía HTTPS con Python
+Esta parte es sencilla, sólo hay que ejecutar la siguiente orden:
+```
+$ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
+```
+
+
+# Servir datos vía HTTPS con Python 2
 
 Otra situación que a veces me encuentro es la de tener que servir algunos archivos vía HTTPS, puesto que el objetivo está detrás de un _proxy_ que rechaza el HTTP en claro.
 En esos casos, puedo envolver la conexión de SimpleHttpServer (es decir: Python2 - de momento) en un _socket_ TLS y ejecutarlo tal que así:
@@ -97,9 +104,35 @@ cd "$SERVE_DIR"
 python ../python_get_https.py
 ```
 
-El certificado (autofirmado) y la clave se pueden crear con el típico `openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 365 -nodes`
-
 El modo de operación desde el lado del cliente es igual, salvo que se debe usar la URL con _https_.
+
+
+# Servir datos vía HTTPS con Python 3
+
+```py
+#!/usr/bin/python
+from http.server import SimpleHTTPRequestHandler
+import socketserver
+import ssl
+
+port = 1234
+
+# Create an HTTPS server with a custom request handler
+httpd = socketserver.TCPServer(('127.0.0.1', port), SimpleHTTPRequestHandler)
+
+ctx = ssl.SSLContext (ssl.PROTOCOL_TLS_SERVER)
+ctx.load_cert_chain ('cert.pem', keyfile = 'key.pem')
+httpd.socket = ctx.wrap_socket(httpd.socket, server_side = True)
+
+print (f"Starting server on 127.0.0.1:{port}")
+httpd.serve_forever()
+```
+
+Por lo visto, la documentación de [Python 3.12](https://docs.python.org/3.12/whatsnew/3.12.html#ssl) dice:
+> Remove the ssl.wrap_socket() function, deprecated in Python 3.7: instead, create a ssl.SSLContext object and call its ssl.SSLContext.wrap_socket method. Any package that still uses ssl.wrap_socket() is broken and insecure.
+> The function neither sends a SNI TLS extension nor validates server hostname.
+> Code is subject to CWE-295: Improper Certificate Validation.
+> (Contributed by Victor Stinner in gh-94199.)
 
 
 # Subir archivos vía HTTPS

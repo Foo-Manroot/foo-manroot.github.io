@@ -638,6 +638,15 @@ body {
 		max-width: 100%;
 	}
 
+	h1 {
+		font-size: 40px;
+
+		@include media-query($on-laptop) {
+			font-size: 32px;
+		}
+	}
+
+
 	h2 {
 		font-size: 32px;
 

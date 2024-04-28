@@ -593,7 +593,7 @@ body {
  * Posts
  */
 .post {
-	max-width: $content-width;
+//	max-width: $content-width;
 	@include media-query($on-palm) {
 		max-width: 90vw;
 	}

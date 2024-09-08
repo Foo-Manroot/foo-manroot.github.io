@@ -187,11 +187,11 @@ body {
 		.page-link {
 			display: block;
 			padding: 5px 10px;
+			margin-left: 20px;
 
 			&:not(:last-child) {
 				margin-right: 0;
 			}
-			margin-left: 20px;
 		}
 	}
 }
@@ -461,12 +461,13 @@ body {
 		padding-left: calc($spacing-unit / 2);
 	}
 
-
-	grid-template:
-		"hd	  hd	 descr"
-		"contact social descr"
-		"contact social descr"
-	;
+	& {
+		grid-template:
+			"hd	  hd	 descr"
+			"contact social descr"
+			"contact social descr"
+		;
+	}
 
 	@include media-query($on-palm) {
 		grid-template:
